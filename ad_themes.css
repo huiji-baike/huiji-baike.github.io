@@ -1,0 +1,329 @@
+/***********************************************************************/
+/*                           GENERAL                                   */
+/* display: inline-flex keeps skill bar from shrinking into 2 rows     */
+/***********************************************************************/
+/*.gw-build div,*/
+/*for placement on server, b/c server version uses div for outerHTML, easier append that way (b/c appendee is a div and won't fit in span, the original outerHTML*/
+.gw-build,
+.gw-build span,
+.gw-build p,
+.gw-build b,
+.gw-skill-detail,
+.gw-skill-detail span,
+.gw-skill-detail p,
+.gw-skill-detail b,
+.gw-skill-detail div{
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+	line-height: 1.2em;
+}
+/***********************************************************************/
+/*                              SKILL                                  */
+/***********************************************************************/
+.skill {
+	display:inline-block;
+	vertical-align:middle;
+	width:72px;/*50px*/
+	height:72px;/*50px*/
+	background-repeat:no-repeat;
+	background-image:none;
+	background-position:0 0;
+
+	-webkit-box-shadow: 0 1px 0 rgba(255,255,255,.2), inset 0 4px 5px rgba(0,0,0,.6), inset 0 1px 0 rgba(0,0,0,.6);
+	-moz-box-shadow: 0 1px 0 rgba(255,255,255,.2), inset 0 4px 5px rgba(0,0,0,.6), inset 0 1px 0 rgba(0,0,0,.6);
+	box-shadow: 0 1px 0 rgba(255,255,255,.2), inset 0 4px 5px rgba(0,0,0,.6), inset 0 1px 0 rgba(0,0,0,.6);
+	
+	-webkit-transition: 0.85s;
+	-moz-transition: 0.85s;
+	transition: 0.85s;
+
+	-webkit-border-radius: 20px;
+	-moz-border-radius: 20px;
+	border-radius: 15px;
+}
+/* only enable for the morphing effect*/
+.skill:hover{
+/*
+	-webkit-box-shadow: 0 0 20px rgba(255,255,255,.6), inset 0 0 20px rgba(255,255,255,1);
+	-moz-box-shadow: 0 0 20px rgba(255,255,255,.6), inset 0 0 20px rgba(255,255,255,1);
+	box-shadow: 0 0 20px rgba(255,255,255,.6), inset 0 0 20px rgba(255,255,255,1);
+
+	-webkit-border-radius: 60em;
+	-moz-border-radius: 60em;
+	border-radius: 60em;
+*/
+    -webkit-box-shadow: 0 0 20px rgba(255,255,255,.6), inset 0 0 20px rgba(255,255,255,1);
+	-moz-box-shadow: 0 0 20px rgba(255,255,255,.6), inset 0 0 20px rgba(255,255,255,1);
+	box-shadow: 0 0 20px rgba(255,255,255,.6), inset 0 0 20px rgba(255,255,255,1);
+
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+.skill .skill-elite{
+ /*styles here have no effect, need to redefine .skill as done below, after panel definitions*/
+}
+
+.skill span {display: none;}
+
+/***********************************************************************/
+/*                           SKILL DETAIL                              */
+/***********************************************************************/
+.gw-skill-detail {
+	font-size: 12px;
+	position: absolute;
+	z-index: 3000;
+	width: 388px;/*350px*/
+	padding: 8px;
+	border: 1px solid #888;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+	background-color: #eee;
+	background-position: right top;
+	background-repeat: no-repeat;
+	background-image: none;
+	box-shadow: 1px 1px 5px #666;
+	overflow: hidden;
+	color: black;
+	display: none;
+	/*http://www.cssmatic.com/gradient-generator#'\-moz\-linear\-gradient\%28left\%2C\%20rgba\%28226\%2C226\%2C226\%2C1\%29\%200\%25\%2C\%20rgba\%28219\%2C219\%2C219\%2C1\%29\%2050\%25\%2C\%20rgba\%28209\%2C209\%2C209\%2C1\%29\%2051\%25\%2C\%20rgba\%28254\%2C254\%2C254\%2C1\%29\%20100\%25\%29\%3B'*/
+	
+	background: rgba(226,226,226,1);
+	background: -moz-linear-gradient(top, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 50%, rgba(209,209,209,1) 51%, rgba(254,254,254,1) 100%);
+	background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(226,226,226,1)), color-stop(50%, rgba(219,219,219,1)), color-stop(51%, rgba(209,209,209,1)), color-stop(100%, rgba(254,254,254,1)));
+	background: -webkit-linear-gradient(top, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 50%, rgba(209,209,209,1) 51%, rgba(254,254,254,1) 100%);
+	background: -o-linear-gradient(top, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 50%, rgba(209,209,209,1) 51%, rgba(254,254,254,1) 100%);
+	background: -ms-linear-gradient(top, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 50%, rgba(209,209,209,1) 51%, rgba(254,254,254,1) 100%);
+	background: linear-gradient(to bottom, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 50%, rgba(209,209,209,1) 51%, rgba(254,254,254,1) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', endColorstr='#fefefe', GradientType=0 );
+}
+.gw-skillA {background-image: url(var/detail_A.png);}
+.gw-skillD {background-image: url(var/detail_D.png);}
+.gw-skillE {background-image: url(var/detail_E.png);}
+.gw-skillMe {background-image: url(var/detail_Me.png);}
+.gw-skillMo {background-image: url(var/detail_Mo.png);}
+.gw-skillN {background-image: url(var/detail_N.png);}
+.gw-skillP {background-image: url(var/detail_P.png);}
+.gw-skillR {background-image: url(var/detail_R.png);}
+.gw-skillRt {background-image: url(var/detail_Rt.png);}
+.gw-skillW {background-image: url(var/detail_W.png);}
+.gw-skill-detail .gw-skill-panel {
+    /*skill icon look might be changed here*/
+	float: left;
+	width: 80px;/*50px->72px*/
+	padding-right: 5px; /*5px*/
+	border-right: 1px solid #ccc; /*1px*/
+	margin-bottom: 20px;
+}
+.gw-skill-detail .gw-skill-panel .skill{
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+	-webkit-border-radius: 0px;
+	-moz-border-radius: 0px;
+	border-radius: 0px;
+	width:72px;/*50px*/
+	height:72px;/*50px*/
+}
+.gw-skill-detail .gw-skill-panel ul {
+	margin: 8px 0;
+	padding: 0;
+	border: 0;
+	list-style: none;
+}
+.gw-skill-detail .gw-skill-panel ul li {
+	line-height: 20px;
+}
+.gw-skill-detail .gw-skill-panel ul li span {
+	display: inline-block;
+	width: 20px;/*20px*/
+	height: 20px;
+	margin-right: 4px;/*4px*/
+	vertical-align: middle;
+	background: url(var/icons.png) no-repeat 0 800px;
+}
+.gw-skill-detail .gw-skill-panel ul li.gw-carac-adrenaline span.carac-img {background-position: 0 0;}
+.gw-skill-detail .gw-skill-panel ul li.gw-carac-casting span.carac-img {background-position: 0 -20px;}
+.gw-skill-detail .gw-skill-panel ul li.gw-carac-energy span.carac-img {background-position: 0 -40px;}
+.gw-skill-detail .gw-skill-panel ul li.gw-carac-eregen span.carac-img {background-position: 0 -60px;}
+.gw-skill-detail .gw-skill-panel ul li.gw-carac-exhaustion span.carac-img {background-position: 0 -80px;}
+.gw-skill-detail .gw-skill-panel ul li.gw-carac-recharge span.carac-img {background-position: 0 -100px;}
+.gw-skill-detail .gw-skill-panel ul li.gw-carac-sacrifice span.carac-img {background-position: 0 -120px;}
+
+.gw-skill-detail .gw-skill-panel ul li.gw-carac-adrenaline b {color:green;font-weight:bold;}
+.gw-skill-detail .gw-skill-panel ul li.gw-carac-casting b {color:green;font-weight:bold;}
+.gw-skill-detail .gw-skill-panel ul li.gw-carac-energy b {color:green;font-weight:bold;}
+.gw-skill-detail .gw-skill-panel ul li.gw-carac-eregen b {color:green;font-weight:bold;}
+.gw-skill-detail .gw-skill-panel ul li.gw-carac-exhaustion b {color:green;font-weight:bold;}
+.gw-skill-detail .gw-skill-panel ul li.gw-carac-recharge b {color:green;font-weight:bold;}
+.gw-skill-detail .gw-skill-panel ul li.gw-carac-sacrifice b {color:green;font-weight:bold;}
+
+.gw-skill-detail .gw-skill-panel ul li.gw-carac-casting strong {color:darkorchid;font-weight:bold;}
+.gw-skill-detail .gw-skill-panel ul li.gw-carac-recharge strong {color:darkorchid;font-weight:bold;}
+
+.gw-skill-detail .gw-skill-desc {
+	margin-left: 100px;/*72->92px*/
+	margin-bottom: 20px;
+}
+.gw-skill-detail .gw-skill-name {
+	font-weight: bold;
+	font-size: 22px;
+}
+.gw-skill-elite .gw-skill-name {
+	color: #AF350D; /*#e9aa12;*/
+}
+.gw-skill-detail .gw-skill-type {
+	font-weight: bold;
+	color: #888;
+}
+.gw-skill-detail .gw-skill-text {
+	margin: 8px 0;
+	white-space:pre-wrap;
+}
+.gw-skill-detail .gw-skill-text b {
+	color: blue; /*#090*/
+	font-weight: bold;
+	white-space:pre-wrap;
+}
+
+.gw-skill-detail .gw-skill-bottom {
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	width: 390px; /*392<-370px, associated with the 350px above*/ /*in previous version, was 408px*/
+}
+.gw-skill-detail .gw-skill-attr {
+	padding: 2px 8px;
+	font-weight: bold;
+	color: #888;
+	float: left;
+	margin-left: 100px;/*72->92px*/
+}
+.gw-skill-detail .gw-skill-attr b {
+	color: blue; /*#090*/
+	font-weight: bold;
+}
+.gw-skill-detail .gw-skill-chap {
+	padding: 2px 12px 2px 8px;
+	float: right;
+	background: #888;
+	font-weight: bold;
+	color: white;
+	-webkit-border-top-left-radius: 8px;
+	-moz-border-radius-bottomright: 8px;
+	border-top-left-radius: 8px;
+}
+/***********************************************************************/
+/*                            BUILD                                    */
+/***********************************************************************/
+.gw-build {
+	margin: 0px 0;
+	overflow: hidden;
+	display: inline-block;
+}
+.gw-count0 {width: ;}/*150px*/
+.gw-count1 {width: ;}/*200px*/
+.gw-count2 {width: ;}/*250px*/
+.gw-count3 {width: ;}/*300px*/
+.gw-count4 {width: ;}/*350px*/
+.gw-count5 {width: ;}/*400px*/
+.gw-count6 {width: ;}/*450px*/
+.gw-count7 {width: ;}/*500px*/
+.gw-count8 {width: ;}/*550px*/
+.gw-count0 .gw-skills-center {width:  !important;}/*0px*/
+.gw-count1 .gw-skills-center {width:  !important;}/*100px*/
+.gw-count2 .gw-skills-center {width:  !important;}/*50px*/
+.gw-count3 .gw-skills-center {width:  !important;}/*150px*/
+.gw-count4 .gw-skills-center {width:  !important;}/*200px*/
+.gw-count5 .gw-skills-center {width:  !important;}/*250px*/
+.gw-count6 .gw-skills-center {width:  !important;}/*300px*/
+.gw-count7 .gw-skills-center {width:  !important;}/*350px*/
+.gw-count8 .gw-skills-center {width:  !important;}/*400px*/
+.gw-build .gw-panel {
+	float: left;
+	width: 90px;/*90px*/
+	height: 60px;/*60px*/
+	text-align:center;
+	padding-top: 0px;/*12px*/
+	overflow: hidden;
+}
+.gw-build .gw-template {
+	display: block;
+	font-size: 85%;
+	/*font-style: italic;*/
+	color: #25383C;/*#888*/
+	/*font-weight: bold;*/
+	text-align: center;
+}
+.gw-build .gw-prof span {
+	display: inline-block;
+	width: 35px;/*35px*/
+	height: 35px;/*35px*/
+	vertical-align: middle;
+	background:url(var/professions.png) no-repeat 100px 0;/*100px*/
+}
+.gw-build .gw-prof .gw-profA {background-position:0 0;}
+.gw-build .gw-prof .gw-profD {background-position:0 -35px;}
+.gw-build .gw-prof .gw-profE {background-position:0 -70px;}
+.gw-build .gw-prof .gw-profMe {background-position:0 -105px;}
+.gw-build .gw-prof .gw-profMo {background-position:0 -140px;}
+.gw-build .gw-prof .gw-profN {background-position:0 -175px;}
+.gw-build .gw-prof .gw-profP {background-position:0 -210px;}
+.gw-build .gw-prof .gw-profR {background-position:0 -245px;}
+.gw-build .gw-prof .gw-profRt {background-position:0 -280px;}
+.gw-build .gw-prof .gw-profW {background-position:0 -315px;}
+.gw-build .gw-container {
+	display: block;
+	overflow: hidden;
+}
+
+.gw-build .gw-skills-left{
+	width: 3px;/*25px*/
+	background-position: 0 -61px; 
+}
+.gw-build .gw-skills-right {
+	width: 3px;/*25px*/
+	background-position: 0 -122px;
+}
+.gw-build .gw-skills-center {
+	background-repeat: repeat-x;
+}
+.gw-build .gw-skills-center .skill {
+	margin-top: 2px;/*5px*/
+}
+.gw-build .gw-skills-left,
+.gw-build .gw-skills-right,
+.gw-build .gw-skills-center {
+	display: inline-block;
+	vertical-align: top;
+	background-color: #ffffff;
+	/*background-image: url(var/buildbox.png);*/
+	/*height: 76px;*//*61px*/
+}
+/***********************************************************************/
+/*                          IE 6 hacks                                 */
+/***********************************************************************/
+* html .gw-skill-detail .gw-skill-panel ul li span {
+	background-image: url(var/icons_ie6.png);
+}
+* html .gw-build .gw-skills-left,
+* html .gw-build .gw-skills-right,
+* html .gw-build .gw-skills-center {
+	background-color: #f6f6f6;
+	/*background-image: url(var/buildbox_ie6.png);*/
+}
+* html .gw-build .gw-prof span {
+	background-color: #f6f6f6;
+	/*background-image:url(var/professions_ie6.png);*/
+}
+* html .gw-skill-detail .gw-skill-attr {
+	margin-left: 0px;
+}
+* html .gw-skill-detail .gw-skill-chap {
+	margin-right: 8px;
+}

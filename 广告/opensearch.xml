@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+  <ShortName>Guild Wars Trade Chat</ShortName>
+  <Description>Search and browse the latest item pricing information right out of Kamadan!</Description>
+  <Image height="16" width="16" type="image/x-icon">http://kamadan.decltype.org/img/travel-icon-16.ico</Image>
+  <Image height="64" width="64" type="image/png">http://kamadan.decltype.org/img/travel-icon-64.png</Image>
+  <Tags>guild wars trade chat kamadan price check</Tags>
+  <Url type="text/html" template="http://kamadan.decltype.org/search/{searchTerms}"/>
+  <OutputEncoding>UTF-8</OutputEncoding>
+  <InputEncoding>UTF-8</InputEncoding>
+</OpenSearchDescription>

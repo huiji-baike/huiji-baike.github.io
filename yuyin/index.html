@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="./css/solarized_dark.css">
+  <link href='https://fonts.googleapis.com/css?family=Raleway:400,500' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="./css/master.min.css" media="screen" title="default" charset="utf-8">
+  <link rel="stylesheet" href="./css/jquery-ui.min.css" media="screen" title="default" charset="utf-8">
+  <link rel="stylesheet" href="./css/jquery-ui.structure.min.css" media="screen" title="default" charset="utf-8">
+  <link rel="stylesheet" href="./css/jquery-ui.theme.min.css" media="screen" title="default" charset="utf-8">
+  <meta charset="utf-8">
+  <title>Discord Widget</title>
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-69334315-1', 'auto');
+  ga('send', 'pageview');
+  </script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+  <script>
+  $(function() {
+    $( "#tabs" ).tabs();
+  });
+  </script>
+</head>
+<body>
+  <h1>Discord Widget</h1>
+  <h5>Created By: <a href="http://github.com/restingcoder">Josh Schmille</a></h5>
+  <h2>
+    Code Snippet
+  </h2>
+  <div id="tabs">
+  <ul>
+    <li><a href="#tab1">HTML / JS</a></li>
+    <li><a href="#tab2">iframe</a></li>
+  </ul>
+  <div id="tab1">
+    <pre><code class="html">&lt;script type=&quot;text/javascript&quot; src=&quot;discord.js&quot;&gt;&lt;/script&gt;<br/>&lt;script type=&quot;text/javascript&quot;&gt;<br/>discordWidget.init({<br/>  serverId: '51143782082543616',<br/>  title: 'Discord Widget Title',<br/>  join: true,<br/>  alphabetical: false,<br/>  theme: 'light',<br/>  hideChannels: ['Channel Name 1', 'Channel Name 2'],<br/>  showAllUsers: true,<br/>  allUsersDefaultState: true,<br/>  showNick: false<br/>});<br/>discordWidget.render();<br/>&lt;/script&gt;<br/><br/>&lt;div class=&quot;discord-widget&quot;&gt;&lt;/div&gt;</code></pre>
+  </div>
+  <div id="tab2">
+    <p class="iframe-form-info">
+      This is still being worked on. The only part not added yet is the Hide Channels option.
+    </p>
+    <pre><code class="html" id="discord-iframe-code">&lt;iframe src=&quot;http://discordi.deliriousdrunkards.com/render?id=51143782082543616&quot; width=&quot;300px&quot; height=&quot;400px&quot; frameborder=&quot;0&quot;&gt;&lt;/iframe&gt;</code></pre>
+    <form id="iframe-form">
+          <div id="iframe-id" class="iframe-form-input">
+               <label for="iframe-id-text">
+                    Server ID
+               </label><br/>
+               <input type="text" name="iframe-id-text" id="iframe-id-text" autocomplete="off">
+          </div>
+          <div id="iframe-title" class="iframe-form-input">
+               <label for="iframe-title-text">
+                    Widget Title <span class="iframe-form-info">(Leave blank to hide the title bar)</span>
+               </label><br/>
+               <input type="text" name="iframe-title" id="iframe-title-text" autocomplete="off">
+          </div>
+          <div id="iframe-theme" class="iframe-form-input">
+               <label for="iframe-theme-light">
+                    Theme
+               </label>
+               <div>
+                    <input type="radio" name="iframe-theme" id="iframe-theme-light" value="Light" checked="checked">
+                    <span>
+                         Light
+                    </span>
+               </div>
+               <div>
+                    <input type="radio" name="iframe-theme" id="iframe-theme-dark" value="Dark">
+                    <span>
+                         Dark
+                    </span>
+               </div>
+               <div>
+                    <input type="radio" name="iframe-theme" id="iframe-theme-none" value="None">
+                    <span>
+                         None
+                    </span>
+               </div>
+          </div>
+          <div id="iframe-options" class="iframe-form-input">
+               <label for="iframe-options">
+                    Options
+               </label>
+               <div>
+                    <input type="checkbox" name="iframe-options-join" id="iframe-options-join" value="Show Join Button">
+                    <span>
+                         Show Join Button
+                    </span>
+                    <br>
+               </div>
+               <div>
+                    <input type="checkbox" name="iframe-options-abc" id="iframe-options-abc" value="Alphabetize Channel List">
+                    <span>
+                         Alphabetize Channel List
+                    </span>
+                    <br>
+               </div>
+               <div>
+                    <input type="checkbox" name="iframe-options-showall" id="iframe-options-showall" value="Show All Online Users">
+                    <span>
+                         Show All Online Users
+                    </span>
+                    <br>
+               </div>
+               <div>
+                    <input type="checkbox" name="iframe-options-showalltoggle" id="iframe-options-showalltoggle" value="All Online Users Starts Expanded">
+                    <span>
+                         All Online Users Starts Expanded
+                    </span>
+                    <br>
+               </div>
+               <div>
+                    <input type="checkbox" name="iframe-options-shownick" id="iframe-options-shownick" value="Show Server Nicknames">
+                    <span>
+                         Show Server Nicknames
+                    </span>
+                    <br>
+               </div>
+          </div>
+          <div id="iframe-hidechannels">
+               <label for="iframe-hidechannels-text">
+                    Hide Channels <span class="iframe-form-info">(Separated by commas)</span>
+               </label><br/>
+               <input type="text" name="iframe-hidechannels-text" id="iframe-hidechannels-text" autocomplete="off" disabled>
+          </div>
+     </form>
+  </div>
+</div>
+
+  <h2>
+    Parameters
+  </h2>
+  <table class="parameter-table">
+    <tr><th>Parameter</th><th>Usage</th><th>Default</th></tr>
+    <tr><td>serverId<br/><strong>[String]</strong></td><td>Paste your Server ID from the Widget section of your Server Settings here.</td><td>false</td></tr>
+    <tr><td>title<br/><strong>[String]</strong></td><td>A header will be added to the widget, containing the text supplied.</td><td>false</td></tr>
+    <tr><td>join<br/><strong>[Boolean]</strong></td><td>Determines whether to show the Join Server button within the widget.</td><td>true</td></tr>
+    <tr><td>alphabetical<br/><strong>[Boolean]</strong></td><td>Determines whether the channel list will display in alphabetical order or not.</td><td>false</td></tr>
+    <tr><td>theme<br/><strong>[String ('light', 'dark', 'none')]</strong></td><td>Pick your poison!<br/><br/>'none' removes <strong>all styling</strong>, including margins and padding around the widget.</td><td>light</td></tr>
+    <tr><td>hideChannels<br/><strong>[String Array]</strong></td><td>Hide channels. If the channel name contains the string provided, it will be hidden.</td><td>false</td></tr>
+    <tr><td>showAllUsers<br/><strong>[Boolean]</strong></td><td>Show all online users, even if they are not in a voice channel.</td><td>false</td></tr>
+    <tr><td>allUsersDefaultState<br/><strong>[Boolean]</strong></td><td>Sets whether the Online Users section is expanded or not by default.</td><td>true</td></tr>
+    <tr><td>showNick<br/><strong>[Boolean]</strong></td><td>Sets whether the the users' server nick name shows or not.</td><td>false</td></tr>
+  </table>
+  <h2>Preview</h2>
+  <div class="discord-preview">
+<script type="text/javascript" src="discord.js"></script>
+<script type="text/javascript">
+discordWidget.init({
+  serverId: '51143782082543616',
+  title: 'Discord Widget Title',
+  join: true,
+  alphabetical: false,
+  theme: 'light',
+  hideChannels: ['Channel Name 1', 'Channel Name 2'],
+  showAllUsers: true,
+  allUsersDefaultState: true,
+  showNick: false
+});
+discordWidget.render();
+</script>
+
+<div class="discord-widget"></div>
+
+<iframe src="http://discordi.deliriousdrunkards.com/render?id=51143782082543616&showall=true&shownick=true" width="300px" height="200px" frameborder="0"></iframe>
+
+  </div>
+  <h2>
+    Help
+  </h2>
+  <p>
+    If you run into trouble, let me know <a href="https://github.com/RestingCoder/discord-widget/issues">here</a>.
+  </p>
+  <script src="./js/highlight.pack.js"></script>
+  <script src="./js/master.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+</body>
+</html>

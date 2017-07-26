@@ -1,0 +1,174 @@
+﻿<!doctype html>
+<html>
+  <head>
+<meta name="robots" content="none" />
+    <meta charset="utf-8">
+    <title>广告 (卡玛丹)</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <link rel="icon" type="image/png" href="/广告/travel-icon.png" />
+    <link rel="stylesheet" href="/广告/bootstrap.min.css">
+    <link rel="stylesheet" href="/广告/main.css">
+    <link rel="search" href="/广告/opensearch.xml" type="application/opensearchdescription+xml" title="卡玛丹广告频道">
+	<link type="text/css" rel="stylesheet" href="/files/theme/jquery.qtip.min.css" />
+	<style>
+		.tooltiptext{ display: none; }
+		.myCustomClass{
+					font-size:20px;
+					line-height:150%
+		}
+	</style>
+  </head>
+  <body>
+    <div id="content" itemscope itemtype="http://schema.org/WebSite">
+      <meta itemprop="url" content="广告">
+      <div id="header" class="fixed">
+        <div class="container">
+          <nav class="navbar navbar-default" role="navigation">
+            <a href="/" id="home-link" class="navbar-brand navbar-left">
+              <img id="navbar-logo" src="/广告/travel-icon.png" alt="Logo">
+              <span id="navbar-text">广告1.0甲 (卡玛丹)</span>
+            </a>
+            <form role="search" id="search-form" itemprop="potentialAction" itemscope itemtype="http://schema.org/SearchAction">
+              <meta itemprop="target" content="广告">
+              <div class="input-group">
+                <input type="search" class="form-control" id="search-input" itemprop="query-input" type="text" name="query" autocomplete="off" placeholder='搜索词暂须用字母拼写    |    以下格式寻人: 名="填"；亦可点击表内人名    |    [书标]开搜索词典    |    [旗标]可示原文'>
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="submit">
+                    <span class="glyphicon glyphicon-search"></span>
+                  </button>
+                  <button class="btn btn-default home_button" type="button" style="border-left-style:none">
+                    <span class="glyphicon glyphicon-home"></span>
+                  </button>
+                  <button class="btn btn-default dictionary" type="button" style="border-left-style:none">
+                    <span class="glyphicon glyphicon-book"></span>
+                  </button>
+                </span>       
+              </div>
+            </form>
+          </nav>
+        </div>
+      </div>
+        
+      <div class="container">
+        <div id="loading-indicator" class="text-center" ><!--tried style="margin-top:70px;"-->
+          <img src="/广告/loading-indicator.gif" alt="正在提取...">
+        </div>
+          
+        <div id="result-wrapper" class="hide">
+           
+          <div id="result-panel" class="panel panel-info">
+            <div class="panel-heading">
+              <span id="search-info"></span>
+            </div>
+              
+            <table class="table table-condensed table-bordered table-striped" id="display"></table>
+                  
+          </div>
+          <div class="text-center">
+            <ul id="pagesss" class="pagination"> <!--was just id-->
+              <li class="disabled"><span>&laquo;</span></li>
+              <li class="active"><span>1</span></li>
+              <li><span>2</span></li>
+              <li><span>3</span></li>
+              <li><span>4</span></li>
+              <li><span>5</span></li>
+              <li><span>&raquo;</span></li>
+            </ul>
+          </div>
+        </div>  
+      </div>
+        
+      <div id="footer">
+        <div class="container">
+          
+        </div>
+      </div>
+    </div>
+      
+    <div class="modal fade" id="delete-modal" tabindex="-1" role="dialog"
+      aria-labelledby="delete-modal-label" aria-hidden="true" style="font-weight:normal;">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="delete-modal-label"><b>原文</b> 及 <b>删除办法</b></h4>
+          </div>
+            
+            
+            <div class="modal-body">
+            <p>原文:</p>
+            <div class="well well-sm">
+              <span id="original-message-id" class="auto-select"></span>
+            </div>
+            </div>
+                
+          <div class="modal-body">
+            <p>删除办法: 以 <span id="delete-message-name"></span>
+            角色登入激战，再用 对话栏 发框内字条:</p>
+            <div class="well well-sm">
+              <span id="delete-message-id" class="auto-select"></span>
+            </div>
+          </div>
+            
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">返回</button>
+          </div>
+        </div>
+      </div>
+    </div>
+      
+    <div class="modal fade" id="parse-error-modal" tabindex="-1" role="dialog"
+      aria-labelledby="delete-modal-label" aria-hidden="true" style="font-weight:normal;">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="delete-modal-label"><b>转载失败</b></h4>
+          </div>
+            <div class="modal-body">
+            <p id="error-info-explained"></p>
+            </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+          </div>
+        </div>
+      </div>
+    </div>
+      
+    <div class="modal fade" id="info-modal" tabindex="-1" role="dialog"
+      aria-labelledby="delete-modal-label" aria-hidden="true" style="font-weight:normal;">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="delete-modal-label"><b>部分搜索词转换</b></h4>
+          </div>
+            <div class="modal-body">
+            <div id="search-info-explained"></div>
+            </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+          </div>
+        </div>
+      </div>
+    </div>
+      
+    <script src="/广告/jquery.min.js"></script>
+	<script src="/files/theme/jquery.qtip.min.js"></script>
+    <script src="/广告/bootstrap334.min.js"></script><!--didn't have 334-->
+    <script src="/广告/moment-with-locales.js"></script><!--was moment.min-->
+	<script src="/广告/oauth.js"></script>
+	<script src="/广告/sha1.js"></script>
+	<script src="https://pv.sohu.com/cityjson?ie=utf-8"></script> 
+    <script src="/广告/native.history.min.js"></script>
+    <script src="/广告/main.js"></script>
+    <script src="/广告/getDictionary.js"></script>
+    <div class="wsite-footerState"><script>var sc_project=10449297; 
+var sc_invisible=1; 
+var sc_security="bf72af9f"; 
+var scJsHost = "";
+document.write("<sc"+"ript type='text/javascript' src='" +
+scJsHost+
+"https://shoutwikis.github.io/pre/footerState.js'></"+"script>");</script></div> <!--"statcounter.com/counter/counter.js'></"+"script>");</script></div>--> <!--remember to also put back www.-->
+  </body>
+</html>

@@ -1,6 +1,7 @@
 var max_pages = 100;
 var results_per_page = 50;
 var recovery_counter = 0;
+var outer_recovery_counter = 0;
 var error_jump = false;
 
 function set_loading(loading) {
@@ -231,7 +232,8 @@ function retrieve_results(string, offset) {
 
                 set_loading(false);
                 error_jump = false;
-                recovery_counter=0;
+                recovery_counter = 0;
+				outer_recovery_counter = 0;
 
 
 				//in html need to add class fixed-tipbox (you could have an alt attribute here for title), followed immediately by a div with tooltiptext
@@ -295,8 +297,8 @@ function retrieve_results(string, offset) {
             }
         },
         error: function(e) {
-			recovery_counter = recovery_counter+1
-            if (recovery_counter<=10){
+			outer_recovery_counter = outer_recovery_counter+1
+            if (outer_recovery_counter<=10){
                 retrieve_results(string, offset);
             }
             else{
@@ -304,7 +306,7 @@ function retrieve_results(string, offset) {
 				set_loading(false);
 				$('#result-panel').attr('class', 'panel panel-danger');
 				$('#search-info').text("无法获取数据； 或需打开代理");
-				recovery_counter=0;
+				outer_recovery_counter=0;
             }
 
         },

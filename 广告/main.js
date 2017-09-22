@@ -295,10 +295,17 @@ function retrieve_results(string, offset) {
             }
         },
         error: function(e) {
-			console.log(e)
-            set_loading(false);
-            $('#result-panel').attr('class', 'panel panel-danger');
-            $('#search-info').text("无法获取数据； 或需打开代理");
+			recovery_counter = recovery_counter+1
+            if (recovery_counter<=10){
+                retrieve_results(string, offset);
+            }
+            else{
+				console.log(e)
+				set_loading(false);
+				$('#result-panel').attr('class', 'panel panel-danger');
+				$('#search-info').text("无法获取数据； 或需打开代理");
+				recovery_counter=0;
+            }
 
         },
         complete: function() {

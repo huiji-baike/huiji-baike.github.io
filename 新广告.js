@@ -228,15 +228,19 @@ function forceReconnectWebSocket() {
 }
 
 function trimPathName(path){
+	console.log(path)	
 	var tPath = path
 	path = path.replace(/^.+?(\/(?:(?:search)|(?:latest)).*?)$/gi,"$1");
-	return ((tPath == path) ? "" : path);
+	console.log(path)
+	//return ((tPath == path) ? "" : path);
+	return tPath;
+	
 }
 
 function setupWebSocket() {
     connectionIndicator.classList.remove("connected");
     socket && (socket.onclose = socket.onopen = socket.onmessage = null, socket.close());
-    var a = trimPathName(document.location.pathname) //document.location.pathname || New: Need to generalize this argument
+    var a = trimPathName(trimPathName(document.location.pathname)) //document.location.pathnam || New: Need to generalize this argument
     pendingRequest || (a = "/notify" + a);
     socket = new WebSocket("wss://" + "kamadan.decltype.org" + "/ws" + a); //window.location.hostname
     socket.onclose = function(a) {
@@ -261,13 +265,13 @@ function setupWebSocket() {
         else {
 			console.log("result for auto update received")
             if (notificationButton.classList.contains("enabled")) {
-                var b = parseRequestFromUrl(document.location.pathname)
+                var b = parseRequestFromUrl(trimPathName(document.location.pathname))
                   , d = {
-                    body: a.message + "\n\n角色名: " + a.name + "\n所在地: 卡玛丹，艾斯坦之钻\n美洲1区",
-                    icon: "", //notification related:  /v/ZjA5Y2E4NT.png
-                    tag: "kamadan/" + b.query
+                    body: "\n\n角色名: " + a.name + "\n"+ parseTranslate(a.message), //所在地: 卡玛丹，艾斯坦之钻\n美洲1区
+                    icon: "ZjA5Y2E4NT.png", //notification related:  /v/ZjA5Y2E4NT.png
+                    tag: "卡玛丹/" + b.query
                 }
-                  , e = "New message";
+                  , e = "激战广告";
                 b.query && (e = e + " matching '" + b.query + "'");
 				console.log("sending notification") //New: this and two lines below test for notification
 				console.log(e)
@@ -489,7 +493,7 @@ function matchesRequest(a, b) {
 function navigateUrl(a) {
     "/latest" == a && (a = "/");
     var b = parseRequestFromUrl(a)
-      , c = parseRequestFromUrl(document.location.pathname);
+      , c = parseRequestFromUrl(trimPathName(document.location.pathname));
     matchesRequest(c, b) || history.pushState({}, "", a);
     retrieveResults(b)
 }
@@ -534,7 +538,7 @@ scrollIndicator.addEventListener("click", function() {
 });
 
 window.addEventListener("popstate", function(a) {
-    retrieveResultsForUrl(document.location.pathname)
+    retrieveResultsForUrl(trimPathName(document.location.pathname))
 });
 
 window.addEventListener("beforeunload", function() {

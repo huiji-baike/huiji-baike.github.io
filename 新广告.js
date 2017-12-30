@@ -51,7 +51,7 @@ function humanReadableDuration(a, b) {
         article: "1 ",
         ms: 6048E5
     }, {
-        unit: "月 ",
+        unit: "个 月 ",
         article: "1 ",
         ms: 2629746E3
     }, {
@@ -230,7 +230,7 @@ function forceReconnectWebSocket() {
 function trimPathName(path){	
 	var tPath = path;
 	path = path.replace(/^.+?(\/(?:(?:search)|(?:latest)).*?)$/gi,"$1");
-	console.log("performing trimPath, original: "+tPath+" | processed: "+path)	
+	console.log("performing trimPath, original: "+tPath+" | processed: "+path + " :: if identical, sends empty string");
 	return ((tPath == path) ? "" : path);
 }
 
@@ -250,7 +250,7 @@ function setupWebSocket() {
         clearTimeout(reconnectTimer);
         reconnectDelayMs = baseReconnectDelayMs;
         connectionIndicator.classList.add("connected")
-		retrieveResults({query:"",offset:0}) // New: Need to generalize this query object
+		//retrieveResults({query:"",offset:0}) // New: Need to generalize this query object
     };
 	
     socket.onmessage = function(a) {
@@ -264,12 +264,12 @@ function setupWebSocket() {
             if (notificationButton.classList.contains("enabled")) {
                 var b = parseRequestFromUrl(trimPathName(document.location.pathname))
                   , d = {
-                    body: "\n\n角色名: " + a.name + "\n"+ parseTranslate(a.message), //所在地: 卡玛丹，艾斯坦之钻\n美洲1区
+                    body: "角色名: " + a.name + "\n"+ parseTranslate(a.message), //所在地: 卡玛丹，艾斯坦之钻\n美洲1区
                     icon: "ZjA5Y2E4NT.png", //notification related:  /v/ZjA5Y2E4NT.png
                     tag: "卡玛丹/" + b.query
                 }
                   , e = "激战广告";
-                b.query && (e = e + " matching '" + b.query + "'");
+                b.query && (e = e + " - '" + b.query + "' 的搜索结果");
 				console.log("sending notification") //New: this and two lines below test for notification
 				console.log(e)
 				console.log(d)
@@ -364,6 +364,7 @@ function displayQuery(a) {
 function displayResults(a) {
     pendingRequest = null;
     var b = buildUrlFor(a.query);
+	console.log("display results: URL built, offset, total number of entries indicated: ")
 	console.log("b: "+b)
 	console.log(a.offset)
     buildUrlFor(a.query, a.offset);

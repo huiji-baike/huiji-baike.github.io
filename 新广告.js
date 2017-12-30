@@ -524,10 +524,27 @@ homeLink.addEventListener("click", function(a) {
 });
 
 notificationButton.addEventListener("click", function() {
-    "undefined" === typeof Notification ? alert("Your browser does not support notifications") : (fetchNotificationSound(),
-    "granted" !== Notification.permission ? Notification.requestPermission(function(a) {
-        "granted" === a && notificationButton.classList.add("enabled")
-    }) : notificationButton.classList.toggle("enabled"))
+	console.log("点了按钮")
+    if ("undefined" === typeof Notification) {
+		alert("浏览器无提示窗功能")
+	} else {
+		console.log("有提示窗功能")
+		fetchNotificationSound();
+		if ("granted" !== Notification.permission){
+			console.log("没有认可，查询意向")
+			Notification.requestPermission(function(a) {
+				console.log("意向以明朗")
+				if ("granted" === a) {
+					console.log("被同意")
+					notificationButton.classList.add("enabled");
+				} else {
+					console.log("不同意")
+				}
+			});
+		} else {
+			notificationButton.classList.toggle("enabled");
+		}
+	}
 });
 
 scrollIndicator.addEventListener("click", function() {

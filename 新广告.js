@@ -240,7 +240,7 @@ function trimPathName(path){
 function setupWebSocket() {
     connectionIndicator.classList.remove("connected");
     socket && (socket.onclose = socket.onopen = socket.onmessage = null, socket.close());
-    var a = trimPathName(trimPathName(document.location.pathname)) //document.location.pathnam || New: Need to generalize this argument
+    var a = trimPathName(document.location.pathname) //document.location.pathnam || New: Need to generalize this argument
     pendingRequest || (a = "/notify" + a);
     socket = new WebSocket("wss://" + "kamadan.decltype.org" + "/ws" + a); //window.location.hostname
     socket.onclose = function(a) {

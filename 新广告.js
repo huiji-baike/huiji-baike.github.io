@@ -227,14 +227,11 @@ function forceReconnectWebSocket() {
     setupWebSocket()
 }
 
-function trimPathName(path){
-	console.log(path)	
-	var tPath = path
+function trimPathName(path){	
+	var tPath = path;
 	path = path.replace(/^.+?(\/(?:(?:search)|(?:latest)).*?)$/gi,"$1");
-	console.log(path)
-	//return ((tPath == path) ? "" : path);
-	return tPath;
-	
+	console.log("performing trimPath, original: "+tPath+" | processed: "+path)	
+	return ((tPath == path) ? "" : path);
 }
 
 function setupWebSocket() {

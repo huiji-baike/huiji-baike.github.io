@@ -1,470 +1,588 @@
-var max_pages = 100;
-var results_per_page = 50;
-var recovery_counter = 0;
-var outer_recovery_counter = 0;
-var error_jump = false;
+var resultsPerPage = 25,
+	maxPages = 100,
+	baseReconnectDelayMs = 100,
+	maxReconnectDelayMs = 3E4,
+	enableSuggest = !1,
+	enableInstantSearch = !1,
+	page = document.getElementById("page"),
+	current = document.getElementById("current"),
+	searchInfo = document.getElementById("search-info"),
+	pagination = document.getElementById("pagination"),
+	scrollIndicator = document.getElementById("scroll-indicator"),
+	incomingCount = document.getElementById("incoming-count"),
+	searchForm = document.getElementById("search-form"),
+	searchInput = document.getElementById("search-input"),
+	homeLink = document.getElementById("home-link"),
+	connectionIndicator = document.getElementById("connection-indicator"),
+	notificationButton = document.getElementById("notification-button"),
+	audioContext,
+	notificationSoundBuffer,
+	socket,
+	reconnectDelayMs = baseReconnectDelayMs,
+	reconnectTimer,
+	isFirstReflow = !0,
+	scrolledDown = !1,
+	scrolling = !1,
+	pendingRequest = null,
+	xhr = null,
+	results = [],
+	incomingResults = [],
+	incomingResultCount = 0;
 
-function set_loading(loading) {
-    $('#loading-indicator').toggleClass('hide', !loading);
-    $('#result-wrapper').toggleClass('hide', loading);
+var animationEnd = 0, animationLengthMs = 500, animationRunning = !1, animationFrameRequest;
+
+var scrollAnimationEnd = 0, scrollAnimationLengthMs, scrollStartY, scrollEndY;
+	
+function humanReadableDuration(a, b) {
+    for (var c = Math.abs(b - a), d = [{
+        unit: "分 钟 ",
+        article: "1 ",
+        ms: 6E4
+    }, {
+        unit: "小 时 ",
+        article: "1 ",
+        ms: 36E5
+    }, {
+        unit: "天 ",
+        article: "1 ",
+        ms: 864E5
+    }, {
+        unit: "周 ",
+        article: "1 ",
+        ms: 6048E5
+    }, {
+        unit: "月 ",
+        article: "1 ",
+        ms: 2629746E3
+    }, {
+        unit: "年 ",
+        article: "1 ",
+        ms: 31556952E3
+    }], e = null, f = 0; f < d.length && !(c < d[f].ms); ++f)
+        e = d[f];
+    return e ? (c = Math.floor(c / e.ms),
+    1 < c ? c + " " + e.unit + "" : e.article + " " + e.unit) : "几 秒 "
 }
 
-function display_info(data, string, offset) {
-    var info;
-    if (data.results.length > 0) {
-        $('#result-panel').attr('class', 'panel panel-info');
-        var shown_results = Math.min(results_per_page, data.results.length);
-        var elapsed_ms = data.elapsed_microseconds / 1000;
-        var start = offset + 1;
-        var end = start + shown_results - 1;
-        if (string) {
-            var precision = (data.exact === "true") ? "" : "~";
+function humanReadableAge(a, b) {
+    "undefined" === typeof b && (b = (new Date).valueOf());
+    return humanReadableDuration(a > b ? b : a, b) + "前"
+}
 
-			var stripSymbols = data.query;
-			stripSymbols = stripSymbols.replace(/[!@#$%^&*()]/gi,"");
-			stripSymbols = stripSymbols.replace(/amp;/gi,"");
+function clearResults() {
+    results = [];
+    for (clearIncomingResults(); current.hasChildNodes(); )
+        current.removeChild(current.lastChild);
+    current.classList.remove("animate-fade-out")
+}
 
-            info = "第 " + start + " - " + end +
-                    " 条" + ' | ' + "搜索 " + stripSymbols + " 共找到" + precision + " " + data.num_results +
-                    " 则广告 "  //+
-                    //" (耗时 " + elapsed_ms + "毫秒)";
-        } else {
-            info = "第 " + start + " - " + end +
-                    " 条" + ' | ' + "共 " + data.num_results + " 则 " //+
-                    //" (耗时 " + elapsed_ms + "毫秒)";
+function addResult(a) {	
+    current.insertAdjacentHTML("afterbegin", formatResult(a));
+    a.domNode = current.firstChild;
+    a.ageDomNode = a.domNode.getElementsByClassName("age")[0];
+    a.deleted = !1;
+    results.push(a)
+}
+
+function populateResultsFromDom() {
+    for (var a = current.childNodes, b = a.length - 1; 0 <= b; --b) {
+        var c = a[b]
+          , c = {
+            domNode: c,
+            deleted: !1,
+            ageDomNode: c.getElementsByClassName("age")[0],
+            y: 0,
+            timestamp: parseInt(c.getAttribute("data-timestamp"), 10),
+            id: parseInt(c.getAttribute("data-id"), 10),
+            name: c.getElementsByClassName("name")[0].innerText,
+            message: c.getElementsByClassName("message")[0].innerText
+        };
+        results.push(c)
+    }
+}
+
+function htmlEscape(a) {
+    return document.createElement("div").appendChild(document.createTextNode(a)).parentNode.innerHTML.replace(/"/g, "&quot;")
+}
+
+function formatResult(a) {
+    var b = htmlEscape(a.name)
+      , c = humanReadableAge(1E3 * a.timestamp);	  	
+    a = htmlEscape(a.message);		
+	a = parseTranslate(a); //New: Need to make sure translation do not break syntax
+    return '<tr class="row"><td class="info"><div class="name">' + b + '</div><div class="age">' + c + '</div></td><td class="message">' + a + '</td><td class="delete"></td></tr>'
+}
+
+function shouldAnimate() {
+    return !0 !== document.hidden
+}
+
+function placeNewResults() {
+    var a = 0, b;
+    for (b = results.length - 1; 0 <= b; --b) {
+        var c = results[b];
+        if ("undefined" !== typeof c.height) {
+            a = c.y;
+            break
         }
-    } else {
-        $('#result-panel').attr('class', 'panel panel-danger');
-        info = "搜索: '" + data.query + "'未找到相关广告";
     }
-    $('#search-info').text(info);
+    for (b += 1; b < results.length; ++b)
+        c = results[b],
+        c.height = c.domNode.getBoundingClientRect().height,
+        c.y = a - c.height,
+        a = c.y
 }
 
-function display_results(data) {
-    var display = document.getElementById('display');
-    var table = '';
-    var now = moment().locale('zh-cn'); //
-    $.each(data.results, function(key, val) {
-        var id = parseInt(val.id);
-        var name = document.createTextNode(val.name);
-        var isoDate = val.timestamp;
-        var age = moment(isoDate).max(now).fromNow();
-        var message = document.createTextNode(val.message);
-        table += '<tr itemscope itemtype="http://schema.org/Article"><td class="info"><span itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="name" itemprop="name">' + name.data
-            + '</span></span><br><span class="age" itemprop="datePublished" content="' + isoDate + '">' + age
-            + '</span></td><td class="message" itemprop="articleBody">' + parseTranslate(message.data)
-            + '</td><td class="actions"><span class="delete-button glyphicon glyphicon-flag" data-id="'
-                + id + '" data-name="' + name.data + '" data-message="' + message.data + '"></span></td></tr>';
-    });
-
-    display.innerHTML = table;
+function computeTargetLayout() {
+    for (var a = 0, b = results.length - 1; 0 <= b; --b) {
+        var c = results[b];
+        c.deleted && (c.domNode.style.zIndex = -1);
+        c.oldY = c.y;
+        c.targetY = a;
+        c.deleted && (c.targetY -= c.height);
+        a += c.deleted ? 0 : c.height
+    }
+    return a
 }
 
-function display_pagination(data, offset) {
-    var num_pages = Math.min(Math.ceil(data.num_results / results_per_page), max_pages);
-    var current_page = Math.floor(offset / results_per_page) + 1;
-    var start_page = Math.max(Math.min(current_page - 2, num_pages - 4), 1);
-
-    var pages = $('#pages').children();//was #pages
-    if (data.num_results > 1) {
-        $('#pages').removeClass('hide');//was #pages
-        pages.each(function(index) {
-            if (index == 0) {
-                $(this).toggleClass('disabled', current_page == 1);
-                $(this).data({ offset: 0 });
-            } else if (index == pages.length - 1) {
-                $(this).toggleClass('disabled', current_page >= num_pages);
-                $(this).data({ offset: (max_pages - 1) * results_per_page });
-            } else {
-                var page_number = start_page + index - 1;
-                $(this).toggleClass('hide', page_number > num_pages);
-                $(this).toggleClass('active', page_number == current_page);
-                $(this).children('span').text(page_number);
-                $(this).data({ offset: (page_number - 1) * results_per_page });
-            }
-        });
-    }
-    var pagesss = $('#pagesss').children();//was #pages
-    if (data.num_results > 1) {
-        $('#pagesss').removeClass('hide');//was #pages
-        pagesss.each(function(index) {
-            if (index == 0) {
-                $(this).toggleClass('disabled', current_page == 1);
-                $(this).data({ offset: 0 });
-            } else if (index == pagesss.length - 1) {
-                $(this).toggleClass('disabled', current_page >= num_pages);
-                $(this).data({ offset: (max_pages - 1) * results_per_page });
-            } else {
-                var page_number = start_page + index - 1;
-                $(this).toggleClass('hide', page_number > num_pages);
-                $(this).toggleClass('active', page_number == current_page);
-                $(this).children('span').text(page_number);
-                $(this).data({ offset: (page_number - 1) * results_per_page });
-            }
-        });
+function measureResults() {
+    for (var a = 0; a < results.length; ++a) {
+        var b = results[a];
+        b.height = b.domNode.getBoundingClientRect().height
     }
 }
 
-jQuery.ajax = (function(_ajax){
-
-    var protocol = location.protocol,
-        hostname = location.hostname,
-        exRegex = RegExp(protocol + '//' + hostname),
-        YQL = 'http' + (/^https/.test(protocol)?'s':'') + '://query.yahooapis.com/v1/public/yql?callback=?&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys',
-        query = 'select * from htmlstring where url="{URL}" and xpath="*"';
-
-    function isExternal(url) {
-        return !exRegex.test(url) && /:\/\//.test(url);
+function deleteOldResults() {
+    for (var a = 0, b = results.length - 1; 0 <= b; --b) {
+        var c = results[b];
+        a > resultsPerPage ? c.deleted = !0 : c.deleted || ++a
     }
+}
 
-    return function(o) {
+function reflowResults(a) {
+    deleteOldResults();
+    var b = computeTargetLayout();
+    current.parentNode.style.height = b + "px";
+    startAnimateResults(a ? animationLengthMs : 0)
+}
 
-        var url = o.url;
+function startAnimateResults(a) {
+    animationEnd = (new Date).getTime() + a;
+    0 == a ? (animationRunning && window.cancelAnimationFrame(animationFrameRequest),
+    animateResults()) : animationRunning || (animationRunning = !0,
+    animationFrameRequest = window.requestAnimationFrame(animateResults))
+}
 
-        if ( /get/i.test(o.type) && !/json/i.test(o.dataType) && isExternal(url) ) {
+function animateResults() {
+    for (var a = (new Date).getTime(), a = a > animationEnd ? 1 : 1 - (animationEnd - a) / animationLengthMs, b = 1, c = results.length - 1; 0 <= c; --c) {
+        var d = results[c]
+          , e = d.domNode;
+        d.y = a * d.targetY + (1 - a) * d.oldY;
+        e.style.transform = "translate3d(0, " + d.y + "px, 0)";
+        d.deleted ? (b = 1 - (b - d.y) / d.height,
+        e.style.opacity = b,
+        0 == b && (current.removeChild(e),
+        results.splice(c, 1))) : 1 >= d.oldY && (e.style.opacity = Math.min(1, 1 + d.y / d.height));
+        b = d.y + d.height
+    }
+    1 > a ? animationFrameRequest = window.requestAnimationFrame(animateResults) : animationRunning = !1
+}
 
-            // Manipulate options so that JSONP-x request is made to YQL
+function toggleScrollIndicator(a) {
+    a ? scrollIndicator.classList.add("scroll-indicator-visible") : scrollIndicator.classList.remove("scroll-indicator-visible");
+    a && (incomingCount.innerText = incomingResultCount)
+}
 
-            o.url = YQL;
-            o.dataType = 'json';
+function findDuplicates(a, b) {
+    var c = [];
+    for (i = b.length - 1; 0 <= i; --i) {
+        var d = b[i];
+        a.name == d.name && a.message == d.message && c.push(d)
+    }
+    return c
+}
 
-            o.data = {
-                q: query.replace(
-                    '{URL}',
-                    url + (o.data ?
-                        (/\?/.test(url) ? '&' : '?') + jQuery.param(o.data) 
-                    : '')
-                ),
-                format: 'xml'
-            };
+function addIncomingResult(a) {
+    incomingResults.push(a);
+    trimIncomingResultsAmortized();
+    ++incomingResultCount
+}
 
-            // Since it's a JSONP request
-            // complete === success
-            if (!o.success && o.complete) {
-                o.success = o.complete;
-                delete o.complete;
-            }
+function clearIncomingResults() {
+    incomingResults = [];
+    incomingResultCount = 0
+}
 
-            o.success = (function(_success){
-                return function(data) {
+function trimIncomingResults() {
+    incomingResults.length > resultsPerPage && (incomingResults = incomingResults.slice(-resultsPerPage))
+}
 
-                    if (_success) {
-                        // Fake XHR callback.
-                        _success.call(this, {
-                            responseText: (data.results[0] || '')
-                                // YQL screws with <script>s
-                                // Get rid of them
-                                .replace(/<head[^>]*>[\s\S]*?<\/head>/gi, "")
-                                .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
-                                .replace(/<script[^>]+?\/>|<script(.|\s)*?\/script>/gi, "")
-                                .replace(/<\/html>/gi, "")
-                                .replace(/<html>/gi, "")
-                                .replace(/<\/body>/gi, "")
-                                .replace(/<body>/gi, "")
-                                .replace(/<head\/>/gi,"")
-                                .replace(/<head>/gi,"")
-                                .replace(/<\/head>/gi,"")
-                                .replace(/<\/.*?>/gi,"")
-                                .replace(/<.*?>/gi,"")
-                                .replace(/!\[CDATA\[.*?\]\]/gi,"")
-								.replace(/&lt;.*?&gt;/gi,"")
-								.replace(/^\s*?\r*?\n*?$/gi,"")
-                        }, 'success');
-                    }
+function trimIncomingResultsAmortized() {
+    incomingResults.length > 2 * resultsPerPage && trimIncomingResults()
+}
 
-                };
-            })(o.success);
+function forceReconnectWebSocket() {
+    clearTimeout(reconnectTimer);
+    reconnectDelayMs = baseReconnectDelayMs;
+    setupWebSocket()
+}
 
-        }
+function trimPathName(path){
+	var tPath = path
+	path = path.replace(/^.+?(\/(?:(?:search)|(?:latest)).*?)$/gi,"$1");
+	return ((tPath == path) ? "" : path);
+}
 
-        return _ajax.apply(this, arguments);
-
+function setupWebSocket() {
+    connectionIndicator.classList.remove("connected");
+    socket && (socket.onclose = socket.onopen = socket.onmessage = null, socket.close());
+    var a = trimPathName(document.location.pathname) //document.location.pathname || New: Need to generalize this argument
+    pendingRequest || (a = "/notify" + a);
+    socket = new WebSocket("wss://" + "kamadan.decltype.org" + "/ws" + a); //window.location.hostname
+    socket.onclose = function(a) {
+        clearTimeout(reconnectTimer);
+        reconnectTimer = setTimeout(setupWebSocket, reconnectDelayMs);
+        reconnectDelayMs = Math.min(2 * reconnectDelayMs, maxReconnectDelayMs)
     };
-
-})(jQuery.ajax);
-
-var xhr = null;
-function retrieve_results(string, offset) {
-    set_loading(true);
-    $('#display').empty();
-    $('#pages').addClass('hide');//was #
-    $('#pagesss').addClass('hide');//was #
-    $('#search-input').val(string);
-
-	var _url = string ? "http://kamadan.decltype.org/api/search/" + encodeURIComponent(translateHelper()) + encodeURIComponent(searchTranslate(string)) : "http://kamadan.decltype.org/api/search/" + encodeURIComponent(translateHelper());
-    offset = typeof offset !== 'undefined' ? parseInt(offset, 10) : 0;
-    if (offset != 0) {
-        _url += "/" + offset;
-    }
-    if (xhr) {
-        xhr.abort();
-    }
-
-    // /*
-    $.ajax({
-        url: _url,
-        type: 'GET',
-        success: function(data) {
-            //$( "#PossiblyCorruptData" ).replaceWith(data.responseText);
-                var dataCopy = data;
-                var dataCopyResponse = data.responseText;
-            //alert(error_jump);
-            try {
-				console.log(data.responseText)
-                data=JSON.parse(data.responseText);//had string wraping around data.responseText
-				console.log("Passed JSON parse")
-				console.log(data)
-                if (error_jump) {
-                    var next_page_number_for_error = Math.floor(offset / results_per_page) + 1;
-                    var errors_Message = "此页装载失败，已跳至第"+next_page_number_for_error+"页； 足够数目的新广告上榜后即恢复正常，数据并未丢失";
-                    $('#error-info-explained').text(errors_Message);
-                    $('#parse-error-modal').modal();
+	
+    socket.onopen = function(a) {
+        clearTimeout(reconnectTimer);
+        reconnectDelayMs = baseReconnectDelayMs;
+        connectionIndicator.classList.add("connected")
+		retrieveResults({query:"",offset:0}) // New: Need to generalize this query object
+    };
+	
+    socket.onmessage = function(a) {
+		a = JSON.parse(a.data);
+        if ("undefined" !== typeof a.query) {
+			console.log("a query is made and a result is returned")
+            displayResults(a);
+		}
+        else {
+			console.log("result for auto update received")
+            if (notificationButton.classList.contains("enabled")) {
+                var b = parseRequestFromUrl(document.location.pathname)
+                  , d = {
+                    body: a.message + "\n\n角色名: " + a.name + "\n所在地: 卡玛丹，艾斯坦之钻\n美洲1区",
+                    icon: "", //notification related:  /v/ZjA5Y2E4NT.png
+                    tag: "kamadan/" + b.query
                 }
-
-                //set_loading(false);
-                //below was originally after the try-catch block
-                display_results(data); //
-				console.log("Passed display results")
-                var displayed_offset = parseInt(data.offset);//
-
-                display_pagination(data, displayed_offset);
-                display_info(data, string, displayed_offset); //placement switched with line above
-
-                set_loading(false);
-                error_jump = false;
-                recovery_counter = 0;
-				outer_recovery_counter = 0;
-
-
-				//in html need to add class fixed-tipbox (you could have an alt attribute here for title), followed immediately by a div with tooltiptext
-
-				$('.fixed-tipbox').each(function () {
-					$(this).qtip({
-						content:  {
-							text: $(this).next('.tooltiptext'),
-							title: function(event, api) {
-								return $(this).attr('alt');
-							},
-						},
-						hide: {
-							fixed: true,
-							delay: 300
-						},
-						position: {
-						   my: 'top left',
-						   at: 'bottom right',
-						   viewport: $(window)
-						},
-						show: {
-							effect: function(offset) {
-								$(this).slideDown(250); // "this" refers to the tooltip
-							}
-						},
-
-						style: {
-							classes: "myCustomClass",
-						},
-					});
-				});
-
-            }catch(e){
-                error_jump = true;
-				console.log("error report as follows:")
-                console.log(e instanceof SyntaxError); // true
-                console.log(e.message);                //
-                console.log(e.name);                   //
-                console.log(e.fileName);               //
-                console.log(e.lineNumber);             //
-                console.log(e.columnNumber);           //
-                console.log(e.stack);
-
-                //alert('错误提示1: '+String(dataCopy));
-                //alert('错误提示2: '+String(dataCopyResponse));
-                offset=offset+50;
-                recovery_counter = recovery_counter+1
-                if (offset<=4950 && recovery_counter<=10){
-                    retrieve_results(string, offset);
-                }
-                else{
-                    set_loading(false);
-                    $('#result-panel').attr('class', 'panel panel-danger');
-                    var errMessage = "转载失败，请稍后访问：足够数目的新广告上榜后即恢复正常  |  其他搜索功能不受影响，数据并未丢失";
-                    $('#search-info').text(errMessage);
-                    error_jump = false;
-                    recovery_counter=0;
-                }
-                return 0;
-            }
-        },
-        error: function(e) {
-			outer_recovery_counter = outer_recovery_counter+1
-            if (outer_recovery_counter<=10){
-                retrieve_results(string, offset);
-            }
-            else{
+                  , e = "New message";
+                b.query && (e = e + " matching '" + b.query + "'");
+				console.log("sending notification") //New: this and two lines below test for notification
 				console.log(e)
-				set_loading(false);
-				$('#result-panel').attr('class', 'panel panel-danger');
-				$('#search-info').text("无法获取数据； 或需打开代理");
-				outer_recovery_counter=0;
+				console.log(d)
+                new Notification(e,d);
+                playNotificationSound()
             }
-
-        },
-        complete: function() {
+            d = scrolledDown && !scrolling;
+            b = findDuplicates(a, results);
+            if (d) {
+                d = findDuplicates(a, incomingResults);
+                b = b.concat(d);
+                for (d = 0; d < b.length; ++d)
+                    b[d].deletedByIncoming = !0;
+                addIncomingResult(a);
+                toggleScrollIndicator(!0)
+            } else
+                addResult(a),
+                b.forEach(function(a) {
+                    a.deleted = !0
+                }),
+                placeNewResults(),
+                reflowResults(shouldAnimate())
         }
-    });
-    // */
-
-    /*
-    xhr = $.getJSON(_url, function(data) {
-        //alert(Object.keys(data));
-        display_results(data);
-        var displayed_offset = parseInt(data.offset);
-        display_info(data, string, displayed_offset);
-        display_pagination(data, displayed_offset);
-    }).fail(function() {
-        $('#result-panel').attr('class', 'panel panel-danger');
-        $('#search-info').text("无法获取数据； 或需打开代理");
-    }).always(function() {
-        set_loading(false);
-    });
-    */
-
-}
-
-function search_by_author(name) {
-    var search_string = 'author:"' + name + '"';
-    search(search_string);
-}
-
-function search(string, offset, replace) {
-    var state_data = {
-        timestamp: new Date().getTime(),
-        search_string: string,
-        offset: offset
-    };
-    var title = "广告|卡玛丹";
-    var url = "/";
-    if (string) {
-        title = string + " - " + title;
-        url = "/search/" + encodeURIComponent(string);
-        if (offset && offset != 0) {
-            url += "/" + offset;
-        }
-    } else if (offset) {
-        url = "/latest/" + offset;
-    }
-
-    url = "/广告";//original did not have this line, prevents browser from changing window
-
-    if (replace) {
-        History.replaceState(state_data, title, url);
-    } else {
-        History.pushState(state_data, title, url);
     }
 }
 
-$('#search-form').on('submit', function(e) {
-    e.preventDefault();
-    var input = $('#search-input');
-    var aInput = input.val();
-    aInput=aInput.replace(/名="(.+?)"/gi,'author:"$1"')
-    search(aInput);
-    input.blur();
-});
+function flushNewRows() {
+    trimIncomingResults();
+    for (var a = 0; a < incomingResults.length; ++a)
+        addResult(incomingResults[a]);
+    clearIncomingResults();
+    for (a = 0; a < results.length; ++a) {
+        var b = results[a];
+        b.deletedByIncoming && (b.deleted = !0)
+    }
+    placeNewResults();
+    reflowResults(shouldAnimate());
+    toggleScrollIndicator(!1)
+}
 
+function displayTitle(a) {
+    var b = "广告|卡玛丹";
+    a && (b = a + " - " + b);
+    document.title = b
+}
 
-$('.auto-select').on('click', function() {
-    var range = document.createRange();
-    range.selectNodeContents($(this)[0].firstChild);
-    var sel = window.getSelection();
-    sel.removeAllRanges();
-    sel.addRange(range);
-});
+function displaySearchInfo(a) {
+    var b = parseInt(a.offset, 10);
+    if (0 < a.results.length) {
+        var c = a.elapsed_microseconds / 1E3
+          , b = b + 1
+          , d = b + Math.min(resultsPerPage, a.results.length) - 1;
+        a = a.query ? "第 " + b + "-" + d + " 条 | 共" + ("true" === a.exact ? "有" : "约") + " " + a.num_results + " 则 与 '" + a.query + "' 相关的广告 (耗时 " + c + " 毫秒)" : "第 " + b + "-" + d + " 条 | 共 " + a.num_results + " 则 (耗时 " + c + " 毫秒)"
+    } else
+        a = "没有 与 '" + a.query + "' 相关的广告";
+    searchInfo.classList.remove("animate-fade-out");
+    searchInfo.innerText = a
+}
 
-History.Adapter.bind(window, 'statechange', function() {
-    var data = History.getState().data;
-    retrieve_results(data.search_string, data.offset);
-});
+function formatPageLink(a, b, c, d) {
+    return '<a class="page-link' + (c ? " page-link-" + c : '" href="' + a + (1 != b ? "/" + (b - 1) * resultsPerPage : "")) + '">' + d + "</a>"
+}
 
-$('#home-link').on('click', function(e) {
-    e.preventDefault();
-    search();
-});
+function formatPagination(a, b, c) {
+    if (0 == c)
+        return "";
+    c = Math.min(Math.ceil(c / resultsPerPage), maxPages);
+    b = Math.floor(b / resultsPerPage) + 1;
+    var d = Math.max(Math.min(b - 2, c - 4), 1)
+      , e = Math.min(c, d + 4);
+    a = htmlEscape(a);
+    for (var f = formatPageLink(a, 1, 1 == b ? "disabled" : "", "&laquo;"); d <= e; ++d)
+        f += formatPageLink(a, d, b == d ? "current" : "", d);
+    return f += formatPageLink(a, maxPages, b == c ? "disabled" : "", "&raquo;")
+}
 
-$('.dictionary').click(function() {
-	window.location = 'http://guildwars.huijiwiki.com/wiki/%E8%AF%8D%E9%9B%86';
+function displayPagination(a, b, c) {
+    pagination.innerHTML = formatPagination(a, b, c)
+}
+
+function buildUrlFor(a, b) {
+    var c = a ? "/search/" + encodeURIComponent(a) : "/latest";
+    b = "undefined" !== typeof b ? parseInt(b, 10) : 0;
+    0 != b && (c += "/" + b);
+    return c
+}
+
+function displayQuery(a) {
+    searchInput.value = a
+}
+
+function displayResults(a) {
+    pendingRequest = null;
+    var b = buildUrlFor(a.query);
+	console.log("b: "+b)
+	console.log(a.offset)
+    buildUrlFor(a.query, a.offset);
+    var c = parseInt(a.num_results, 10);
+	console.log("c: "+c)
+    clearResults();
+    for (var d = a.results.length - 1; 0 <= d; --d)
+        addResult(a.results[d]);
+    displaySearchInfo(a);
+    displayPagination(b, a.offset, c);
+    placeNewResults();
+    reflowResults();
+    scrollToTop(100)
+}
+
+function parseRequestFromUrl(a) {
+    a = a.split(/\/+/);
+    "" == a[0] && (a = a.slice(1));
+    var b = ""
+      , c = 0;
+    1 <= a.length && "latest" == a[0] ? a = a.slice(1) : 2 <= a.length && "search" == a[0] && (b = decodeURIComponent(a[1]),
+    a = a.slice(2));
+    1 <= a.length && (c = parseInt(a[0], 10),
+    isNaN(c) && (c = 0));
+    return {
+        query: b,
+        offset: c
+    }
+}
+
+function retrieveResultsForUrl(a) {
+    retrieveResults(parseRequestFromUrl(a))
+}
+
+function displayRequest(a) {
+    displayTitle(a.query);
+    displayQuery(a.query);
+    a.query || 0 != a.offset || searchInput.focus();
+    current.classList.add("animate-fade-out");
+    searchInfo.classList.add("animate-fade-out")
+}
+
+function retrieveResults(a) {
+    pendingRequest = a;
+    displayRequest(a);
+    socket && socket.readyState == WebSocket.OPEN ? socket.send(JSON.stringify({
+        query: a.query,
+        offset: a.offset,
+        suggest: enableSuggest
+    })) : forceReconnectWebSocket()
+}
+
+function reflowDocument() {
+    isFirstReflow && (scrolledDown = !isAtTopOfPage(),
+    populateResultsFromDom());
+    measureResults();
+    isFirstReflow && (document.body.classList.remove("no-js"),
+    document.body.classList.add("js"),
+    isFirstReflow = !1);
+    reflowResults()
+}
+
+function animateScroll() {
+    var a = (new Date).getTime()
+      , a = a > scrollAnimationEnd ? 1 : 1 - (scrollAnimationEnd - a) / scrollAnimationLengthMs;
+    window.scrollTo(0, Math.floor(a * scrollEndY + (1 - a) * scrollStartY));
+    1 > a ? window.requestAnimationFrame(animateScroll) : scrolledDown = scrolling = !1
+}
+
+function scrollToTop(a) {
+    var b = -page.getBoundingClientRect().top;
+    scrollAnimationLengthMs = "undefined" === typeof a ? animationLengthMs : a;
+    0 < b && (scrollStartY = b,
+    scrollEndY = 0,
+    scrollAnimationEnd = (new Date).getTime() + scrollAnimationLengthMs,
+    scrolling = !0,
+    window.requestAnimationFrame(animateScroll))
+}
+
+function play(a) {
+    var b = audioContext.createBufferSource();
+    b.buffer = a;
+    b.connect(audioContext.destination);
+    b.start()
+}
+
+function playNotificationSound() {
+    notificationSoundBuffer && play(notificationSoundBuffer)
+}
+
+function fetchNotificationSound() {
+	//New: commented out the entire block below
 	/*
-    $('#search-info-explained').html(getDictionary());
-    $('#info-modal').modal();
+    "undefined" === typeof notificationSoundBuffer && (notificationSoundBuffer = null,
+    "undefined" !== typeof AudioContext && (audioContext = new AudioContext,
+    window.fetch("ZTkxMjA0YW.mp3").then(function(a) { //notification related: /v/ZTkxMjA0YW.mp3 
+        return a.arrayBuffer()
+    }).then(function(a) {
+        return audioContext.decodeAudioData(a)
+    }).then(function(a) {
+        notificationSoundBuffer = a
+    })))
 	*/
-});
+}
 
-$('.home_button').click(function() {
-    /*
-    $('#search-info-explained').html(getDictionary());
-    http://jizhan.gitcafe.io"
-    */
-    window.location = 'http://guildwars.huijiwiki.com';
-});
+function isAtTopOfPage() {
+    return 0 <= page.getBoundingClientRect().top
+}
 
+function isSelecting(a) {
+    var b = getSelection();
+    return 0 == b.toString().length ? !1 : (b = b.anchorNode) && a.contains(b)
+}
 
-$(document).on('click', '.name', function() {
-    search_by_author($(this).text());
-});
+function displayDeleteDialog(a) {
+    a = '<div id="modal"><div id="dialog"><div><h1>原文 及 删除办法</h1>原文: <div id="command">' + htmlEscape(a.message) + '</div>删除办法: 以 <strong>' + htmlEscape(a.name) + '</strong> 角色登入激战，再用 对话栏 发以下字条:</div><div id="command">/whisper Chat Log, DELETE ' + a.id + '</div><div id="dialog-footer"><button id="dismiss">返回</button></div></div></div>';
+    document.body.insertAdjacentHTML("beforeend", a)
+}
 
-$(document).on('click', '.delete-button', function() {
-    var name = $(this).data('name');
-    var id = $(this).data('id');
-    var message = $(this).data('message');
-    $('#original-message-id').text(message);
-    //alert(message);
-    $('#delete-message-name').text(name);
-    $('#delete-message-id').text('/whisper Chat Log, DELETE ' + id);
-    $('#delete-modal').modal();
+function matchesRequest(a, b) {
+    return a.query === b.query && a.offset == b.offset
+}
 
-});
+function navigateUrl(a) {
+    "/latest" == a && (a = "/");
+    var b = parseRequestFromUrl(a)
+      , c = parseRequestFromUrl(document.location.pathname);
+    matchesRequest(c, b) || history.pushState({}, "", a);
+    retrieveResults(b)
+}
 
-$(document).on('click', '#pages>li', function() {//was pages
-    var data = $(this).data();
-    var state = History.getState();
-    if (!$(this).hasClass('active') && !$(this).hasClass('disabled')) {
-        search(state.data.search_string, data.offset);
+function navigate(a, b) {
+    var c = buildUrlFor(a, b);
+    navigateUrl(c)
+}
+
+function updateTimestamps() {
+    for (var a = (new Date).valueOf(), b = 0; b < results.length; ++b) {
+        var c = results[b]
+          , d = humanReadableAge(1E3 * c.timestamp, a);
+        d !== c.ageDomNode.innerText && (c.ageDomNode.innerText = d)
     }
+}
+
+enableInstantSearch && searchInput.addEventListener("input", function(a) {
+    navigate(searchInput.value)
 });
 
-$(document).on('click', '#pagesss>li', function() {//was pages
-    var data = $(this).data();
-    var state = History.getState();
-    if (!$(this).hasClass('active') && !$(this).hasClass('disabled')) {
-        search(state.data.search_string, data.offset);
-    }
+searchForm.addEventListener("submit", function(a) {
+    a.preventDefault();
+    navigate(searchInput.value)
 });
 
-function fit_footer() {
-    var footer = $('#footer');
-    var height = footer.outerHeight();
-    $('#content').css('padding-bottom', height);
-}
+homeLink.addEventListener("click", function(a) {
+    a.preventDefault();
+    navigate()
+});
 
-function fit_header() {
-    var header = $('#header');
-    var height = header.outerHeight();
-    $('body').css('padding-top', height);
-}
+notificationButton.addEventListener("click", function() {
+    "undefined" === typeof Notification ? alert("Your browser does not support notifications") : (fetchNotificationSound(),
+    "granted" !== Notification.permission ? Notification.requestPermission(function(a) {
+        "granted" === a && notificationButton.classList.add("enabled")
+    }) : notificationButton.classList.toggle("enabled"))
+});
 
-function fit_page() {
-    fit_header();
-    fit_footer();
-}
+scrollIndicator.addEventListener("click", function() {
+    flushNewRows();
+    scrollToTop()
+});
 
-function searchTranslate(data){
+window.addEventListener("popstate", function(a) {
+    retrieveResultsForUrl(document.location.pathname)
+});
 
+window.addEventListener("beforeunload", function() {
+    socket && (clearTimeout(reconnectTimer), socket.onclose = function() {}, socket.close())
+});
 
+window.addEventListener("scroll", function() {
+    (scrolledDown = !isAtTopOfPage()) || flushNewRows()
+});
 
-    //报结果
-    return data;
-}
+window.addEventListener("resize", reflowDocument);
+
+document.addEventListener("click", function(a) {
+    var b = a.target;
+    if (1 == a.which)
+        if (b.classList.contains("name") && !isSelecting(b))
+            navigate('author:"' + b.innerText + '"'),
+            a.preventDefault();
+        else if (b.classList.contains("page-link") && b.hasAttribute("href"))
+            navigateUrl(b.getAttribute("href")),
+            a.preventDefault();
+        else if (b.classList.contains("delete")) {
+            a = b.parentNode;
+            for (var c, b = 0; b < results.length; ++b)
+                results[b].domNode === a && (c = results[b]);
+            c && displayDeleteDialog(c)
+        } else if ("modal" === b.id)
+            document.body.removeChild(b);
+        else if ("dismiss" === b.id)
+            a = document.getElementById("modal"),
+            document.body.removeChild(a);
+        else if ("command" === b.id) {
+            c = getSelection();
+            c.removeAllRanges();
+            var d = document.createRange();
+            d.selectNode(b);
+            c.addRange(d);
+            try {
+                document.execCommand("copy")
+            } catch (e) {}
+            a.preventDefault()
+        }
+});
+
+window.setInterval(updateTimestamps, 1E3);
+reflowDocument();
+setupWebSocket();
+
 
 function parseTranslate(data){
 
@@ -2875,87 +2993,3 @@ function parseTranslate(data){
     //报结果
     return data;
 }
-
-function translateHelper(){
-
-	var uiden;
-	var rnd;
-	//search can take 854 characters total
-	//ipv6 10^50/(31622400*100*10^39)=31.62
-	var buffLength; //for the random 10k case, 14 is enough, else 50
-	var symbolSet = "!@#$%^&*()";
-	//10 ~`-_=+{}[]
-	//9  :;<>,.?|\ space
-	var data = "";
-
-	try {
-		uiden = returnCitySN["cip"];
-		if (uiden == null || uiden.match(/[^0-9\.]/i)) {
-			console.log("异常1");
-			rnd = Math.floor(Math.random() * (10001 - 1)) + 1;
-			buffLength=14;
-		} else{
-			//console.log("正常");
-			rnd = uiden.replace(/\./gi, "");
-			rnd = parseInt(rnd);
-			buffLength=50;
-		}
-	}
-	catch(err) {
-		console.log("异常2");
-		rnd = Math.floor(Math.random() * (10001 - 1)) + 1;
-		buffLength=14;
-	}
-
-	var tBegin = new Date('2016-03-07T03:56:00');
-	var tEnd = new Date();
-	//console.log(tBegin);
-	//console.log(tEnd);
-	var diff = Math.round((tEnd - tBegin)/1000);
-	//console.log(diff);
-
-	var offset = rnd*diff;
-	//console.log(rnd);
-	//console.log(offset);
-	var s_offset = offset.toString();
-	var s_len = s_offset.length;
-
-	for (i = 0; i < buffLength; i++) {
-
-		if (i >= s_len || s_len == 0) {
-			data += symbolSet.charAt(0);
-			continue;
-		}
-		var tmpIndex = parseInt(s_offset.charAt(i));
-		if (tmpIndex == 0){
-			tmpIndex = 10;
-		}
-		data += symbolSet.charAt(tmpIndex-1);
-	}
-
-	//console.log(data);
-	return data;
-}
-
-$(document).ready(function() {
-    fit_page();
-    $(window).resize(fit_page);
-});
-
-(function() {
-    var path_array = window.location.pathname.split('/');
-    var query = '';
-    var offset;
-    if (path_array.length > 2) {
-        var action = decodeURIComponent(path_array[1]);
-        if (action == 'search') {
-            query = decodeURIComponent(path_array[2]);
-            if (path_array.length > 3) {
-                offset = decodeURIComponent(path_array[3]);
-            }
-        } else if (action == 'latest') {
-            offset = decodeURIComponent(path_array[2]);
-        }
-    }
-    search(query, offset, true);
-})();

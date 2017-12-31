@@ -533,7 +533,7 @@ notificationButton.addEventListener("click", function() {
 		if ("granted" !== Notification.permission){
 			console.log("没有认可，查询意向")
 			Notification.requestPermission(function(a) {
-				console.log("意向以明朗")
+				console.log("意向已明朗")
 				if ("granted" === a) {
 					console.log("被同意")
 					notificationButton.classList.add("enabled");

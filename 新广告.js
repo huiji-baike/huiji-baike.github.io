@@ -250,7 +250,7 @@ function setupWebSocket() {
         clearTimeout(reconnectTimer);
         reconnectDelayMs = baseReconnectDelayMs;
         connectionIndicator.classList.add("connected")
-		//retrieveResults({query:"",offset:0}) // New: Need to generalize this query object
+		retrieveResults({query:"",offset:0}) // New: Need to generalize this query object
     };
 	
     socket.onmessage = function(a) {

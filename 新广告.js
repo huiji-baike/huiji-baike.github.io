@@ -492,7 +492,7 @@ function navigateUrl(a) {
     "/latest" == a && (a = "/");
     var b = parseRequestFromUrl(a)
       , c = parseRequestFromUrl(trimPathName(document.location.pathname));
-    matchesRequest(c, b) || history.pushState({}, "", a);
+    matchesRequest(c, b) || history.pushState({}, "", "/广告/"+a);
     retrieveResults(b)
 }
 

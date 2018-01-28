@@ -237,7 +237,7 @@ function trimPathName(path){
 function setupWebSocket() {
     connectionIndicator.classList.remove("connected");
     socket && (socket.onclose = socket.onopen = socket.onmessage = null, socket.close());
-    var a = trimPathName(document.location.pathname) //document.location.pathnam || New: Need to generalize this argument
+    var a = trimPathName(document.location.pathname) //document.location.pathname || New: Need to generalize this argument
     pendingRequest || (a = "/notify" + a);
     socket = new WebSocket("wss://" + "kamadan.decltype.org" + "/ws" + a); //window.location.hostname
     socket.onclose = function(a) {
@@ -254,7 +254,8 @@ function setupWebSocket() {
 			retrieveResults({query:"",offset:0}) // New: Need to generalize this query object
 		} else {
 			var tempString = window.location.href.match(/^https\:\/\/huiji\-baike\.github\.io\/广告(\?.+)$/i)
-			if (tempString){				
+			if (tempString){
+				console.log("on open connection, address ends with: "+tempString[1])
 				navigateUrl(tempString[1])
 			} else {
 				retrieveResults({query:"",offset:0}) // New: Need to generalize this query object

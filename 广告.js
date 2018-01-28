@@ -254,9 +254,8 @@ function setupWebSocket() {
 			retrieveResults({query:"",offset:0}) // New: Need to generalize this query object
 		} else {
 			var tempString = window.location.href.match(/^https\:\/\/huiji\-baike\.github\.io\/广告(\?.+)$/i)
-			if (tempString){
-				retrieveResults({query:"",offset:0}) // New: Need to generalize this query object
-				//tempString[1]
+			if (tempString){				
+				navigateUrl(tempString[1])
 			} else {
 				retrieveResults({query:"",offset:0}) // New: Need to generalize this query object
 			}			

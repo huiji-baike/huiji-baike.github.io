@@ -229,7 +229,7 @@ function forceReconnectWebSocket() {
 
 function trimPathName(path){	
 	var tPath = path;
-	path = path.replace(/^.+?(\/(?:(?:search)|(?:latest)).*?)$/gi,"$1");
+	path = path.replace(/^.+?(\?(?:(?:search)|(?:latest)).*?)$/gi,"$1");
 	console.log("performing trimPath, original: "+tPath+" | processed: "+path + " :: if identical, sends empty string");
 	return ((tPath == path) ? "" : path);
 }

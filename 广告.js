@@ -253,7 +253,9 @@ function setupWebSocket() {
 		if (window.location.href.match(/^https\:\/\/huiji\-baike\.github\.io\/广告(?:\/{0,1}?|\?{0,1}?)$/i)){
 			retrieveResults({query:"",offset:0}) // New: Need to generalize this query object
 		} else {
+			console.log(window.location.href)			
 			var tempString = window.location.href.match(/^https\:\/\/huiji\-baike\.github\.io\/广告(\?.+)$/i)
+			console.log(tempString)
 			if (tempString){
 				console.log("on open connection, address ends with: "+tempString[1])
 				navigateUrl(tempString[1])

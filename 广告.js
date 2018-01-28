@@ -391,6 +391,7 @@ function displayResults(a) {
 }
 
 function parseRequestFromUrl(a) {
+	(a.charAt(0) == "?") ? a = a.substr(1) : a
     a = a.split(/\/+/);
     "" == a[0] && (a = a.slice(1));
     var b = ""

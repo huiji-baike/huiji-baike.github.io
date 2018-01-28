@@ -250,7 +250,17 @@ function setupWebSocket() {
         clearTimeout(reconnectTimer);
         reconnectDelayMs = baseReconnectDelayMs;
         connectionIndicator.classList.add("connected")
-		retrieveResults({query:"",offset:0}) // New: Need to generalize this query object
+		if (window.location.href.match(/^https\:\/\/huiji\-baike\.github\.io\/广告(?:\/{0,1}?|\?{0,1}?)$/i)){
+			retrieveResults({query:"",offset:0}) // New: Need to generalize this query object
+		} else {
+			var tempString = window.location.href.match(/^https\:\/\/huiji\-baike\.github\.io\/广告(\?.+)$/i)
+			if (tempString){
+				retrieveResults({query:"",offset:0}) // New: Need to generalize this query object
+				//tempString[1]
+			} else {
+				retrieveResults({query:"",offset:0}) // New: Need to generalize this query object
+			}			
+		}		
     };
 	
     socket.onmessage = function(a) {
@@ -351,7 +361,7 @@ function displayPagination(a, b, c) {
 }
 
 function buildUrlFor(a, b) {
-    var c = a ? "/search/" + encodeURIComponent(a) : "/latest";
+    var c = a ? "?search/" + encodeURIComponent(a) : "?latest";
     b = "undefined" !== typeof b ? parseInt(b, 10) : 0;
     0 != b && (c += "/" + b);
     return c
@@ -490,10 +500,10 @@ function matchesRequest(a, b) {
 }
 
 function navigateUrl(a) {
-    "/latest" == a && (a = "/");
+    "?latest" == a && (a = "?");
     var b = parseRequestFromUrl(a)
       , c = parseRequestFromUrl(trimPathName(document.location.pathname));
-    matchesRequest(c, b) || history.pushState({}, "", (a=="/") ? "/广告" : "/广告"+a); //previously: a
+    matchesRequest(c, b) || history.pushState({}, "", (a=="?") ? "/广告" : "/广告"+a); //previously: a
     retrieveResults(b)
 }
 

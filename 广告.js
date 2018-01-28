@@ -410,6 +410,7 @@ function displayRequest(a) {
 function retrieveResults(a) {
     pendingRequest = a;
     displayRequest(a);
+	a.query = searchTranslate(a.query)
     socket && socket.readyState == WebSocket.OPEN ? socket.send(JSON.stringify({
         query: a.query,
         offset: a.offset,
@@ -602,6 +603,9 @@ window.setInterval(updateTimestamps, 1E3);
 reflowDocument();
 setupWebSocket();
 
+function searchTranslate(data){
+	return data
+}
 
 function parseTranslate(data){
 

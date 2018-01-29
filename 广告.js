@@ -238,8 +238,9 @@ function setupWebSocket() {
     connectionIndicator.classList.remove("connected");
     socket && (socket.onclose = socket.onopen = socket.onmessage = null, socket.close());
     var a = trimPathName(document.location.pathname) //document.location.pathname || New: Need to generalize this argument
-	console.log("websocket setup suffix is: "+"a")
+	console.log("websocket setup suffix is: "+a)
     pendingRequest || (a = "/notify" + a);
+	console.log("websocket address is: "+"wss://" + "kamadan.decltype.org" + "/ws" + a)
     socket = new WebSocket("wss://" + "kamadan.decltype.org" + "/ws" + a); //window.location.hostname
     socket.onclose = function(a) {
         clearTimeout(reconnectTimer);

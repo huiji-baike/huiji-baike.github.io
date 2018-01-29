@@ -267,6 +267,8 @@ function setupWebSocket() {
 	
     socket.onmessage = function(a) {
 		a = JSON.parse(a.data);
+		console.log("some result is received")
+		console.log(a)
         if ("undefined" !== typeof a.query) {
 			console.log("a query is made and a result is returned")
             displayResults(a);

@@ -238,6 +238,7 @@ function setupWebSocket() {
     connectionIndicator.classList.remove("connected");
     socket && (socket.onclose = socket.onopen = socket.onmessage = null, socket.close());
     var a = trimPathName(document.location.pathname) //document.location.pathname || New: Need to generalize this argument
+	console.log("pretrim pathname: "+document.location.pathname)
 	console.log("websocket setup suffix is: "+a)
     pendingRequest || (a = "/notify" + a);
 	console.log("websocket address is: "+"wss://" + "kamadan.decltype.org" + "/ws" + a)

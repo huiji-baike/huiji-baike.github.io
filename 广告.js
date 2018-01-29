@@ -250,22 +250,19 @@ function setupWebSocket() {
         clearTimeout(reconnectTimer);
         reconnectDelayMs = baseReconnectDelayMs;
         connectionIndicator.classList.add("connected")
-		if (window.location.href.match(/^https\:\/\/huiji\-baike\.github\.io\/广告(?:\/{0,1}?|\?{0,1}?)$/i)){
-			console.log("branch 1")
-			console.log(window.location.href)			
-			retrieveResults({query:"",offset:0}) // New: Need to generalize this query object
+		
+		var tAddress = window.location.href
+		console.log(address)
+		
+		var regX = new RegExp("^https\:\/\/huiji\-baike\.github\.io\/"+encodeURIComponent(广告)+"(\?.+)$", "i")
+		
+		if (window.location.href.match(regX)){
+			console.log("branch: not front page")
+			navigateUrl(window.location.href.match(reg2)[1])
 		} else {
-			console.log("branch 2")
-			console.log(window.location.href)			
-			var tempString = window.location.href.match(/^https\:\/\/huiji\-baike\.github\.io\/广告(\?.+)$/i)
-			console.log(tempString)
-			if (tempString){
-				console.log("on open connection, address ends with: "+tempString[1])
-				navigateUrl(tempString[1])
-			} else {
-				retrieveResults({query:"",offset:0}) // New: Need to generalize this query object
-			}			
-		}		
+			console.log("branch: front page")
+			retrieveResults({query:"",offset:0})
+		}
     };
 	
     socket.onmessage = function(a) {

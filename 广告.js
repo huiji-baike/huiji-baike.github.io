@@ -252,7 +252,7 @@ function setupWebSocket() {
         connectionIndicator.classList.add("connected")
 		
 		var tAddress = window.location.href
-		console.log(address)
+		console.log(tAddress)
 		
 		var regX = new RegExp("^https\:\/\/huiji\-baike\.github\.io\/"+encodeURIComponent(广告)+"(\?.+)$", "i")
 		

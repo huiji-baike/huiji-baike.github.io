@@ -251,8 +251,11 @@ function setupWebSocket() {
         reconnectDelayMs = baseReconnectDelayMs;
         connectionIndicator.classList.add("connected")
 		if (window.location.href.match(/^https\:\/\/huiji\-baike\.github\.io\/广告(?:\/{0,1}?|\?{0,1}?)$/i)){
+			console.log("branch 1")
+			console.log(window.location.href)			
 			retrieveResults({query:"",offset:0}) // New: Need to generalize this query object
 		} else {
+			console.log("branch 2")
 			console.log(window.location.href)			
 			var tempString = window.location.href.match(/^https\:\/\/huiji\-baike\.github\.io\/广告(\?.+)$/i)
 			console.log(tempString)

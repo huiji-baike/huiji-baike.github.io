@@ -240,6 +240,8 @@ function setupWebSocket() {
     var a = trimPathName(document.location.pathname) //document.location.pathname || New: Need to generalize this argument
 	console.log("pretrim pathname: "+document.location.pathname)
 	console.log("websocket setup suffix is: "+a)
+	(a.charAt(0)=="?") ? a="/"+a.slice(1) : a
+	console.log("websocket setup suffix is (after switch): "+a)
     pendingRequest || (a = "/notify" + a);
 	console.log("websocket address is: "+"wss://" + "kamadan.decltype.org" + "/ws" + a)
     socket = new WebSocket("wss://" + "kamadan.decltype.org" + "/ws" + a); //window.location.hostname

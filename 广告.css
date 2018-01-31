@@ -284,12 +284,18 @@ button:active {
     width: 32px;
     height: 32px;
     z-index: 1;
+	font-size:16px;
+	font-weight:bold;
+    transform: translate(1px,5px);
     content: '静'
 }
 
 #notification-button.enabled::before {
-    /*background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxNiAxNic+PHBhdGggZD0ibTEwLjczIDMuMjY5YzIuODkyIDEuNTA3IDMuNjI0IDUuODQ1IDEuNDU2IDguMjU4LTAuNDE0NyAwLjQ3NzYtMC45MTExIDAuODgyOC0xLjQ1NiAxLjIwMyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjIuMTE3Ii8+PHBhdGggZD0ibTcuMTkgMTQuNTJjMC44NDk2LTEuNDcyIDEuNjk5LTIuOTQzIDIuNTQ5LTQuNDE1IDAuODQ5NiAxLjQ3MiAxLjY5OSAyLjk0MyAyLjU0OSA0LjQxNC0xLjY5OSAwLTMuMzk4IDAtNS4wOTcgMWUtNXoiLz48cGF0aCBkPSJtNS4yNjkgMTIuNzNjLTIuODkyLTEuNTA3LTMuNjI0LTUuODQ1LTEuNDU2LTguMjU4IDAuNDE0Ny0wLjQ3NzYgMC45MTExLTAuODgyOCAxLjQ1Ni0xLjIwMyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjIuMTE3Ii8+PHBhdGggZD0ibTguODEgMS40ODFjLTAuODQ5NiAxLjQ3MS0xLjY5OSAyLjk0My0yLjU0OSA0LjQxNC0wLjg0OTYtMS40NzItMS42OTktMi45NDMtMi41NDktNC40MTUgMS42OTkgM2UtNyAzLjM5OCA3ZS03IDUuMDk3IDFlLTZ6Ii8+PC9zdmc+Cg==");*/
-	content: '弹';
+    /*background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxNiAxNic+PHBhdGggZD0ibTEwLjczIDMuMjY5YzIuODkyIDEuNTA3IDMuNjI0IDUuODQ1IDEuNDU2IDguMjU4LTAuNDE0NyAwLjQ3NzYtMC45MTExIDAuODgyOC0xLjQ1NiAxLjIwMyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjIuMTE3Ii8+PHBhdGggZD0ibTcuMTkgMTQuNTJjMC44NDk2LTEuNDcyIDEuNjk5LTIuOTQzIDIuNTQ5LTQuNDE1IDAuODQ5NiAxLjQ3MiAxLjY5OSAyLjk0MyAyLjU0OSA0LjQxNC0xLjY5OSAwLTMuMzk4IDAtNS4wOTcgMWUtNXoiLz48cGF0aCBkPSJtNS4yNjkgMTIuNzNjLTIuODkyLTEuNTA3LTMuNjI0LTUuODQ1LTEuNDU2LTguMjU4IDAuNDE0Ny0wLjQ3NzYgMC45MTExLTAuODgyOCAxLjQ1Ni0xLjIwMyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjIuMTE3Ii8+PHBhdGggZD0ibTguODEgMS40ODFjLTAuODQ5NiAxLjQ3MS0xLjY5OSAyLjk0My0yLjU0OSA0LjQxNC0wLjg0OTYtMS40NzItMS42OTktMi45NDMtMi41NDktNC40MTUgMS42OTkgM2UtNyAzLjM5OCA3ZS03IDUuMDk3IDFlLTZ6Ii8+PC9zdmc+Cg==");*/	
+	font-size:16px;
+	font-weight:bold;
+    transform: translate(1px,5px);
+	content: '报';
     background-repeat: no-repeat;
     background-position: center;
     background-size: 16px;

@@ -27,7 +27,10 @@ var resultsPerPage = 25,
 	xhr = null,
 	results = [],
 	incomingResults = [],
-	incomingResultCount = 0;
+	incomingResultCount = 0,
+	追踪项 = [],
+	暂被闭频人 = [],
+	静音时间 = 5
 
 var animationEnd = 0, animationLengthMs = 500, animationRunning = !1, animationFrameRequest;
 
@@ -504,10 +507,6 @@ function displayDeleteDialog(a) {
     a = '<div id="modal"><div id="dialog"><div><h1>原文 及 删除办法</h1>原文: <div id="command">' + htmlEscape(a.message) + '</div>删除办法: 以 <strong>' + htmlEscape(a.name) + '</strong> 角色登入激战，再用 对话栏 发以下字条:</div><div id="command">/whisper Chat Log, DELETE ' + a.id + '</div><div id="dialog-footer"><button id="dismiss">返回</button></div></div></div>';
     document.body.insertAdjacentHTML("beforeend", a)
 }
-
-var 追踪项 = [""]
-var 暂时闭频 = []
-var 静音时间 = 5
 
 function displayNotificationDialog(){
 	document.getElementById("tracking-Form").style.display = "flex"

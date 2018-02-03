@@ -510,11 +510,11 @@ var 暂时闭频 = []
 
 function displayNotificationDialog(){
 	document.getElementsByClassName("tracking-Form")[0].style.display = "initial"
-	document.getElementById("tracked-Items").val() = 追踪项.toString()
+	document.getElementById("tracked-Items").value = 追踪项.toString()
 }
 document.getElementById("begin-Notification").addEventListener("submit", function(a) {
 	a.preventDefault()
-	追踪项 = document.getElementById("tracked-Items").val().split(",");
+	追踪项 = document.getElementById("tracked-Items").value.split(",");
 	
 	fetchNotificationSound();
 	if ("granted" !== Notification.permission){

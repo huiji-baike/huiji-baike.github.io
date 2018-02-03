@@ -507,6 +507,7 @@ function displayDeleteDialog(a) {
 
 var 追踪项 = [""]
 var 暂时闭频 = []
+var 静音时间 = 5
 
 function displayNotificationDialog(){
 	document.getElementById("tracking-Form").style.display = "flex"
@@ -515,7 +516,12 @@ function displayNotificationDialog(){
 document.getElementById("begin-Notification").addEventListener("click", function(a) {
 	a.preventDefault()
 	追踪项 = document.getElementById("tracked-Items").value.split(",");
-	
+	静音时间 = document.getElementById("silent-Interval").value
+	if (!静音时间.match(/[0-9]{1,2}/i)){
+		return 0
+	} else {
+		静音时间 = parseInt(静音时间)
+	}
 	fetchNotificationSound();
 	if ("granted" !== Notification.permission){
 		console.log("没有认可，查询意向")

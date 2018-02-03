@@ -31,6 +31,19 @@
       </div>
       <div class="space"></div>
       <div id="pagination"></div>
+	  
+		<div id="modal" class="tracking-form" style="display:none">
+			<div id="dialog">
+				<div><h1>通报与以下物品相关的广告</h1>(用逗号作各项之间的分隔符)
+					<textarea id="tracked-Items" rows="4" cols="50"></textarea>
+				</div>
+				<div id="dialog-footer">
+					<input id="cancel-Notification" type="submit" value="取消">
+					<input id="begin-Notification" type="submit" value="启动">
+				</div>
+			</div>
+		</div>
+		
     </div>
     <script>
       window.addEventListener('load', function() {

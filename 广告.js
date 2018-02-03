@@ -505,6 +505,42 @@ function displayDeleteDialog(a) {
     document.body.insertAdjacentHTML("beforeend", a)
 }
 
+var 追踪项 = [""]
+var 暂时闭频 = []
+
+function displayNotificationDialog(){
+	document.getElementsByClassName("tracking-form").style.display = "initial"
+	document.getElementById("tracked-Items").val() = 追踪项.toString()
+}
+document.getElementById("begin-Notification").addEventListener("submit", function(a) {
+	a.preventDefault()
+	追踪项 = document.getElementById("tracked-Items").val().split(",");
+	
+	fetchNotificationSound();
+	if ("granted" !== Notification.permission){
+		console.log("没有认可，查询意向")
+		Notification.requestPermission(function(a) {
+			console.log("意向已明朗")
+			if ("granted" === a) {
+				console.log("被同意")
+				notificationButton.classList.add("enabled");
+			} else {
+				console.log("不同意")
+			}
+		})
+	} else {
+		notificationButton.classList.toggle("enabled")
+	}
+		
+	//document.getElementsByClassName("tracking-form").style.display = "none"
+})
+	
+document.getElementById("end-Notification").addEventListener("submit", function(a) {
+	a.preventDefault()
+		
+	//document.getElementsByClassName("tracking-form").style.display = "none"
+})
+
 function matchesRequest(a, b) {
     return a.query === b.query && a.offset == b.offset
 }
@@ -548,22 +584,14 @@ notificationButton.addEventListener("click", function() {
 	console.log("点了按钮")
     if ("undefined" === typeof Notification) {
 		alert("浏览器无提示窗功能")
+		notificationButton.classList.remove("enabled")
 	} else {
-		console.log("有提示窗功能")
-		fetchNotificationSound();
-		if ("granted" !== Notification.permission){
-			console.log("没有认可，查询意向")
-			Notification.requestPermission(function(a) {
-				console.log("意向已明朗")
-				if ("granted" === a) {
-					console.log("被同意")
-					notificationButton.classList.add("enabled");
-				} else {
-					console.log("不同意")
-				}
-			});
+		if (notificationButton.classList.contains("enabled")){
+			console.log("提示正在进行，现予以关闭")
+			notificationButton.classList.remove("enabled")
 		} else {
-			notificationButton.classList.toggle("enabled");
+			console.log("有提示窗功能，打开询问窗口")
+			displayNotificationDialog()
 		}
 	}
 });

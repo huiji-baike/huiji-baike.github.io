@@ -512,6 +512,7 @@ var 静音时间 = 5
 function displayNotificationDialog(){
 	document.getElementById("tracking-Form").style.display = "flex"
 	document.getElementById("tracked-Items").value = 追踪项.toString()
+	document.getElementById("silent-Interval").value = 静音时间
 }
 document.getElementById("begin-Notification").addEventListener("click", function(a) {
 	a.preventDefault()

@@ -685,7 +685,7 @@ button:active {
 }
 
 #cancel-Notification{
-	display: block;
+	display: flex;
     margin-right: auto;
     font-size: 14px;
     background-color: #f5f5f5

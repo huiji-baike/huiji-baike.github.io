@@ -512,7 +512,7 @@ function displayNotificationDialog(){
 	document.getElementsByClassName("tracking-Form")[0].style.display = "initial"
 	document.getElementById("tracked-Items").value = 追踪项.toString()
 }
-document.getElementById("begin-Notification").addEventListener("submit", function(a) {
+document.getElementById("begin-Notification").addEventListener("click", function(a) {
 	a.preventDefault()
 	追踪项 = document.getElementById("tracked-Items").value.split(",");
 	
@@ -535,7 +535,7 @@ document.getElementById("begin-Notification").addEventListener("submit", functio
 	//document.getElementsByClassName("tracking-Form")[0].style.display = "none"
 })
 	
-document.getElementById("cancel-Notification").addEventListener("submit", function(a) {
+document.getElementById("cancel-Notification").addEventListener("click", function(a) {
 	a.preventDefault()
 		
 	//document.getElementsByClassName("tracking-Form")[0].style.display = "none"

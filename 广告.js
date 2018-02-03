@@ -509,7 +509,7 @@ var 追踪项 = [""]
 var 暂时闭频 = []
 
 function displayNotificationDialog(){
-	document.getElementsByClassName("tracking-Form")[0].style.display = "initial"
+	document.getElementById("tracking-Form").style.display = "initial"
 	document.getElementById("tracked-Items").value = 追踪项.toString()
 }
 document.getElementById("begin-Notification").addEventListener("click", function(a) {
@@ -532,13 +532,13 @@ document.getElementById("begin-Notification").addEventListener("click", function
 		notificationButton.classList.toggle("enabled")
 	}
 		
-	document.getElementsByClassName("tracking-Form")[0].style.display = "none"
+	document.getElementById("tracking-Form").style.display = "none"
 })
 	
 document.getElementById("cancel-Notification").addEventListener("click", function(a) {
 	a.preventDefault()
 		
-	document.getElementsByClassName("tracking-Form")[0].style.display = "none"
+	document.getElementById("tracking-Form").style.display = "none"
 })
 
 function matchesRequest(a, b) {

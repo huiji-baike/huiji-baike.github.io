@@ -616,7 +616,7 @@ button:active {
     }
 }
 
-#modal {
+#tracking-Form, #modal {
     top: 0;
     z-index: 10;
     position: fixed;
@@ -677,14 +677,14 @@ button:active {
     border-top: 1px solid #ccc
 }
 
-#dismiss {
+#cancel-Notification, #begin-Notification, #dismiss {
     display: block;
     margin-left: auto;
     font-size: 14px;
     background-color: #f5f5f5
 }
 
-#dismiss:active {
+#cancel-Notification:active, #begin-Notification:active, #dismiss:active {
     background-color: #eee
 }
 

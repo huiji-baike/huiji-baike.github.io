@@ -518,6 +518,8 @@ document.getElementById("begin-Notification").addEventListener("click", function
 	a.preventDefault()
 	追踪项 = document.getElementById("tracked-Items").value.split(",");
 	静音时间 = document.getElementById("silent-Interval").value
+	console.log(静音时间)
+	console.log(!静音时间.match(/[0-9]{1,2}/i))
 	if (!静音时间.match(/[0-9]{1,2}/i)){
 		return 0
 	} else {

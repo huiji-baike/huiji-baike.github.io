@@ -532,13 +532,13 @@ document.getElementById("begin-Notification").addEventListener("click", function
 		notificationButton.classList.toggle("enabled")
 	}
 		
-	//document.getElementsByClassName("tracking-Form")[0].style.display = "none"
+	document.getElementsByClassName("tracking-Form")[0].style.display = "none"
 })
 	
 document.getElementById("cancel-Notification").addEventListener("click", function(a) {
 	a.preventDefault()
 		
-	//document.getElementsByClassName("tracking-Form")[0].style.display = "none"
+	document.getElementsByClassName("tracking-Form")[0].style.display = "none"
 })
 
 function matchesRequest(a, b) {

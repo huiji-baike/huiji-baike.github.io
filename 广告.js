@@ -509,7 +509,7 @@ var 追踪项 = [""]
 var 暂时闭频 = []
 
 function displayNotificationDialog(){
-	document.getElementById("tracking-Form").style.display = "initial"
+	document.getElementById("tracking-Form").style.display = "flex"
 	document.getElementById("tracked-Items").value = 追踪项.toString()
 }
 document.getElementById("begin-Notification").addEventListener("click", function(a) {

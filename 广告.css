@@ -696,7 +696,7 @@ button:active {
     background-color: #f5f5f5
 }
 #silent-Interval:invalid{
-	border-color: red;
+	background-color: red;
 }
 
 #cancel-Notification:active, #begin-Notification:active, #dismiss:active {

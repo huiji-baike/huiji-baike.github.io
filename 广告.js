@@ -535,7 +535,7 @@ document.getElementById("begin-Notification").addEventListener("submit", functio
 	//document.getElementsByClassName("tracking-form").style.display = "none"
 })
 	
-document.getElementById("end-Notification").addEventListener("submit", function(a) {
+document.getElementById("cancel-Notification").addEventListener("submit", function(a) {
 	a.preventDefault()
 		
 	//document.getElementsByClassName("tracking-form").style.display = "none"

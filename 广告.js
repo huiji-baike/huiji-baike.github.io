@@ -301,7 +301,7 @@ function setupWebSocket() {
                         }
 
                         if (isValidRegExp) {
-                            return a.message().match(new RegExp(项, "i"))
+                            return a.message.match(new RegExp(项, "i"))
                         }
                         return false
                     })

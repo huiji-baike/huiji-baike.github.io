@@ -318,23 +318,23 @@ function setupWebSocket() {
     }
 }
 
-function isEntryUnique(data) {
-    近期广告 = 近期广告.filter(isRecent)
-    for (let i = 0; i < 近期广告.length; i++) {
-        var records = 近期广告[i];
-        if (data.name == records.name && data.message == records.message) {
+function 可曾见过(新数据) {
+    近期广告 = 近期广告.filter(还新否)
+    for (var i = 0; i < 近期广告.length; i++) {
+        var 记录 = 近期广告[i];
+        if (新数据.name == 记录.name && 新数据.message == 记录.message) {
             return false
         }
     }
-    data.receivedOn = (new Date()).getTime()
-    近期广告.push(data)
+    新数据.接收时间 = (new Date()).getTime()
+    近期广告.push(新数据)
     return true
 }
 
-function isRecent(ad) {
-    var timeNow = new Date()
-    var adTime = new Date(ad.receivedOn)
-    return ((timeNow - adTime) > mutePeriod) ? false : true
+function 还新否(广告) {
+    var 现在时间 = new Date()
+    var 广告时间 = new Date(广告.接收时间)
+    return ((现在时间 - 广告时间) > (静音时间 * 60 * 1000)) ? false : true
 }
 
 function flushNewRows() {

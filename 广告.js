@@ -32,36 +32,40 @@ var resultsPerPage = 25,
     近期广告 = [],
     静音时间 = 5
 
-var animationEnd = 0, animationLengthMs = 500, animationRunning = !1, animationFrameRequest;
+var animationEnd = 0,
+    animationLengthMs = 500,
+    animationRunning = !1,
+    animationFrameRequest;
 
-var scrollAnimationEnd = 0, scrollAnimationLengthMs, scrollStartY, scrollEndY;
+var scrollAnimationEnd = 0,
+    scrollAnimationLengthMs, scrollStartY, scrollEndY;
 
 function humanReadableDuration(a, b) {
     for (var c = Math.abs(b - a), d = [{
-        unit: "分 钟 ",
-        article: "1 ",
-        ms: 6E4
-    }, {
-        unit: "小 时 ",
-        article: "1 ",
-        ms: 36E5
-    }, {
-        unit: "天 ",
-        article: "1 ",
-        ms: 864E5
-    }, {
-        unit: "周 ",
-        article: "1 ",
-        ms: 6048E5
-    }, {
-        unit: "个 月 ",
-        article: "1 ",
-        ms: 2629746E3
-    }, {
-        unit: "年 ",
-        article: "1 ",
-        ms: 31556952E3
-    }], e = null, f = 0; f < d.length && !(c < d[f].ms); ++f)
+            unit: "分 钟 ",
+            article: "1 ",
+            ms: 6E4
+        }, {
+            unit: "小 时 ",
+            article: "1 ",
+            ms: 36E5
+        }, {
+            unit: "天 ",
+            article: "1 ",
+            ms: 864E5
+        }, {
+            unit: "周 ",
+            article: "1 ",
+            ms: 6048E5
+        }, {
+            unit: "个 月 ",
+            article: "1 ",
+            ms: 2629746E3
+        }, {
+            unit: "年 ",
+            article: "1 ",
+            ms: 31556952E3
+        }], e = null, f = 0; f < d.length && !(c < d[f].ms); ++f)
         e = d[f];
     return e ? (c = Math.floor(c / e.ms),
         1 < c ? c + " " + e.unit + "" : e.article + " " + e.unit) : "几 秒 "
@@ -89,8 +93,8 @@ function addResult(a) {
 
 function populateResultsFromDom() {
     for (var a = current.childNodes, b = a.length - 1; 0 <= b; --b) {
-        var c = a[b]
-            , c = {
+        var c = a[b],
+            c = {
                 domNode: c,
                 deleted: !1,
                 ageDomNode: c.getElementsByClassName("age")[0],
@@ -109,8 +113,8 @@ function htmlEscape(a) {
 }
 
 function formatResult(a) {
-    var b = htmlEscape(a.name)
-        , c = humanReadableAge(1E3 * a.timestamp);
+    var b = htmlEscape(a.name),
+        c = humanReadableAge(1E3 * a.timestamp);
     a = htmlEscape(a.message);
     a = parseTranslate(a); //New: Need to make sure translation do not break syntax
     return '<tr class="row"><td class="info"><div class="name">' + b + '</div><div class="age">' + c + '</div></td><td class="message">' + a + '</td><td class="delete"></td></tr>'
@@ -121,7 +125,8 @@ function shouldAnimate() {
 }
 
 function placeNewResults() {
-    var a = 0, b;
+    var a = 0,
+        b;
     for (b = results.length - 1; 0 <= b; --b) {
         var c = results[b];
         if ("undefined" !== typeof c.height) {
@@ -131,9 +136,9 @@ function placeNewResults() {
     }
     for (b += 1; b < results.length; ++b)
         c = results[b],
-            c.height = c.domNode.getBoundingClientRect().height,
-            c.y = a - c.height,
-            a = c.y
+        c.height = c.domNode.getBoundingClientRect().height,
+        c.y = a - c.height,
+        a = c.y
 }
 
 function computeTargetLayout() {
@@ -173,13 +178,13 @@ function startAnimateResults(a) {
     animationEnd = (new Date).getTime() + a;
     0 == a ? (animationRunning && window.cancelAnimationFrame(animationFrameRequest),
         animateResults()) : animationRunning || (animationRunning = !0,
-            animationFrameRequest = window.requestAnimationFrame(animateResults))
+        animationFrameRequest = window.requestAnimationFrame(animateResults))
 }
 
 function animateResults() {
     for (var a = (new Date).getTime(), a = a > animationEnd ? 1 : 1 - (animationEnd - a) / animationLengthMs, b = 1, c = results.length - 1; 0 <= c; --c) {
-        var d = results[c]
-            , e = d.domNode;
+        var d = results[c],
+            e = d.domNode;
         d.y = a * d.targetY + (1 - a) * d.oldY;
         e.style.transform = "translate3d(0, " + d.y + "px, 0)";
         d.deleted ? (b = 1 - (b - d.y) / d.height,
@@ -242,8 +247,8 @@ function setupWebSocket() {
     socket && (socket.onclose = socket.onopen = socket.onmessage = null, socket.close());
     var a = trimPathName(document.location.pathname) //document.location.pathname || New: Need to generalize this argument
     console.log("pretrim pathname: " + document.location.pathname)
-    console.log("websocket setup suffix is: " + a)
-        ; (a.charAt(0) == "?") ? a = "/" + a.slice(1) : a
+    console.log("websocket setup suffix is: " + a);
+    (a.charAt(0) == "?") ? a = "/" + a.slice(1): a
     console.log("websocket setup suffix is (after switch): " + a)
     pendingRequest || (a = "/notify" + a);
     console.log("websocket address is: " + "wss://" + "kamadan.decltype.org" + "/ws" + a)
@@ -269,7 +274,10 @@ function setupWebSocket() {
             navigateUrl(window.location.href.match(regX)[1])
         } else {
             console.log("branch: front page")
-            retrieveResults({ query: "", offset: 0 })
+            retrieveResults({
+                query: "",
+                offset: 0
+            })
         }
     };
 
@@ -280,23 +288,40 @@ function setupWebSocket() {
         if ("undefined" !== typeof a.query) {
             console.log("a query is made and a result is returned")
             displayResults(a);
-        }
-        else {
+        } else {
             console.log("result for auto update received")
-            if (notificationButton.classList.contains("enabled") && 可曾见过(a)) {
-                var b = parseRequestFromUrl(trimPathName(document.location.pathname))
-                    , d = {
-                        body: "角色名: " + a.name + "\n" + parseTranslate(a.message), //所在地: 卡玛丹，艾斯坦之钻\n美洲1区
-                        icon: "ZjA5Y2E4NT.png", //notification related:  /v/ZjA5Y2E4NT.png
-                        tag: "卡玛丹/" + b.query
+            if (notificationButton.classList.contains("enabled")) {
+                if (追踪项.length > 0) {
+                    var 找到 = 追踪项.filter(项 => {
+                        var isValidRegExp = true
+                        try {
+                            new RegExp(项, "i")
+                        } catch (e) {
+                            isValidRegExp = false
+                        }
+
+                        if (isValidRegExp) {
+                            return a.message().match(new RegExp(项, "i"))
+                        }
+                        return false
+                    })
+                    console.log("找到: " + 找到)
+                    if ((找到.length > 0) && 未曾见过(a)) {
+                        var b = parseRequestFromUrl(trimPathName(document.location.pathname)),
+                            d = {
+                                body: "角色名: " + a.name + "\n" + parseTranslate(a.message), //所在地: 卡玛丹，艾斯坦之钻\n美洲1区
+                                icon: "ZjA5Y2E4NT.png", //notification related:  /v/ZjA5Y2E4NT.png
+                                tag: "卡玛丹/" + b.query
+                            },
+                            e = "激战广告";
+                        b.query && (e = e + " - '" + b.query + "' 的搜索结果");
+                        console.log("sending notification") //New: this and two lines below test for notification
+                        console.log(e)
+                        console.log(d)
+                        new Notification(e, d);
+                        playNotificationSound()
                     }
-                    , e = "激战广告";
-                b.query && (e = e + " - '" + b.query + "' 的搜索结果");
-                console.log("sending notification") //New: this and two lines below test for notification
-                console.log(e)
-                console.log(d)
-                new Notification(e, d);
-                playNotificationSound()
+                }
             }
             d = scrolledDown && !scrolling;
             b = findDuplicates(a, results);
@@ -309,16 +334,16 @@ function setupWebSocket() {
                 toggleScrollIndicator(!0)
             } else
                 addResult(a),
-                    b.forEach(function (a) {
-                        a.deleted = !0
-                    }),
-                    placeNewResults(),
-                    reflowResults(shouldAnimate())
+                b.forEach(function (a) {
+                    a.deleted = !0
+                }),
+                placeNewResults(),
+                reflowResults(shouldAnimate())
         }
     }
 }
 
-function 可曾见过(新数据) {
+function 未曾见过(新数据) {
     近期广告 = 近期广告.filter(还新否)
     for (var i = 0; i < 近期广告.length; i++) {
         var 记录 = 近期广告[i];
@@ -360,9 +385,9 @@ function displayTitle(a) {
 function displaySearchInfo(a) {
     var b = parseInt(a.offset, 10);
     if (0 < a.results.length) {
-        var c = a.elapsed_microseconds / 1E3
-            , b = b + 1
-            , d = b + Math.min(resultsPerPage, a.results.length) - 1;
+        var c = a.elapsed_microseconds / 1E3,
+            b = b + 1,
+            d = b + Math.min(resultsPerPage, a.results.length) - 1;
         a = a.query ? "第 " + b + "-" + d + " 条 | 共" + ("true" === a.exact ? "有" : "约") + " " + a.num_results + " 则 与 '" + a.query + "' 相关的广告 (耗时 " + c + " 毫秒)" : "第 " + b + "-" + d + " 条 | 共 " + a.num_results + " 则 (耗时 " + c + " 毫秒)"
     } else
         a = "没有 与 '" + a.query + "' 相关的广告";
@@ -379,8 +404,8 @@ function formatPagination(a, b, c) {
         return "";
     c = Math.min(Math.ceil(c / resultsPerPage), maxPages);
     b = Math.floor(b / resultsPerPage) + 1;
-    var d = Math.max(Math.min(b - 2, c - 4), 1)
-        , e = Math.min(c, d + 4);
+    var d = Math.max(Math.min(b - 2, c - 4), 1),
+        e = Math.min(c, d + 4);
     a = htmlEscape(a);
     for (var f = formatPageLink(a, 1, 1 == b ? "disabled" : "", "&laquo;"); d <= e; ++d)
         f += formatPageLink(a, d, b == d ? "current" : "", d);
@@ -422,11 +447,11 @@ function displayResults(a) {
 }
 
 function parseRequestFromUrl(a) {
-    (a.charAt(0) == "?") ? a = a.substr(1) : a
+    (a.charAt(0) == "?") ? a = a.substr(1): a
     a = a.split(/\/+/);
     "" == a[0] && (a = a.slice(1));
-    var b = ""
-        , c = 0;
+    var b = "",
+        c = 0;
     1 <= a.length && "latest" == a[0] ? a = a.slice(1) : 2 <= a.length && "search" == a[0] && (b = decodeURIComponent(a[1]),
         a = a.slice(2));
     1 <= a.length && (c = parseInt(a[0], 10),
@@ -471,8 +496,8 @@ function reflowDocument() {
 }
 
 function animateScroll() {
-    var a = (new Date).getTime()
-        , a = a > scrollAnimationEnd ? 1 : 1 - (scrollAnimationEnd - a) / scrollAnimationLengthMs;
+    var a = (new Date).getTime(),
+        a = a > scrollAnimationEnd ? 1 : 1 - (scrollAnimationEnd - a) / scrollAnimationLengthMs;
     window.scrollTo(0, Math.floor(a * scrollEndY + (1 - a) * scrollStartY));
     1 > a ? window.requestAnimationFrame(animateScroll) : scrolledDown = scrolling = !1
 }
@@ -500,7 +525,7 @@ function playNotificationSound() {
 
 function fetchNotificationSound() {
     //New: commented out the entire block below
-	/*
+    /*
     "undefined" === typeof notificationSoundBuffer && (notificationSoundBuffer = null,
     "undefined" !== typeof AudioContext && (audioContext = new AudioContext,
     window.fetch("ZTkxMjA0YW.mp3").then(function(a) { //notification related: /v/ZTkxMjA0YW.mp3 
@@ -534,7 +559,7 @@ function displayNotificationDialog() {
 }
 document.getElementById("begin-Notification").addEventListener("click", function (a) {
     a.preventDefault()
-    追踪项 = document.getElementById("tracked-Items").value.split(",");
+    追踪项 = document.getElementById("tracked-Items").value.split(",").map(x => x.trim()).filter(x => (x != ""))
     静音时间 = document.getElementById("silent-Interval").value
     if (!静音时间.match(/^[0-9]{1,2}$/i)) {
         return 0
@@ -572,8 +597,8 @@ function matchesRequest(a, b) {
 
 function navigateUrl(a) {
     "?latest" == a && (a = "?");
-    var b = parseRequestFromUrl(a)
-        , c = parseRequestFromUrl(trimPathName(document.location.pathname));
+    var b = parseRequestFromUrl(a),
+        c = parseRequestFromUrl(trimPathName(document.location.pathname));
     matchesRequest(c, b) || history.pushState({}, "", (a == "?") ? "/广告" : "/广告" + a); //previously: a
     retrieveResults(b)
 }
@@ -585,8 +610,8 @@ function navigate(a, b) {
 
 function updateTimestamps() {
     for (var a = (new Date).valueOf(), b = 0; b < results.length; ++b) {
-        var c = results[b]
-            , d = humanReadableAge(1E3 * c.timestamp, a);
+        var c = results[b],
+            d = humanReadableAge(1E3 * c.timestamp, a);
         d !== c.ageDomNode.innerText && (c.ageDomNode.innerText = d)
     }
 }
@@ -631,7 +656,7 @@ window.addEventListener("popstate", function (a) {
 });
 
 window.addEventListener("beforeunload", function () {
-    socket && (clearTimeout(reconnectTimer), socket.onclose = function () { }, socket.close())
+    socket && (clearTimeout(reconnectTimer), socket.onclose = function () {}, socket.close())
 });
 
 window.addEventListener("scroll", function () {
@@ -645,31 +670,31 @@ document.addEventListener("click", function (a) {
     if (1 == a.which)
         if (b.classList.contains("name") && !isSelecting(b))
             navigate('author:"' + b.innerText + '"'),
-                a.preventDefault();
+            a.preventDefault();
         else if (b.classList.contains("page-link") && b.hasAttribute("href"))
-            navigateUrl(b.getAttribute("href")),
-                a.preventDefault();
-        else if (b.classList.contains("delete")) {
-            a = b.parentNode;
-            for (var c, b = 0; b < results.length; ++b)
-                results[b].domNode === a && (c = results[b]);
-            c && displayDeleteDialog(c)
-        } else if ("modal" === b.id)
-            document.body.removeChild(b);
-        else if ("dismiss" === b.id)
-            a = document.getElementById("modal"),
-                document.body.removeChild(a);
-        else if ("command" === b.id) {
-            c = getSelection();
-            c.removeAllRanges();
-            var d = document.createRange();
-            d.selectNode(b);
-            c.addRange(d);
-            try {
-                document.execCommand("copy")
-            } catch (e) { }
-            a.preventDefault()
-        }
+        navigateUrl(b.getAttribute("href")),
+        a.preventDefault();
+    else if (b.classList.contains("delete")) {
+        a = b.parentNode;
+        for (var c, b = 0; b < results.length; ++b)
+            results[b].domNode === a && (c = results[b]);
+        c && displayDeleteDialog(c)
+    } else if ("modal" === b.id)
+        document.body.removeChild(b);
+    else if ("dismiss" === b.id)
+        a = document.getElementById("modal"),
+        document.body.removeChild(a);
+    else if ("command" === b.id) {
+        c = getSelection();
+        c.removeAllRanges();
+        var d = document.createRange();
+        d.selectNode(b);
+        c.addRange(d);
+        try {
+            document.execCommand("copy")
+        } catch (e) {}
+        a.preventDefault()
+    }
 });
 
 window.setInterval(updateTimestamps, 1E3);
@@ -1025,7 +1050,7 @@ function parseTranslate(data) {
     data = data.replace(/(^|[^A-Za-z])(APP*?TT*?ITT*?UD*?T*?EE*? NOT ATT*?ITT*?I*?T*?UD*?T*?EE*?|APTT*?I*?T*?U*?D*?E*\.*? NO*T* ATTI*?T*?U*?D*?E*?\.*?|App*?tit*?t*?u*?d*?e*?s*? not attitut*?des*?)(?=[^A-Za-z]|$)/gi, '$1"能力而非态度"');
 
     data = data.replace(/(^|[^A-Za-z])(NOT THE FACE)(?=[^A-Za-z]|$)/gi, '$1"不要打脸"');
-    data = data.replace(/(^|[^A-Za-z])(LEAF ON THE WIND|LEAF IN THE WIND)(?=[^A-Za-z]|$)/gi, '$1"风中之叶"');//(对冰冻攻击 防御+10)
+    data = data.replace(/(^|[^A-Za-z])(LEAF ON THE WIND|LEAF IN THE WIND)(?=[^A-Za-z]|$)/gi, '$1"风中之叶"'); //(对冰冻攻击 防御+10)
     data = data.replace(/(^|[^A-Za-z])(LIKE A ROLLING STONE)(?=[^A-Za-z]|$)/gi, '$1"漂泊者"');
     data = data.replace(/(^|[^A-Za-z])(SLEEP NOW IN THE FIRE)(?=[^A-Za-z]|$)/gi, '$1"烈焰中歇息"');
     data = data.replace(/(^|[^A-Za-z])(RIDERS ON THE STORM)(?=[^A-Za-z]|$)/gi, '$1"暴风骑士"');
@@ -1132,7 +1157,7 @@ function parseTranslate(data) {
     data = data.replace(/(^|[^A-Za-z])(ELONI*?AN*? LEATHERS*(?: S*?QUARES*?)?|E-*?LEATHE*?R*?S*?(?: SQUARES*?)?)(?=[^A-Za-z]|$)/gi, '$1伊洛那皮革');
     data = data.replace(/(^|[^A-Za-z])(FEATHERS*?|FEATHERS*? STACKS*?|STACKS*? OF FEATHERS*?)(?=[^A-Za-z]|$)/gi, '$1羽毛');
     data = data.replace(/(^|[^A-Za-z])(FUR SQUARES*?|FURS*?)(?=[^A-Za-z]|$)/gi, '$1毛皮');
-    data = data.replace(/(^|[^A-Za-z])((?:GLOBE*?S*? OF )?\s*?ECTOPLASMS*?|ECTOP*?S*?|ECTOE*?S*?)(?=[^A-Za-z]|$)/gi, '$1玉');//心灵之玉
+    data = data.replace(/(^|[^A-Za-z])((?:GLOBE*?S*? OF )?\s*?ECTOPLASMS*?|ECTOP*?S*?|ECTOE*?S*?)(?=[^A-Za-z]|$)/gi, '$1玉'); //心灵之玉
 
     //花岗岩石板，铁，骨头 :: 放置最后
     data = data.replace(/(^|[^A-Za-z])(JADEITE SC*?HARD*?S*?)(?=[^A-Za-z]|$)/gi, '$1硬玉');
@@ -1265,7 +1290,7 @@ function parseTranslate(data) {
     data = data.replace(/(^|[^A-Za-z])(SMITE CRAWLERS*?)(?=[^A-Za-z]|$)/gi, '$1幻影爬行者');
     data = data.replace(/(^|[^A-Za-z])(SMITE*?R*?S*?|SMI*?TT*?E*?ING PRAYERS*?|SMITT*?ING*?|Smithing)(?=[^A-Za-z]|$)/gi, '$1惩戒');
     data = data.replace(/(^|[^A-Za-z])(PROTECTION\s*?PRAYERS|PROTECTION|PROT)(?=[^A-Za-z]|$)/gi, '$1防护');
-    data = data.replace(/(^|[^A-Za-z])(DIVI*?NE\s*?FAVOU*?RS*?|DIVI*?NE|DF)(?=[^A-Za-z]|$)/gi, '$1神恩');//Favou*?r
+    data = data.replace(/(^|[^A-Za-z])(DIVI*?NE\s*?FAVOU*?RS*?|DIVI*?NE|DF)(?=[^A-Za-z]|$)/gi, '$1神恩'); //Favou*?r
 
     data = data.replace(/(^|[^A-Za-z])(STR*?E*?NGT*?HT*?|STR|STREN|Strg|STRN)(?=[^A-Za-z]|$)/gi, '$1力量');
     data = data.replace(/(^|[^A-Za-z])(AXE\s*?MASTERY)(?=[^A-Za-z]|$)/gi, '$1斧术');
@@ -1631,7 +1656,7 @@ function parseTranslate(data) {
     data = data.replace(/(^|[^A-Za-z])(SUNDERI*?N*?G*?N*?)(?=[^A-Za-z]|$)/gi, '$1[分离]');
     data = data.replace(/(^|[^A-Za-z])(VAMPI*?RIC)(?=[^A-Za-z]|$)/gi, '$1[吸血鬼]');
     data = data.replace(/(^|[^A-Za-z])(ZEALOUS)(?=[^A-Za-z]|$)/gi, '$1[热望]');
-    data = data.replace(/(^|[^A-Za-z])(ADEPT)(?=[^A-Za-z]|$)/gi, '$1[行家]');//(施法时间减半(概率:10-20%))
+    data = data.replace(/(^|[^A-Za-z])(ADEPT)(?=[^A-Za-z]|$)/gi, '$1[行家]'); //(施法时间减半(概率:10-20%))
     data = data.replace(/(^|[^A-Za-z])(DEFENSIVE)(?=[^A-Za-z]|$)/gi, '$1[防卫]');
     data = data.replace(/(^|[^A-Za-z])(HALE)(?=[^A-Za-z]|$)/gi, '$1[健壮]');
     data = data.replace(/(^|[^A-Za-z])(INSIGHTFUL)(?=[^A-Za-z]|$)/gi, '$1[洞察]');
@@ -1666,7 +1691,7 @@ function parseTranslate(data) {
     data = data.replace(/(^|[^A-Za-z])(OFFHAND*S*|OFFHAND|OFF\s*?-*?HANDS*?)(?=[^A-Za-z]|$)/gi, '$1副手');
     data = data.replace(/(^|[^A-Za-z])(WANDS*?)(?=[^A-Za-z]|$)/gi, '$1魔杖');
     data = data.replace(/(^|[^A-Za-z])(OPP*?RO*?ESS*?OE*?RS*?)(?=[^A-Za-z]|$)/gi, '$1压迫者');
-    data = data.replace(/(^|[^A-Za-z])(DESTROYER|destryer)(?=[^A-Za-z]|$)/gi, '$1破坏者');//
+    data = data.replace(/(^|[^A-Za-z])(DESTROYER|destryer)(?=[^A-Za-z]|$)/gi, '$1破坏者'); //
     data = data.replace(/(^|[^A-Za-z])(TOU*?RMENTOR|TOU*?RM|TOU*?RMENTE*?D*?|Tormentend|tormentt|tormentet)(?=[^A-Za-z]|$)/gi, '$1拷问者');
     //遗物 已移上
     data = data.replace(/(^|[^A-Za-z])(Diessi*a*'*s*(?: ChalL*?ices*?)?|D\-*?\.*?\s*?Chalices*?|DISSEA(?: ChalL*?ices*?)?)(?=[^A-Za-z]|$)/gi, '$1底耶沙(眼罩)杯');
@@ -1790,24 +1815,24 @@ function parseTranslate(data) {
     var searchIndex = -1;
     var searchIndexB = -1;
     searchIndex = data.search(/(^|[^A-Za-z])((?:Q\s*?\d*?\d\s*?)VS|VS(?:\s*?Q\s*?\d*?\d))(?=[^A-Za-z]|$)/gi);
-    (searchIndex != -1) ? data = data.replace(/(^|[^A-Za-z])(VS)(?=[^A-Za-z]|$)/gi, '$1电流矛') : data = data.replace(/(^|[^A-Za-z])(VS)(?=[^A-Za-z]|$)/gi, '$1VS');
+    (searchIndex != -1) ? data = data.replace(/(^|[^A-Za-z])(VS)(?=[^A-Za-z]|$)/gi, '$1电流矛'): data = data.replace(/(^|[^A-Za-z])(VS)(?=[^A-Za-z]|$)/gi, '$1VS');
     searchIndex = data.search(/(^|[^A-Za-z])((?:属性需求\s*?\d*?\d\s*?)VS|VS(?:\s*?属性需求\s*?\d*?\d))(?=[^A-Za-z]|$)/gi);
-    (searchIndex != -1) ? data = data.replace(/(^|[^A-Za-z])(VS)(?=[^A-Za-z]|$)/gi, '$1电流矛') : data = data.replace(/(^|[^A-Za-z])(VS)(?=[^A-Za-z]|$)/gi, '$1VS');
+    (searchIndex != -1) ? data = data.replace(/(^|[^A-Za-z])(VS)(?=[^A-Za-z]|$)/gi, '$1电流矛'): data = data.replace(/(^|[^A-Za-z])(VS)(?=[^A-Za-z]|$)/gi, '$1VS');
     searchIndex = data.search(/(^|[^A-Za-z])((?:R\s*?\d*?\d\s*?)VS|VS(?:\s*?R\s*?\d*?\d))(?=[^A-Za-z]|$)/gi);
-    (searchIndex != -1) ? data = data.replace(/(^|[^A-Za-z])(VS)(?=[^A-Za-z]|$)/gi, '$1电流矛') : data = data.replace(/(^|[^A-Za-z])(VS)(?=[^A-Za-z]|$)/gi, '$1VS');
+    (searchIndex != -1) ? data = data.replace(/(^|[^A-Za-z])(VS)(?=[^A-Za-z]|$)/gi, '$1电流矛'): data = data.replace(/(^|[^A-Za-z])(VS)(?=[^A-Za-z]|$)/gi, '$1VS');
     searchIndex = data.search(/迷你/gi);
-    (searchIndex != -1) ? data = data.replace(/(^|[^A-Za-z])(UNDEADS*?)(?=[^A-Za-z]|$)/gi, '$1未奉献的') : data = data.replace(/(^|[^A-Za-z])(UNDEADS*?)(?=[^A-Za-z]|$)/gi, '$1不死族');
+    (searchIndex != -1) ? data = data.replace(/(^|[^A-Za-z])(UNDEADS*?)(?=[^A-Za-z]|$)/gi, '$1未奉献的'): data = data.replace(/(^|[^A-Za-z])(UNDEADS*?)(?=[^A-Za-z]|$)/gi, '$1不死族');
     searchIndex = data.search(/(精英|普通)/gi);
-    (searchIndex != -1) ? data = data.replace(/(^|[^A-Za-z])(TOMBS*?)(?=[^A-Za-z]|$)/gi, '$1书') : data = data.replace(/(^|[^A-Za-z])(TOMBS*?)(?=[^A-Za-z]|$)/gi, '$1墓');
+    (searchIndex != -1) ? data = data.replace(/(^|[^A-Za-z])(TOMBS*?)(?=[^A-Za-z]|$)/gi, '$1书'): data = data.replace(/(^|[^A-Za-z])(TOMBS*?)(?=[^A-Za-z]|$)/gi, '$1墓');
     searchIndex = data.search(/书/gi);
-    (searchIndex != -1) ? data = data.replace(/(^|[^A-Za-z])(WAR)(?=[^A-Za-z]|$)/gi, '$1战士') : data = data.replace(/(^|[^A-Za-z])(WAR)(?=[^A-Za-z]|$)/gi, '$1战士');
+    (searchIndex != -1) ? data = data.replace(/(^|[^A-Za-z])(WAR)(?=[^A-Za-z]|$)/gi, '$1战士'): data = data.replace(/(^|[^A-Za-z])(WAR)(?=[^A-Za-z]|$)/gi, '$1战士');
     searchIndex = data.search(/永久/gi);
     searchIndexB = data.search(/变身/gi);
-    ((searchIndex != -1) && (searchIndexB == -1)) ? data = data.replace(/(^|[^A-Za-z])(永久)(?=[^A-Za-z]|$)/gi, '$1永久变身') : searchIndexB = -1;
+    ((searchIndex != -1) && (searchIndexB == -1)) ? data = data.replace(/(^|[^A-Za-z])(永久)(?=[^A-Za-z]|$)/gi, '$1永久变身'): searchIndexB = -1;
     searchIndex = data.search(/普通|困难/gi);
-    (searchIndex != -1) ? searchIndex = -1 : data = data.replace(/(^|[^A-Za-z])(模式)(?=[^A-Za-z]|$)/gi, '$1组件');
+    (searchIndex != -1) ? searchIndex = -1: data = data.replace(/(^|[^A-Za-z])(模式)(?=[^A-Za-z]|$)/gi, '$1组件');
     searchIndex = data.search(/地图|块/gi);
-    (searchIndex != -1) ? searchIndex = -1 : data = data.replace(/(^|[^A-Za-z])(LEFT)(?=[^A-Za-z]|$)/gi, '$1剩下');
+    (searchIndex != -1) ? searchIndex = -1: data = data.replace(/(^|[^A-Za-z])(LEFT)(?=[^A-Za-z]|$)/gi, '$1剩下');
 
     //data=data.replace(/(^|[^A-Za-z])(TOP)(?=[^A-Za-z]|$)/gi, '$1上')
     data = data.replace(/(^|[^A-Za-z])(BOTT*O*M*)(?=[^A-Za-z]|$)/gi, '$1下方')
@@ -1854,7 +1879,7 @@ function parseTranslate(data) {
     data = data.replace(/(^|[^A-Za-z])(BUNCH OF)(?=[^A-Za-z]|$)/gi, '$1多个');
     data = data.replace(/(^|[^A-Za-z])(FIREWORKS*?)(?=[^A-Za-z]|$)/gi, '$1烟花');
     data = data.replace(/(^|[^A-Za-z])(CRE*?è*?MES*? BRU*?û*?LE*?é*?E*S*?)(?=[^A-Za-z]|$)/gi, '$1焦糖布丁');
-    data = data.replace(/(^|[^A-Za-z])(CRE*?è*?MES*?BRU*?û*?LE*?é*?E*S*?|Creme\s*?Brul*?le*?e|cre*?è*?me)(?=[^A-Za-z]|$)/gi, '$1焦糖布丁');//Crème Brûlée
+    data = data.replace(/(^|[^A-Za-z])(CRE*?è*?MES*?BRU*?û*?LE*?é*?E*S*?|Creme\s*?Brul*?le*?e|cre*?è*?me)(?=[^A-Za-z]|$)/gi, '$1焦糖布丁'); //Crème Brûlée
     data = data.replace(/(^|[^A-Za-z])(TYPES*?|KINDS*?|VARIETY*?I*?E*?S*?)(?=[^A-Za-z]|$)/gi, '$1种类');
     data = data.replace(/(^|[^A-Za-z])(SINGLES*?)(?=[^A-Za-z]|$)/gi, '$1单个');
     data = data.replace(/(^|[^A-Za-z])(SC*?HARD*?S*?)(?=[^A-Za-z]|$)/gi, '$1碎片');
@@ -2011,7 +2036,7 @@ function parseTranslate(data) {
     data = data.replace(/(^|[^A-Za-z])(MELONNI)(?=[^A-Za-z]|$)/gi, '$1梅隆妮');
     data = data.replace(/(^|[^A-Za-z])(RAZAH)(?=[^A-Za-z]|$)/gi, '$1雷撒');
     data = data.replace(/(^|[^A-Za-z])(JORA)(?=[^A-Za-z]|$)/gi, '$1乔拉');
-    data = data.replace(/(^|[^A-Za-z])(PYRE?O?(?: FIERCESHOTS*?)?)(?=[^A-Za-z]|$)/gi, '$1烈之击-炎焰');//"馅"字左边去掉"饣"右边加上"炎"是什么字?
+    data = data.replace(/(^|[^A-Za-z])(PYRE?O?(?: FIERCESHOTS*?)?)(?=[^A-Za-z]|$)/gi, '$1烈之击-炎焰'); //"馅"字左边去掉"饣"右边加上"炎"是什么字?
     data = data.replace(/(^|[^A-Za-z])(OGDEN(?: STONEHEALER)?)(?=[^A-Za-z]|$)/gi, '$1石愈者-欧格登');
     data = data.replace(/(^|[^A-Za-z])(LIVIA)(?=[^A-Za-z]|$)/gi, '$1莉薇亚');
     data = data.replace(/(^|[^A-Za-z])(GWEN)(?=[^A-Za-z]|$)/gi, '$1关');
@@ -3002,8 +3027,8 @@ function parseTranslate(data) {
     data = data.replace(/(^|[^A-Za-z_])(BAL*?THA*?Z*?R*?A*?R*?D*?'?s*?Z*?|BALTHA*?'*?S*?|BALTA'*?S*?)(?=[^A-Za-z]|$)/gi, '$1巴萨泽');
     data = data.replace(/(^|[^A-Za-z_])(HEROE*?S*?)(?=[^A-Za-z]|$)/gi, '$1英雄');
     data = data.replace(/(^|[^A-Za-z])(AR)(?=[^A-Za-z]|$)/gi, '$1防御');
-    data = data.replace(/(^|[^A-Za-z])(FIRE\s*?MAGIC|FIRE)(?=[^A-Za-z]|$)/gi, '$1火系');//魔法
-    data = data.replace(/(^|[^A-Za-z])(WATER\s*?MAGIC|WATER)(?=[^A-Za-z]|$)/gi, '$1水系');//魔法
+    data = data.replace(/(^|[^A-Za-z])(FIRE\s*?MAGIC|FIRE)(?=[^A-Za-z]|$)/gi, '$1火系'); //魔法
+    data = data.replace(/(^|[^A-Za-z])(WATER\s*?MAGIC|WATER)(?=[^A-Za-z]|$)/gi, '$1水系'); //魔法
     data = data.replace(/(^|[^A-Za-z])(HSR)(?=[^A-Za-z]|$)/gi, '$1半恢复时间');
     data = data.replace(/(^|[^A-Za-z])(HCT)(?=[^A-Za-z]|$)/gi, '$1半施法时间');
     data = data.replace(/(^|[^A-Za-z])(DRACONIC)(?=[^A-Za-z]|$)/gi, '$1严龙');
@@ -3025,7 +3050,7 @@ function parseTranslate(data) {
     ////////////////
     //data=data.replace(/(\d)E(?![A-Za-z])/gi,'$1玉');
     data = data.replace(/(\+\d+)(\s*?)E(?![A-Za-z])/gi, '$1$2能量');
-    data = data.replace(/(^|\s)(\-\d+)E(?![A-Za-z])/gi, '$1$2能量');//HM-9玉|5-9玉 E前无空格时才认为是能量， $3?
+    data = data.replace(/(^|\s)(\-\d+)E(?![A-Za-z])/gi, '$1$2能量'); //HM-9玉|5-9玉 E前无空格时才认为是能量， $3?
     data = data.replace(/(\d)(\s*?)E(?![A-Za-z])/gi, '$1$2玉');
     //data=data.replace(/(\d)A(?![A-Za-z])/gi,'$1真理');
     data = data.replace(/(\d)(\s*?)A(?![A-Za-z])/gi, '$1$2真理');

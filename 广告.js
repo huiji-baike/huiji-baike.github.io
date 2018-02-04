@@ -283,7 +283,7 @@ function setupWebSocket() {
         }
         else {
             console.log("result for auto update received")
-            if (notificationButton.classList.contains("enabled")) {
+            if (notificationButton.classList.contains("enabled") && 可曾见过(a)) {
                 var b = parseRequestFromUrl(trimPathName(document.location.pathname))
                     , d = {
                         body: "角色名: " + a.name + "\n" + parseTranslate(a.message), //所在地: 卡玛丹，艾斯坦之钻\n美洲1区

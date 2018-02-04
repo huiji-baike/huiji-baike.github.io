@@ -305,7 +305,7 @@ function setupWebSocket() {
                             console.log(a.message)
                             console.log(项)
                             console.log(a.message.match(new RegExp(项, "i")))
-                            return a.message.match(new RegExp(项, "i"))
+                            return (a.message.match(new RegExp(项, "i")) || parseTranslate(a.message).match(new RegExp(项, "i")))
                         }
                         return false
                     })

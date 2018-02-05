@@ -291,21 +291,22 @@ function setupWebSocket() {
         } else {
             console.log("result for auto update received")
             if (notificationButton.classList.contains("enabled")) {
+                var 找到 = []
                 if (追踪项.length > 0) {
-                    var 找到 = 追踪项.filter(项 => {
+                        找到 = 追踪项.filter(项 => {
                         console.log("a.message")
                         console.log(a.message)
                         console.log(项)
                         console.log(追踪项)
                         console.log(近期广告)
                         console.log(a.message.match(new RegExp(项, "i")))
-                        return (a.message.match(new RegExp(项, "i")) || parseTranslate(a.message).match(new RegExp(项, "i")))
+                        return (a.message.match(new RegExp(项, "i")) || parseTranslate(a.message, false).match(new RegExp(项, "i")))
                     })
                     console.log("找到: " + 找到)
                     if ((找到.length > 0) && 未曾见过(a)) {
                         var b = parseRequestFromUrl(trimPathName(document.location.pathname)),
                             d = {
-                                body: "角色名: " + a.name + "\n" + parseTranslate(a.message), //所在地: 卡玛丹，艾斯坦之钻\n美洲1区
+                                body: "角色名: " + a.name + "\n" + parseTranslate(a.message, false), //所在地: 卡玛丹，艾斯坦之钻\n美洲1区
                                 icon: "ZjA5Y2E4NT.png", //notification related:  /v/ZjA5Y2E4NT.png
                                 tag: "卡玛丹/" + b.query
                             },
@@ -723,7 +724,7 @@ function searchTranslate(data) {
     return data
 }
 
-function parseTranslate(data) {
+function parseTranslate(data, 样式 = true) {
 
     data = data.replace(/(^|[^A-Za-z])(CHINA|CHINESE)(?=[^A-Za-z]|$)/gi, '$1中国');
 

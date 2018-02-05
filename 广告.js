@@ -555,7 +555,7 @@ function displayNotificationDialog() {
 }
 document.getElementById("begin-Notification").addEventListener("click", function (a) {
     a.preventDefault()
-    追踪项 = document.getElementById("tracked-Items").value.split(",").map(x => x.trim()).filter(x => (x != ""))
+    追踪项 = document.getElementById("tracked-Items").value.split(/[,，]/).map(x => x.trim()).filter(x => (x != ""))
     var 被驳回 = 追踪项.reduce((驳回, 项) => {
         try {
             new RegExp(项, "i")

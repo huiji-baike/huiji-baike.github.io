@@ -117,7 +117,7 @@ function formatResult(a) {
         c = humanReadableAge(1E3 * a.timestamp);
     a = htmlEscape(a.message);
     a = parseTranslate(a); //New: Need to make sure translation do not break syntax
-    return '<tr class="row"><td class="info"><div class="name">' + b + '</div><div class="age">' + c + '</div></td><td class="message">' + a + '</td><td class="delete"></td></tr>'
+    return '<tr class="row"><td class="info"><div class="name">' + b + '</div><div class="age">' + c + '</div></td><td class="message">' + a + '</td><td class="delete"><i class="fas fa-angle-double-down"></i></td></tr>'
 }
 
 function shouldAnimate() {
@@ -592,12 +592,15 @@ document.getElementById("begin-Notification").addEventListener("click", function
             console.log("意向已明朗")
             if ("granted" === a) {
                 console.log("被同意")
-                notificationButton.classList.add("enabled");
+                document.getElementById("notification-button").innerHTML='<i class="fas fa-cog fa-spin"></i>'
+                notificationButton.classList.add("enabled");                
             } else {
                 console.log("不同意")
             }
         })
     } else {
+        //add enabled
+        document.getElementById("notification-button").innerHTML='<i class="fas fa-cog fa-spin"></i>'
         notificationButton.classList.toggle("enabled")
     }
 
@@ -608,6 +611,16 @@ document.getElementById("cancel-Notification").addEventListener("click", functio
     a.preventDefault()
 
     document.getElementById("tracking-Form").style.display = "none"
+})
+
+document.getElementById("wiki-button").addEventListener("click", function (a) {
+    a.preventDefault()
+    location.href="https://guildwars.huijiwiki.com/wiki/首页"
+})
+
+document.getElementById("dictionary-button").addEventListener("click", function (a) {
+    a.preventDefault()
+    location.href="https://guildwars.huijiwiki.com/wiki/词典"  
 })
 
 function matchesRequest(a, b) {
@@ -653,10 +666,12 @@ notificationButton.addEventListener("click", function () {
     console.log("点了按钮")
     if ("undefined" === typeof Notification) {
         alert("浏览器无提示窗功能")
+        document.getElementById("notification-button").innerHTML='<i class="fas fa-cog"></i>'
         notificationButton.classList.remove("enabled")
     } else {
         if (notificationButton.classList.contains("enabled")) {
             console.log("提示正在进行，现予以关闭")
+            document.getElementById("notification-button").innerHTML='<i class="fas fa-cog"></i>'
             notificationButton.classList.remove("enabled")
         } else {
             console.log("有提示窗功能，打开询问窗口")

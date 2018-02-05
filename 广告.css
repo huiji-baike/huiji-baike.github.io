@@ -265,7 +265,7 @@ button:active {
     background-color: #2ecc40
 }
 
-#notification-button {
+#wiki-button, #dictionary-button, #notification-button {
     width: 34px;
     height: 34px;
     margin-left: 4px;
@@ -286,8 +286,7 @@ button:active {
     z-index: 1;
 	font-size:16px;
 	font-weight:bold;
-    transform: translate(0px,6px);
-    content: '静'
+    transform: translate(0px,6px);    
 }
 
 #notification-button.enabled::before {
@@ -295,7 +294,7 @@ button:active {
 	font-size:16px;
 	font-weight:bold;
     transform: translate(0px,6px);
-	content: '报';
+	/*content: '静';*/
     background-repeat: no-repeat;
     background-position: center;
     background-size: 16px;
@@ -357,15 +356,13 @@ button:active {
 
 .delete {
     display: block;
-    flex-shrink: 0;
-    background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiI+CiA8cGF0aCBkPSJtMS42MDcgMS42MTMgMTIuNzkgMTIuNzciIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzk5OSIgc3Ryb2tlLXdpZHRoPSIyLjUiLz4KIDxwYXRoIGQ9Im0xNC4zOSAxLjYxMy0xMi43OSAxMi43NyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjOTk5IiBzdHJva2Utd2lkdGg9IjIuNSIvPgo8L3N2Zz4K") no-repeat center;
-    background-size: 50%;
+    flex-shrink: 0;    
     width: 20px;
-    margin: 5px;
+    margin: auto;    
     color: #AAA;
     cursor: pointer;
     font-size: 13px;
-    line-height: 18px
+    line-height: 18px;
 }
 
 .delete {

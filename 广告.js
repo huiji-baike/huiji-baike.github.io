@@ -290,16 +290,16 @@ function setupWebSocket() {
             displayResults(a);
         } else {
             console.log("result for auto update received")
-            if (notificationButton.classList.contains("enabled")) {                
+            if (notificationButton.classList.contains("enabled")) {
                 if (追踪项.length > 0) {
-                    var 找到 = 追踪项.filter(项 => {                        
+                    var 找到 = 追踪项.filter(项 => {
                         console.log("a.message")
                         console.log(a.message)
                         console.log(项)
                         console.log(追踪项)
                         console.log(近期广告)
                         console.log(a.message.match(new RegExp(项, "i")))
-                        return (a.message.match(new RegExp(项, "i")) || parseTranslate(a.message).match(new RegExp(项, "i")))                                                
+                        return (a.message.match(new RegExp(项, "i")) || parseTranslate(a.message).match(new RegExp(项, "i")))
                     })
                     console.log("找到: " + 找到)
                     if ((找到.length > 0) && 未曾见过(a)) {
@@ -556,21 +556,21 @@ function displayNotificationDialog() {
 document.getElementById("begin-Notification").addEventListener("click", function (a) {
     a.preventDefault()
     追踪项 = document.getElementById("tracked-Items").value.split(",").map(x => x.trim()).filter(x => (x != ""))
-    var 被驳回 = 追踪项.reduce((驳回, 项) => {        
+    var 被驳回 = 追踪项.reduce((驳回, 项) => {
         try {
             new RegExp(项, "i")
         } catch (e) {
             驳回.push(项)
         }
-        return 驳回        
-    },[])
-    if (被驳回.length > 0){
-        document.getElementById("tracked-Items").insertAdjacentHTML("输入失败，以下字条违规："+被驳回.toString(), "afterend")
+        return 驳回
+    }, [])
+    if (被驳回.length > 0) {
+        document.getElementById("tracked-Items").insertAdjacentHTML("输入失败，以下字条违规：" + 被驳回.toString(), "afterend")
         document.getElementById("tracked-Items").value = 追踪项.filter(项 => {
             var 合格 = true
-            try{
+            try {
                 new RegExp(项, "i")
-            } catch (e){
+            } catch (e) {
                 合格 = false
             }
             return 合格

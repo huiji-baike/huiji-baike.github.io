@@ -1,80 +1,110 @@
 <html>
-<head>
-    <meta charset="utf-8">
-    <title>广告|卡玛丹</title>
-    <meta name="viewport" content="width=device-width">
-    <link rel="icon" type="image/png" href="ZjA5Y2E4NT.png"> <!--/v/ZjA5Y2E4NT.png-->
-    <link rel="stylesheet" href="广告.css">
-    <link rel="search" href="/opensearch.xml" type="application/opensearchdescription+xml" title="卡玛丹广告">
-</head>
-<body class="no-js" itemscope="" itemtype="http://schema.org/WebSite">
-    <meta itemprop="url" content="https://huiji-baike.github.io/广告">
-    <div id="nav" class="center-row">
-      <a id="home-link" href="/">
-        <img id="home-icon" alt="Logo" width="46" height="44" src="ZjA5Y2E4NT.png"> <!-- /v/ZjA5Y2E4NT.png -->
-        <span id="home-text">广告 (卡玛丹)</span>
-      </a>
-      <form id="search-form" action="/search" method="get" role="search" itemprop="potentialAction" itemscope="" itemtype="http://schema.org/SearchAction">
-        <meta itemprop="target" content="https://kamadan.decltype.org/search/{query}">
-        <div id="search-bar">
-          <input type="search" id="search-input" itemprop="query-input" name="query" autocomplete="off" title="输入搜索词" autofocus="">
-        </div>
-        <div><button type="submit" id="search-button" title="搜索"></button></div>
-      </form>
-      <button id="notification-button" class = "disabled" title="自动提示开关"></button>
-    </div>
-    <div id="page">
-      <div id="results-header" class="center-row"><span id="search-info"></span><div class="space"></div><div id="connection-indicator"></div></div>
-      <div id="listings" class="center-row">
-        <div class="fixed-top"><div id="scroll-indicator" title="查阅新增广告"><div id="incoming-count"></div></div></div>
-        <main><table id="current-wrapper"><tbody id="current"></tbody></table></main>
-      </div>
-      <div class="space"></div>
-      <div id="pagination"></div>	  		
-    </div>
-		<div id="tracking-Form" style="display:none">
-			<div id="dialog">				
-				<div>
-					<h1>自动提示 - 设置</h1>
-          <div>填入 物品名称，或各种别名，以逗号为分隔符，中外文通用</div>
-          <div style="font-size:small">(特殊符号需以"\"号开头，例：\*)</div>
-					<div id="command">
-						<textarea id="tracked-Items" rows="5" cols="50"></textarea>
-					</div>
-					<div id="command">
-						<input type="number" id="silent-Interval" value="5" min="0" max="99" required pattern = "[0-9]{1,2}"> 
-						<span style="font-size:small">分钟内不报重复的广告</span>
-					</div>
-				</div>
-				<div id="dialog-footer">
-					<button id="cancel-Notification">取消</button><button id="begin-Notification">启动</button>
-				</div>
-			</div>
-		</div>
-    <script>
-      window.addEventListener('load', function() {
-        var s = document.createElement('script');
-        s.src = '广告.js';
-        document.body.appendChild(s);
-      });
-    </script>
-	    <div class="wsite-footerState"><script>var sc_project=10449297; 
-var sc_invisible=1; 
-var sc_security="bf72af9f"; 
-var scJsHost = "";
-document.write("<sc"+"ript type='text/javascript' src='" +
-scJsHost+
-"https://huiji-baike.github.io/pre/footerState.js'></"+"script>");</script>
 
-<script>
-		(function(h,o,t,j,a,r){
-			h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-			h._hjSettings={hjid:402228,hjsv:5};
-			a=o.getElementsByTagName('head')[0];
-			r=o.createElement('script');r.async=1;
-			r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
-			a.appendChild(r);
-		})(window,document,'//static.hotjar.com/c/hotjar-','.js?sv=');
-		</script></div> 
-</body> 
+<head>
+  <meta charset="utf-8">
+  <title>广告|卡玛丹</title>
+  <meta name="viewport" content="width=device-width">
+  <link rel="icon" type="image/png" href="ZjA5Y2E4NT.png">
+  <!--/v/ZjA5Y2E4NT.png-->
+  <link rel="stylesheet" href="广告.css">
+  <link rel="search" href="/opensearch.xml" type="application/opensearchdescription+xml" title="卡玛丹广告">
+</head>
+
+<body class="no-js" itemscope="" itemtype="http://schema.org/WebSite">
+  <meta itemprop="url" content="https://huiji-baike.github.io/广告">
+  <div id="nav" class="center-row">
+    <a id="home-link" href="/">
+      <img id="home-icon" alt="Logo" width="46" height="44" src="ZjA5Y2E4NT.png">
+      <!-- /v/ZjA5Y2E4NT.png -->
+      <span id="home-text">广告 (卡玛丹)</span>
+    </a>
+    <form id="search-form" action="/search" method="get" role="search" itemprop="potentialAction" itemscope="" itemtype="http://schema.org/SearchAction">
+      <meta itemprop="target" content="https://kamadan.decltype.org/search/{query}">
+      <div id="search-bar">
+        <input type="search" id="search-input" itemprop="query-input" name="query" autocomplete="off" title="输入搜索词" autofocus="">
+      </div>
+      <div>
+        <button type="submit" id="search-button" title="搜索"></button>
+      </div>
+    </form>
+    <button id="notification-button" class="disabled" title="自动提示开关"></button>
+  </div>
+  <div id="page">
+    <div id="results-header" class="center-row">
+      <span id="search-info"></span>
+      <div class="space"></div>
+      <div id="connection-indicator"></div>
+    </div>
+    <div id="listings" class="center-row">
+      <div class="fixed-top">
+        <div id="scroll-indicator" title="查阅新增广告">
+          <div id="incoming-count"></div>
+        </div>
+      </div>
+      <main>
+        <table id="current-wrapper">
+          <tbody id="current"></tbody>
+        </table>
+      </main>
+    </div>
+    <div class="space"></div>
+    <div id="pagination"></div>
+  </div>
+  <div id="tracking-Form" style="display:none">
+    <div id="dialog">
+      <div>
+        <h1>自动提示 - 设置</h1>
+        <div>填入 物品名称，或各种别名，以逗号为分隔符，中外文通用</div>
+        <div id="command">
+          <div style="font-size:small">(特殊符号需以"\"号开头，例：\*)</div>
+          <textarea id="tracked-Items" rows="5" cols="50"></textarea>
+        </div>
+        <div id="command">
+          <input type="number" id="silent-Interval" value="5" min="0" max="99" required pattern="[0-9]{1,2}">
+          <span style="font-size:small">分钟内不报重复的广告</span>
+        </div>
+      </div>
+      <div id="dialog-footer">
+        <button id="cancel-Notification">取消</button>
+        <button id="begin-Notification">启动</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    window.addEventListener('load', function () {
+      var s = document.createElement('script');
+      s.src = '广告.js';
+      document.body.appendChild(s);
+    });
+  </script>
+  <div class="wsite-footerState">
+    <script>
+      var sc_project = 10449297;
+      var sc_invisible = 1;
+      var sc_security = "bf72af9f";
+      var scJsHost = "";
+      document.write("<sc" + "ript type='text/javascript' src='" +
+        scJsHost +
+        "https://huiji-baike.github.io/pre/footerState.js'></" + "script>");
+    </script>
+
+    <script>
+      (function (h, o, t, j, a, r) {
+        h.hj = h.hj || function () {
+          (h.hj.q = h.hj.q || []).push(arguments)
+        };
+        h._hjSettings = {
+          hjid: 402228,
+          hjsv: 5
+        };
+        a = o.getElementsByTagName('head')[0];
+        r = o.createElement('script');
+        r.async = 1;
+        r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
+        a.appendChild(r);
+      })(window, document, '//static.hotjar.com/c/hotjar-', '.js?sv=');
+    </script>
+  </div>
+</body>
+
 </html>

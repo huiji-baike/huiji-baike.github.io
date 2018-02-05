@@ -293,7 +293,7 @@ function setupWebSocket() {
             if (notificationButton.classList.contains("enabled")) {
                 var 找到 = []
                 if (追踪项.length > 0) {
-                        找到 = 追踪项.filter(项 => {
+                    找到 = 追踪项.filter(项 => {
                         console.log("a.message")
                         console.log(a.message)
                         console.log(项)
@@ -567,7 +567,7 @@ document.getElementById("begin-Notification").addEventListener("click", function
     }, [])
     if (被驳回.length > 0) {
         document.getElementById("tracked-Items").insertAdjacentHTML("afterend", "<div style='font-size:small'> \
-        输入失败，以下字条违规：" + 被驳回.toString()+"</div>")
+        输入失败，以下字条违规：" + 被驳回.toString() + "</div>")
         document.getElementById("tracked-Items").value = 追踪项.filter(项 => {
             var 合格 = true
             try {

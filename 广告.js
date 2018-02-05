@@ -565,7 +565,8 @@ document.getElementById("begin-Notification").addEventListener("click", function
         return 驳回
     }, [])
     if (被驳回.length > 0) {
-        document.getElementById("tracked-Items").insertAdjacentHTML("afterend", "输入失败，以下字条违规：" + 被驳回.toString())
+        document.getElementById("tracked-Items").insertAdjacentHTML("afterend", "<div style='font-size:small'> \
+        输入失败，以下字条违规：" + 被驳回.toString()+"</div>")
         document.getElementById("tracked-Items").value = 追踪项.filter(项 => {
             var 合格 = true
             try {

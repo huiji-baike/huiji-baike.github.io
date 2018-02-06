@@ -1,0 +1,23 @@
+{
+  "name": "huiji-baike.github.io",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/huiji-baike/huiji-baike.github.io.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/huiji-baike/huiji-baike.github.io/issues"
+  },
+  "homepage": "https://github.com/huiji-baike/huiji-baike.github.io#readme",
+  "devDependencies": {
+    "eslint": "^4.17.0",
+    "eslint-plugin-react": "^7.6.1"
+  }
+}

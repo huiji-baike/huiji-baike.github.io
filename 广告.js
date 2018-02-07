@@ -474,8 +474,7 @@ function displayRequest(a) {
 
 function retrieveResults(a) {
 	pendingRequest = a
-	displayRequest(a)
-	a.query = searchTranslate(a.query)
+	displayRequest(a)	
 	socket && socket.readyState == WebSocket.OPEN ? socket.send(JSON.stringify({
 		query: a.query,
 		offset: a.offset,
@@ -657,6 +656,7 @@ enableInstantSearch && searchInput.addEventListener("input", function (a) {
 searchForm.addEventListener("submit", function (a) {
 	a.preventDefault()
 	searchInput.value = searchInput.value.replace(/^名=(.+?)$/gi,"author:\"$1\"")
+	searchInput.value = searchTranslate(searchInput.value)
 	navigate(searchInput.value)
 })
 

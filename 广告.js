@@ -238,7 +238,6 @@ function forceReconnectWebSocket() {
 function trimPathName(path) {
 	var tPath = path
 	path = path.replace(/^.+?(\?(?:(?:search)|(?:latest)).*?)$/gi, "$1")
-	console.log("performing trimPath, original: " + tPath + " | processed: " + path + " :: if identical, sends empty string")
 	return ((tPath == path) ? "" : path)
 }
 
@@ -246,12 +245,8 @@ function setupWebSocket() {
 	connectionIndicator.classList.remove("connected")
 	socket && (socket.onclose = socket.onopen = socket.onmessage = null, socket.close())
 	var a = trimPathName(document.location.href) //document.location.pathname || New: Need to generalize this argument
-	console.log("pretrim pathname: " + document.location.href)
-	console.log("websocket setup suffix is: " + a);
 	(a.charAt(0) == "?") ? a = "/" + a.slice(1): a
-	console.log("websocket setup suffix is (after switch): " + a)
 	pendingRequest || (a = "/notify" + a)
-	console.log("websocket address is: " + "wss://" + "kamadan.decltype.org" + "/ws" + a)
 	socket = new WebSocket("wss://" + "kamadan.decltype.org" + "/ws" + a) //window.location.hostname
 	socket.onclose = function (a) {
 		clearTimeout(reconnectTimer)
@@ -265,49 +260,33 @@ function setupWebSocket() {
 		connectionIndicator.classList.add("connected")
 
 		var tAddress = window.location.href
-		console.log(tAddress)
-
 		var regX = new RegExp("^https\:\/\/huiji\-baike\.github\.io\/" + encodeURIComponent("广告") + "(\\?.+)$", "i")
 
 		if (window.location.href.match(regX)) {
-			console.log("branch: not front page")
 			navigateUrl(window.location.href.match(regX)[1])
 		} else {
-			console.log("branch: front page")
 			retrieveResults({
 				query: "",
 				offset: 0
 			})
 		}
-		
+
 	}
 
 	socket.onmessage = function (a) {
 		a = JSON.parse(a.data)
-		console.log("some result is received")
-		console.log(a)
 		for (var prop in a) {
-			console.log("message field: " + prop)
 			a[prop] = inputVal(a[prop])
 		}
 		if ("undefined" !== typeof a.query) {
-			console.log("a query is made and a result is returned")
 			displayResults(a)
 		} else {
-			console.log("result for auto update received")
 			if (notificationButton.classList.contains("enabled")) {
 				var 找到 = []
 				if (追踪项.length > 0) {
 					找到 = 追踪项.filter(项 => {
-						console.log("a.message")
-						console.log(a.message)
-						console.log(项)
-						console.log(追踪项)
-						console.log(近期广告)
-						console.log(a.message.match(new RegExp(项, "i")))
 						return (a.message.match(new RegExp(项, "i")) || parseTranslate(a.message, false).match(new RegExp(项, "i")))
 					})
-					console.log("找到: " + 找到)
 					if ((找到.length > 0) && 未曾见过(a)) {
 						var b = parseRequestFromUrl(trimPathName(document.location.href)),
 							d = {
@@ -316,10 +295,7 @@ function setupWebSocket() {
 								tag: "卡玛丹/" + b.query
 							},
 							e = "激战广告"
-						b.query && (e = e + " - '" + b.query + "' 的搜索结果")
-						console.log("sending notification") //New: this and two lines below test for notification
-						console.log(e)
-						console.log(d)
+						b.query && (e = e + " - '" + b.query + "' 的搜索结果")						
 						new Notification(e, d)
 						playNotificationSound()
 					}
@@ -432,12 +408,8 @@ function displayQuery(a) {
 function displayResults(a) {
 	pendingRequest = null
 	var b = buildUrlFor(a.query)
-	console.log("display results: URL built, offset, total number of entries indicated: ")
-	console.log("b: " + b)
-	console.log(a.offset)
 	buildUrlFor(a.query, a.offset)
 	var c = parseInt(a.num_results, 10)
-	console.log("c: " + c)
 	clearResults()
 	for (var d = a.results.length - 1; 0 <= d; --d)
 		addResult(a.results[d])
@@ -474,7 +446,7 @@ function displayRequest(a) {
 
 function retrieveResults(a) {
 	pendingRequest = a
-	displayRequest(a)	
+	displayRequest(a)
 	socket && socket.readyState == WebSocket.OPEN ? socket.send(JSON.stringify({
 		query: a.query,
 		offset: a.offset,
@@ -588,16 +560,11 @@ document.getElementById("begin-Notification").addEventListener("click", function
 	}
 	fetchNotificationSound()
 	if ("granted" !== Notification.permission) {
-		console.log("没有认可，查询意向")
 		Notification.requestPermission(function (a) {
-			console.log("意向已明朗")
 			if ("granted" === a) {
-				console.log("被同意")
 				document.getElementById("notification-button").innerHTML = "<i class=\"fas fa-cog fa-spin\"></i>"
 				notificationButton.classList.add("enabled")
-			} else {
-				console.log("不同意")
-			}
+			} else {}
 		})
 	} else {
 		//add enabled
@@ -655,7 +622,7 @@ enableInstantSearch && searchInput.addEventListener("input", function (a) {
 
 searchForm.addEventListener("submit", function (a) {
 	a.preventDefault()
-	searchInput.value = searchInput.value.replace(/^名=(.+?)$/gi,"author:\"$1\"")
+	searchInput.value = searchInput.value.replace(/^名\s*?=\s*?(.+?)$/gi, "author:\"$1\"")
 	searchInput.value = searchTranslate(searchInput.value)
 	navigate(searchInput.value)
 })
@@ -666,18 +633,15 @@ homeLink.addEventListener("click", function (a) {
 })
 
 notificationButton.addEventListener("click", function () {
-	console.log("点了按钮")
 	if ("undefined" === typeof Notification) {
 		alert("浏览器无提示窗功能")
 		document.getElementById("notification-button").innerHTML = "<i class=\"fas fa-cog\"></i>"
 		notificationButton.classList.remove("enabled")
 	} else {
 		if (notificationButton.classList.contains("enabled")) {
-			console.log("提示正在进行，现予以关闭")
 			document.getElementById("notification-button").innerHTML = "<i class=\"fas fa-cog\"></i>"
 			notificationButton.classList.remove("enabled")
 		} else {
-			console.log("有提示窗功能，打开询问窗口")
 			displayNotificationDialog()
 		}
 	}
@@ -752,7 +716,6 @@ function searchTranslate(data) {
 }
 
 function inputVal(data) {
-	console.log(data)
 	if (Array.isArray(data)) {
 		for (var o = 0; o < data.length; o++) {
 			for (var field in data[o]) {

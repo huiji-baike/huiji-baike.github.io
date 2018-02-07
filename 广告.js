@@ -235,7 +235,7 @@ function forceReconnectWebSocket() {
 	setupWebSocket()
 }
 
-function trimPathName(path) {	
+function trimPathName(path) {
 	var tPath = path
 	path = path.replace(/^.+?(\?(?:(?:search)|(?:latest)).*?)$/gi, "$1")
 	console.log("performing trimPath, original: " + tPath + " | processed: " + path + " :: if identical, sends empty string")
@@ -246,7 +246,7 @@ function setupWebSocket() {
 	connectionIndicator.classList.remove("connected")
 	socket && (socket.onclose = socket.onopen = socket.onmessage = null, socket.close())
 	var a = trimPathName(document.location.href) //document.location.pathname || New: Need to generalize this argument
-	console.log("pretrim pathname: " + document.location.pathname)
+	console.log("pretrim pathname: " + document.location.href)
 	console.log("websocket setup suffix is: " + a);
 	(a.charAt(0) == "?") ? a = "/" + a.slice(1): a
 	console.log("websocket setup suffix is (after switch): " + a)

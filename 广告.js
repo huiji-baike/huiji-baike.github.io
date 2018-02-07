@@ -703,6 +703,14 @@ document.addEventListener("click", function (a) {
 	var b = a.target
 	if (1 == a.which)
 		if (b.classList.contains("name") && !isSelecting(b))
+			c = getSelection()
+			c.removeAllRanges()
+			var d = document.createRange()
+			d.selectNode(b)
+			c.addRange(d)
+			try {
+				document.execCommand("copy")
+			} catch (e) {}
 			navigate("author:\"" + b.innerText + "\""),
 			a.preventDefault()
 		else if (b.classList.contains("page-link") && b.hasAttribute("href"))

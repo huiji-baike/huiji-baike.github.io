@@ -656,7 +656,7 @@ enableInstantSearch && searchInput.addEventListener("input", function (a) {
 
 searchForm.addEventListener("submit", function (a) {
 	a.preventDefault()
-	searchInput.value = searchInput.value.replace(/^名=(.+?)$/gi,'author:"$1"')
+	searchInput.value = searchInput.value.replace(/^名=(.+?)$/gi,"author:\"$1\"")
 	navigate(searchInput.value)
 })
 

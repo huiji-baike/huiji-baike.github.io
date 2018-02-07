@@ -157,6 +157,19 @@ button:active {
     box-shadow: inset 0 0 2px #ccc
 }
 
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+    font-size:0.5em 
+}
+::-moz-placeholder { /* Firefox 19+ */
+    font-size:0.5em
+}
+:-ms-input-placeholder { /* IE 10+ */
+    font-size:0.5em
+}
+:-moz-placeholder { /* Firefox 18- */
+    font-size:0.5em
+}
+
 #search-button {
     background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAyMSAyMSc+PGcgdHJhbnNmb3JtPSd0cmFuc2xhdGUoLTkzLjc2MSAtMTQ4Ljk5KScgZmlsbD0nbm9uZScgc3Ryb2tlPSdyZ2JhKDAsMCwwLDEpJyBzdHJva2Utd2lkdGg9JzMnPjxjaXJjbGUgdHJhbnNmb3JtPSdyb3RhdGUoMTM1KScgY3g9JzM5LjA1MicgY3k9Jy0xODQuMTcnIHI9JzcuMjU3MScvPjxwYXRoIGQ9J20xMDcuOTggMTYzLjIxIDUuMTU0IDUuMTU4JyBzdHJva2UtbGluZWNhcD0ncm91bmQnLz48L2c+PC9zdmc+Cg==");
     background-repeat: no-repeat;

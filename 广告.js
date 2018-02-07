@@ -757,37 +757,31 @@ function inputVal(data) {
 	console.log(data)
 	if (Array.isArray(data)) {
 		for (var o = 0; o < data.length; o++) {
-			data[o] = data[o].replace(/<head[^>]*>[\s\S]*?<\/head>/gi, "")
-				.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
-				.replace(/<script[^>]+?\/>|<script(.|\s)*?\/script>/gi, "")
-				.replace(/<\/html>/gi, "")
-				.replace(/<html>/gi, "")
-				.replace(/<\/body>/gi, "")
-				.replace(/<body>/gi, "")
-				.replace(/<head\/>/gi, "")
-				.replace(/<head>/gi, "")
-				.replace(/<\/head>/gi, "")
-				.replace(/<\/.*?>/gi, "")
-				.replace(/<.*?>/gi, "")
-				.replace(/!\[CDATA\[.*?\]\]/gi, "")
-				.replace(/&lt;.*?&gt;/gi, "")
+			for (var field in data[o]) {
+				data[o][field] = inputValHelper(data[o][field])
+			}
 		}
 	} else {
-		data = data.replace(/<head[^>]*>[\s\S]*?<\/head>/gi, "")
-			.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
-			.replace(/<script[^>]+?\/>|<script(.|\s)*?\/script>/gi, "")
-			.replace(/<\/html>/gi, "")
-			.replace(/<html>/gi, "")
-			.replace(/<\/body>/gi, "")
-			.replace(/<body>/gi, "")
-			.replace(/<head\/>/gi, "")
-			.replace(/<head>/gi, "")
-			.replace(/<\/head>/gi, "")
-			.replace(/<\/.*?>/gi, "")
-			.replace(/<.*?>/gi, "")
-			.replace(/!\[CDATA\[.*?\]\]/gi, "")
-			.replace(/&lt;.*?&gt;/gi, "")
+		inputValHelper(data)
 	}
+	return data
+}
+
+function inputValHelper(data) {
+	data = data.replace(/<head[^>]*>[\s\S]*?<\/head>/gi, "")
+		.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
+		.replace(/<script[^>]+?\/>|<script(.|\s)*?\/script>/gi, "")
+		.replace(/<\/html>/gi, "")
+		.replace(/<html>/gi, "")
+		.replace(/<\/body>/gi, "")
+		.replace(/<body>/gi, "")
+		.replace(/<head\/>/gi, "")
+		.replace(/<head>/gi, "")
+		.replace(/<\/head>/gi, "")
+		.replace(/<\/.*?>/gi, "")
+		.replace(/<.*?>/gi, "")
+		.replace(/!\[CDATA\[.*?\]\]/gi, "")
+		.replace(/&lt;.*?&gt;/gi, "")
 	return data
 }
 

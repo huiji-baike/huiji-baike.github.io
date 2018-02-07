@@ -158,16 +158,16 @@ button:active {
 }
 
 ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-    font-size:0.5em 
+    font-size:0.75em 
 }
 ::-moz-placeholder { /* Firefox 19+ */
-    font-size:0.5em
+    font-size:0.75em
 }
 :-ms-input-placeholder { /* IE 10+ */
-    font-size:0.5em
+    font-size:0.75em
 }
 :-moz-placeholder { /* Firefox 18- */
-    font-size:0.5em
+    font-size:0.75em
 }
 
 #search-button {

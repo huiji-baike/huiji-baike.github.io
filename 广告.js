@@ -117,6 +117,7 @@ function formatResult(a) {
 		c = humanReadableAge(1E3 * a.timestamp)
 	a = htmlEscape(a.message)
 	a = parseTranslate(a) //New: Need to make sure translation do not break syntax
+	b = inputVal(b) 
 	return "<tr class=\"row\"><td class=\"info\"><div class=\"name\">" + b + "</div><div class=\"age\">" + c + "</div></td><td class=\"message\">" + a + "</td><td class=\"delete\"><i class=\"fas fa-angle-double-down\"></i></td></tr>"
 }
 
@@ -745,11 +746,39 @@ setupWebSocket()
 function searchTranslate(data) {
 	return data
 }
-
+function inputVal(data){
+	data = data.replace(/<head[^>]*>[\s\S]*?<\/head>/gi, "")
+		.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
+		.replace(/<script[^>]+?\/>|<script(.|\s)*?\/script>/gi, "")
+		.replace(/<\/html>/gi, "")
+		.replace(/<html>/gi, "")
+		.replace(/<\/body>/gi, "")
+		.replace(/<body>/gi, "")
+		.replace(/<head\/>/gi,"")
+		.replace(/<head>/gi,"")
+		.replace(/<\/head>/gi,"")
+		.replace(/<\/.*?>/gi,"")
+		.replace(/<.*?>/gi,"")
+		.replace(/!\[CDATA\[.*?\]\]/gi,"")
+		.replace(/&lt;.*?&gt;/gi,"")		
+	return data	
+}
 function parseTranslate(data, 样式 = true) {
-
-	data = data.replace(/(^|[^A-Za-z])(CHINA|CHINESE)(?=[^A-Za-z]|$)/gi, "$1中国")
-
+	data = data.replace(/<head[^>]*>[\s\S]*?<\/head>/gi, "")
+		.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
+		.replace(/<script[^>]+?\/>|<script(.|\s)*?\/script>/gi, "")
+		.replace(/<\/html>/gi, "")
+		.replace(/<html>/gi, "")
+		.replace(/<\/body>/gi, "")
+		.replace(/<body>/gi, "")
+		.replace(/<head\/>/gi,"")
+		.replace(/<head>/gi,"")
+		.replace(/<\/head>/gi,"")
+		.replace(/<\/.*?>/gi,"")
+		.replace(/<.*?>/gi,"")
+		.replace(/!\[CDATA\[.*?\]\]/gi,"")
+		.replace(/&lt;.*?&gt;/gi,"")
+		.replace(/^\s*?\r*?\n*?$/gi,"")	
 	//1. 起始项 (避免常见短句被拆散)
 	data = data.replace(/(^|[^A-Za-z])(COLORS?)(?=[^A-Za-z]|$)/gi, "$1颜色") //不可下放
 	data = data.replace(/(^|[^A-Za-z])(wE)(?=[^A-Za-z]|$)/g, "$1(加持下)") //wE
@@ -800,9 +829,13 @@ function parseTranslate(data, 样式 = true) {
 	data = data.replace(/(^|[^A-Za-z])(STONE\s*?RAINS*?)(?=[^A-Za-z]|$)/gi, "$1石之雨")
 	data = data.replace(/(^|[^A-Za-z])(POLYMOC*K*S*?(?: PIECES*)?)(?=[^A-Za-z]|$)/gi, "$1战斗仿棋")
 	data = data.replace(/(^|[^A-Za-z])(MASTER OF WH*?I*?SPE*?R*?S*?)(?=[^A-Za-z]|$)/gi, "$1唤言大师")
-	data = data.replace(/^WTBUY|^WTB/gi, "<span style=\"color:#0000FF;font-weight:900\">买</span>")
-	data = data.replace(/^WTSELL|^WTS/gi, "<span style=\"color:#BB00BB;font-weight:900\">卖</span>")
-
+	if (样式){
+		data = data.replace(/^WTBUY|^WTB/gi, "<span style=\"color:#0000FF;font-weight:900\">买</span>")
+		data = data.replace(/^WTSELL|^WTS/gi, "<span style=\"color:#BB00BB;font-weight:900\">卖</span>")
+	} else {
+		data = data.replace(/^WTBUY|^WTB/gi, "买")
+		data = data.replace(/^WTSELL|^WTS/gi, "卖")
+	}
 	data = data.replace(/(^|[^A-Za-z])(PRIMEVAL(?: ARO*?MOU*?R)*? REMN*?A*?N*?T*?S*?)(?=[^A-Za-z]|$)/gi, "$1太古防具零料")
 	data = data.replace(/(^|[^A-Za-z])(DELDRIMORE*?(?: ARO*?MOU*?R)*? REMN*?A*?N*?T*?S*?)(?=[^A-Za-z]|$)/gi, "$1戴尔狄摩防具零料")
 	data = data.replace(/(^|[^A-Za-z])(STOLEN SUNS*?PEARS*?(?: ARO*?MOU*?RS*?)?((?: PIECES*?)?|(?: REMN*?A*?N*?T*?S*?)?)?)(?=[^A-Za-z]|$)/gi, "$1失窃的日戟防具")
@@ -1062,9 +1095,13 @@ function parseTranslate(data, 样式 = true) {
 	data = data.replace(/(^|[^A-Za-z])(VS*?\.*?\s?PI*?EI*?RC*?S*I*N*G*(?: DA*?MA*?GE*?S*?)?)(?=[^A-Za-z]|$)/gi, "$1(对穿刺)")
 
 	data = data.replace(/(^|[^A-Za-z])((?:OS|OLDS*?CHOO*?L|OLD SCHOO*?L|OLD SKOO*?L|OLDSKOO*?L)\s*?(?:RS|RUNESCAPES*?))(?=[^A-Za-z]|$)/gi, "$1原版 江湖")
-	data = data.replace(/(^|[^A-Za-z])(WANT TO SELL)(?=[^A-Za-z]|$)/gi, "$1<span style=\"color:#BB00BB;font-weight:900\">卖</span>")
-	data = data.replace(/(^|[^A-Za-z])(WANT TO BUY)(?=[^A-Za-z]|$)/gi, "$1<span style=\"color:#0000FF;font-weight:900\">买</span>")
-
+	if (样式){
+		data = data.replace(/(^|[^A-Za-z])(WANT TO SELL)(?=[^A-Za-z]|$)/gi, "$1<span style=\"color:#BB00BB;font-weight:900\">卖</span>")
+		data = data.replace(/(^|[^A-Za-z])(WANT TO BUY)(?=[^A-Za-z]|$)/gi, "$1<span style=\"color:#0000FF;font-weight:900\">买</span>")
+	} else {
+		data = data.replace(/(^|[^A-Za-z])(WANT TO SELL)(?=[^A-Za-z]|$)/gi, "$1卖")
+		data = data.replace(/(^|[^A-Za-z])(WANT TO BUY)(?=[^A-Za-z]|$)/gi, "$1买")
+	}
 	//1a. 铸印
 	data = data.replace(/(^|[^A-Za-z])(STR\&HON)(?=[^A-Za-z]|$)/gi, "$1\"力与荣耀\"") //无法对上str&hon，原因不明
 	data = data.replace(/(^|[^A-Za-z])(STR*?ENGT*?HT*?\s*?(?:AND|\&)?\s*?HONO*?R*?S*?)(?=[^A-Za-z]|$)/gi, "$1\"力与荣耀\"")
@@ -1129,8 +1166,13 @@ function parseTranslate(data, 样式 = true) {
 	data = data.replace(/(^|[^A-Za-z])(SHOW ME THE MONEY)(?=[^A-Za-z]|$)/gi, "$1\"给我钱\"")
 
 	//2. 卖买
-	data = data.replace(/(^|[^A-Za-z])(SELL*?I*?ING*?|WW*?TSS*?|WT\$|SELL|VENDR*?E*?|VVTS|W[^A-Za-z]*?T[^A-Za-z]*?S)(?=[^A-Za-z]|$)/gi, "$1<span style=\"color:#BB00BB;font-weight:900\">卖</span>")
-	data = data.replace(/(^|[^A-Za-z])(BUYING|BUYIN|WYB|WW*?TBB*?|VVTB|ACHETE*?R*?S*?|BUY|W[^A-Za-z]*?T[^A-Za-z]*?B|WTV)(?=[^A-Za-z]|$)/gi, "$1<span style=\"color:#0000FF;font-weight:900\">买</span>")
+	if (样式){
+		data = data.replace(/(^|[^A-Za-z])(SELL*?I*?ING*?|WW*?TSS*?|WT\$|SELL|VENDR*?E*?|VVTS|W[^A-Za-z]*?T[^A-Za-z]*?S)(?=[^A-Za-z]|$)/gi, "$1<span style=\"color:#BB00BB;font-weight:900\">卖</span>")
+		data = data.replace(/(^|[^A-Za-z])(BUYING|BUYIN|WYB|WW*?TBB*?|VVTB|ACHETE*?R*?S*?|BUY|W[^A-Za-z]*?T[^A-Za-z]*?B|WTV)(?=[^A-Za-z]|$)/gi, "$1<span style=\"color:#0000FF;font-weight:900\">买</span>")
+	} else {
+		data = data.replace(/(^|[^A-Za-z])(SELL*?I*?ING*?|WW*?TSS*?|WT\$|SELL|VENDR*?E*?|VVTS|W[^A-Za-z]*?T[^A-Za-z]*?S)(?=[^A-Za-z]|$)/gi, "$1卖")
+		data = data.replace(/(^|[^A-Za-z])(BUYING|BUYIN|WYB|WW*?TBB*?|VVTB|ACHETE*?R*?S*?|BUY|W[^A-Za-z]*?T[^A-Za-z]*?B|WTV)(?=[^A-Za-z]|$)/gi, "$1买")
+	}
 	data = data.replace(/(^|[^A-Za-z])(WTT|W[^A-Za-z]*?T\[^A-Za-z]*?T|TRADE*?S*?|TRADING)(?=[^A-Za-z]|$)/gi, "$1交易")
 	data = data.replace(/(^|[^A-Za-z])(LF|LOOKING*? FOR)(?=[^A-Za-z]|$)/gi, "$1找")
 
@@ -3053,18 +3095,29 @@ function parseTranslate(data, 样式 = true) {
 	data = data.replace(/(^|[^A-Za-z])((EVER*?\s*?LAS*?TING*?|EVERLA*?S*?T*?I*?N*?G*?\.*?|EL)+?\s*?(TONICS*?|TONCIS)+?)(?=[^A-Za-z]|$)/gi, "$1永久变身")
 	data = data.replace(/(^|[^A-Za-z])(EVER*?\s*?LAS*?TING*?|EL)(?=[^A-Za-z]|$)/gi, "$1永久") //EL 修改
 	data = data.replace(/(^|[^A-Za-z])(TONICS*?|TONCIS)(?=[^A-Za-z]|$)/gi, "$1变身")
+	if (样式){
+		data = data.replace(/(^|[^A-Za-z])(永久 CHAMPI*?O*?N*?S*?(?: OF )?(BAL*?THA*?Z*?R*?A*?R*?D*?'?s*?Z*?)?)(?=[^A-Za-z]|$)/gi, "$1永久变身 <a href=\"http://wiki.guildwars.com/wiki/Everlasting_Balthazar%27s_Champion_Tonic\" style=\"font-weight:900;\" title=\"Everlasting_Balthazar_Champion_Tonic\">巴萨泽拥护者</a> [<a href=\"http://wiki.guildwars.com/wiki/Champion_of_Balthazar\" style=\"font-weight:900;text-decoration:underline;\">图</a>]")
 
-	data = data.replace(/(^|[^A-Za-z])(永久 CHAMPI*?O*?N*?S*?(?: OF )?(BAL*?THA*?Z*?R*?A*?R*?D*?'?s*?Z*?)?)(?=[^A-Za-z]|$)/gi, "$1永久变身 <a href=\"http://wiki.guildwars.com/wiki/Everlasting_Balthazar%27s_Champion_Tonic\" style=\"font-weight:900;\" title=\"Everlasting_Balthazar_Champion_Tonic\">巴萨泽拥护者</a> [<a href=\"http://wiki.guildwars.com/wiki/Champion_of_Balthazar\" style=\"font-weight:900;text-decoration:underline;\">图</a>]")
+		data = data.replace(/(^|[^A-Za-z])(CHAMPI*?O*?N*?S*? (?:OF )?BAL*?THA*?Z*?R*?A*?R*?D*?'?s*?Z*?|BAL*?THA*?Z*?R*?A*?R*?D*?'?s*?Z*? CHAMPIONS*?)(?=[^A-Za-z]|$)/gi, "$1<a href=\"http://wiki.guildwars.com/wiki/Everlasting_Balthazar%27s_Champion_Tonic\" style=\"font-weight:900;\" title=\"Everlasting_Balthazar_Champion_Tonic\">巴萨泽拥护者</a> [<a href=\"http://wiki.guildwars.com/wiki/Champion_of_Balthazar\" style=\"font-weight:900;text-decoration:underline;\">图</a>]")
+		data = data.replace(/(^|[^A-Za-z])(PRIESTS*? (?:OF )?BAL*?THA*?Z*?R*?A*?R*?D*?'?s*?Z*?)(?=[^A-Za-z]|$)/gi, "$1<a href=\"http://wiki.guildwars.com/wiki/Everlasting_Priest_of_Balthazar_Tonic\" style=\"font-weight:900;\" title=\"Everlasting_Priest_of_Balthazar_Tonic\">巴萨泽的祭司</a> [<a href=\"http://wiki.guildwars.com/wiki/Priest_of_Balthazar\" style=\"font-weight:900;text-decoration:underline;\">图</a>]")
+		data = data.replace(/(^|[^A-Za-z])(AVATARS*? (?:OF )?BAL*?THA*?Z*?R*?A*?R*?D*?'?s*?Z*?)(?=[^A-Za-z]|$)/gi, "$1<a href=\"http://wiki.guildwars.com/wiki/Everlasting_Avatar_of_Balthazar_Tonic\" style=\"font-weight:900;\" title=\"Everlasting_Avatar_of_Balthazar_Tonic\">巴萨泽化身</a> [<a href=\"http://wiki.guildwars.com/wiki/Avatar_of_Balthazar_Form\" style=\"font-weight:900;text-decoration:underline;\">图</a>]")
+		data = data.replace(/(^|[^A-Za-z])(GH*?OSTLY HEROE*?S*?)(?=[^A-Za-z]|$)/gi, "$1<a href=\"http://wiki.guildwars.com/wiki/Everlasting_Ghostly_Hero_Tonic\" style=\"font-weight:900;\" title=\"Everlasting_Ghostly_Hero_Tonic\">英雄之魂</a> [<a href=\"http://wiki.guildwars.com/wiki/Ghostly_Hero_Form\" style=\"font-weight:900;text-decoration:underline;\">图</a>]")
+		data = data.replace(/(^|[^A-Za-z])(GH*?OSTLY PRIESTS*?)(?=[^A-Za-z]|$)/gi, "$1<a href=\"http://wiki.guildwars.com/wiki/Everlasting_Ghostly_Priest_Tonic\" style=\"font-weight:900;\" title=\"Everlasting_Ghostly_Priest_Tonic\">游魂祭司</a> [<a href=\"http://wiki.guildwars.com/wiki/Ghostly_Priest\" style=\"font-weight:900;text-decoration:underline;\">图</a>]")
+		data = data.replace(/(^|[^A-Za-z])(GUILD LORDS*?)(?=[^A-Za-z]|$)/gi, "$1<a href=\"http://wiki.guildwars.com/wiki/Everlasting_Guild_Lord_Tonic\" style=\"font-weight:900;\" title=\"Everlasting_Guild_Lord_Tonic\">公会领主</a> [<a href=\"http://wiki.guildwars.com/wiki/Guild_Lord_Form\" style=\"font-weight:900;text-decoration:underline;\">图</a>]")
+		data = data.replace(/(^|[^A-Za-z])(SINISTER AUTOMATONICS*?)(?=[^A-Za-z]|$)/gi, "$1<a href=\"http://wiki.guildwars.com/wiki/Everlasting_Sinister_Automatonic\" style=\"font-weight:900;\" title=\"Everlasting_Sinister_Automatonic_Tonic\">黑高仑</a> [<a href=\"http://wiki.guildwars.com/wiki/Sinister_Golem_Form\" style=\"font-weight:900;text-decoration:underline;\">图</a>]")
+		data = data.replace(/(^|[^A-Za-z\_])(AUTOMATONICS*?)(?=[^A-Za-z]|$)/gi, "$1<a href=\"http://wiki.guildwars.com/wiki/Everlasting_Automatonic\" style=\"font-weight:900;\" title=\"Everlasting_Automatonic_Tonic\">高仑</a> [<a href=\"http://wiki.guildwars.com/wiki/Golem_Form\" style=\"font-weight:900;text-decoration:underline;\">图</a>]")
+	} else {
+		data = data.replace(/(^|[^A-Za-z])(永久 CHAMPI*?O*?N*?S*?(?: OF )?(BAL*?THA*?Z*?R*?A*?R*?D*?'?s*?Z*?)?)(?=[^A-Za-z]|$)/gi, "$1永久变身 巴萨泽拥护者")
 
-	data = data.replace(/(^|[^A-Za-z])(CHAMPI*?O*?N*?S*? (?:OF )?BAL*?THA*?Z*?R*?A*?R*?D*?'?s*?Z*?|BAL*?THA*?Z*?R*?A*?R*?D*?'?s*?Z*? CHAMPIONS*?)(?=[^A-Za-z]|$)/gi, "$1<a href=\"http://wiki.guildwars.com/wiki/Everlasting_Balthazar%27s_Champion_Tonic\" style=\"font-weight:900;\" title=\"Everlasting_Balthazar_Champion_Tonic\">巴萨泽拥护者</a> [<a href=\"http://wiki.guildwars.com/wiki/Champion_of_Balthazar\" style=\"font-weight:900;text-decoration:underline;\">图</a>]")
-	data = data.replace(/(^|[^A-Za-z])(PRIESTS*? (?:OF )?BAL*?THA*?Z*?R*?A*?R*?D*?'?s*?Z*?)(?=[^A-Za-z]|$)/gi, "$1<a href=\"http://wiki.guildwars.com/wiki/Everlasting_Priest_of_Balthazar_Tonic\" style=\"font-weight:900;\" title=\"Everlasting_Priest_of_Balthazar_Tonic\">巴萨泽的祭司</a> [<a href=\"http://wiki.guildwars.com/wiki/Priest_of_Balthazar\" style=\"font-weight:900;text-decoration:underline;\">图</a>]")
-	data = data.replace(/(^|[^A-Za-z])(AVATARS*? (?:OF )?BAL*?THA*?Z*?R*?A*?R*?D*?'?s*?Z*?)(?=[^A-Za-z]|$)/gi, "$1<a href=\"http://wiki.guildwars.com/wiki/Everlasting_Avatar_of_Balthazar_Tonic\" style=\"font-weight:900;\" title=\"Everlasting_Avatar_of_Balthazar_Tonic\">巴萨泽化身</a> [<a href=\"http://wiki.guildwars.com/wiki/Avatar_of_Balthazar_Form\" style=\"font-weight:900;text-decoration:underline;\">图</a>]")
-	data = data.replace(/(^|[^A-Za-z])(GH*?OSTLY HEROE*?S*?)(?=[^A-Za-z]|$)/gi, "$1<a href=\"http://wiki.guildwars.com/wiki/Everlasting_Ghostly_Hero_Tonic\" style=\"font-weight:900;\" title=\"Everlasting_Ghostly_Hero_Tonic\">英雄之魂</a> [<a href=\"http://wiki.guildwars.com/wiki/Ghostly_Hero_Form\" style=\"font-weight:900;text-decoration:underline;\">图</a>]")
-	data = data.replace(/(^|[^A-Za-z])(GH*?OSTLY PRIESTS*?)(?=[^A-Za-z]|$)/gi, "$1<a href=\"http://wiki.guildwars.com/wiki/Everlasting_Ghostly_Priest_Tonic\" style=\"font-weight:900;\" title=\"Everlasting_Ghostly_Priest_Tonic\">游魂祭司</a> [<a href=\"http://wiki.guildwars.com/wiki/Ghostly_Priest\" style=\"font-weight:900;text-decoration:underline;\">图</a>]")
-	data = data.replace(/(^|[^A-Za-z])(GUILD LORDS*?)(?=[^A-Za-z]|$)/gi, "$1<a href=\"http://wiki.guildwars.com/wiki/Everlasting_Guild_Lord_Tonic\" style=\"font-weight:900;\" title=\"Everlasting_Guild_Lord_Tonic\">公会领主</a> [<a href=\"http://wiki.guildwars.com/wiki/Guild_Lord_Form\" style=\"font-weight:900;text-decoration:underline;\">图</a>]")
-	data = data.replace(/(^|[^A-Za-z])(SINISTER AUTOMATONICS*?)(?=[^A-Za-z]|$)/gi, "$1<a href=\"http://wiki.guildwars.com/wiki/Everlasting_Sinister_Automatonic\" style=\"font-weight:900;\" title=\"Everlasting_Sinister_Automatonic_Tonic\">黑高仑</a> [<a href=\"http://wiki.guildwars.com/wiki/Sinister_Golem_Form\" style=\"font-weight:900;text-decoration:underline;\">图</a>]")
-	data = data.replace(/(^|[^A-Za-z\_])(AUTOMATONICS*?)(?=[^A-Za-z]|$)/gi, "$1<a href=\"http://wiki.guildwars.com/wiki/Everlasting_Automatonic\" style=\"font-weight:900;\" title=\"Everlasting_Automatonic_Tonic\">高仑</a> [<a href=\"http://wiki.guildwars.com/wiki/Golem_Form\" style=\"font-weight:900;text-decoration:underline;\">图</a>]")
-
+		data = data.replace(/(^|[^A-Za-z])(CHAMPI*?O*?N*?S*? (?:OF )?BAL*?THA*?Z*?R*?A*?R*?D*?'?s*?Z*?|BAL*?THA*?Z*?R*?A*?R*?D*?'?s*?Z*? CHAMPIONS*?)(?=[^A-Za-z]|$)/gi, "$1巴萨泽拥护者")
+		data = data.replace(/(^|[^A-Za-z])(PRIESTS*? (?:OF )?BAL*?THA*?Z*?R*?A*?R*?D*?'?s*?Z*?)(?=[^A-Za-z]|$)/gi, "$1巴萨泽的祭司")
+		data = data.replace(/(^|[^A-Za-z])(AVATARS*? (?:OF )?BAL*?THA*?Z*?R*?A*?R*?D*?'?s*?Z*?)(?=[^A-Za-z]|$)/gi, "$1巴萨泽化身")
+		data = data.replace(/(^|[^A-Za-z])(GH*?OSTLY HEROE*?S*?)(?=[^A-Za-z]|$)/gi, "$1英雄之魂")
+		data = data.replace(/(^|[^A-Za-z])(GH*?OSTLY PRIESTS*?)(?=[^A-Za-z]|$)/gi, "$1游魂祭司")
+		data = data.replace(/(^|[^A-Za-z])(GUILD LORDS*?)(?=[^A-Za-z]|$)/gi, "$1公会领主")
+		data = data.replace(/(^|[^A-Za-z])(SINISTER AUTOMATONICS*?)(?=[^A-Za-z]|$)/gi, "$1黑高仑")
+		data = data.replace(/(^|[^A-Za-z\_])(AUTOMATONICS*?)(?=[^A-Za-z]|$)/gi, "$1高仑")
+	}
 	data = data.replace(/(^|[^A-Za-z_])(BAL*?THA*?Z*?R*?A*?R*?D*?'?s*?Z*?|BALTHA*?'*?S*?|BALTA'*?S*?)(?=[^A-Za-z]|$)/gi, "$1巴萨泽")
 	data = data.replace(/(^|[^A-Za-z_])(HEROE*?S*?)(?=[^A-Za-z]|$)/gi, "$1英雄")
 	data = data.replace(/(^|[^A-Za-z])(AR)(?=[^A-Za-z]|$)/gi, "$1防御")
@@ -3081,7 +3134,7 @@ function parseTranslate(data, 样式 = true) {
 	data = data.replace(/(^|[^A-Za-z])(Brotherhoods*?)(?=[^A-Za-z]|$)/gi, "$1修士")
 	data = data.replace(/(^|[^A-Za-z])(Sunspears*?)(?=[^A-Za-z]|$)/gi, "$1日戟")
 
-	for (counter = 0; counter < 5; counter++) {
+	for (var counter = 0; counter < 5; counter++) {
 		data = data.replace(/(^|[^A-Za-z])(stac*?k*?s*? of)(\s.*?)(?=\s|[A-Za-z]|$|\\|'|!|"|#|\$|%|&|\(|\)|\*|\+|,|\-|\.|\/|:|;|<|=|>|\?|@|\[|\]|\^|_|`|\{|\||\}|~)/gi, "$1$3 组")
 	}
 

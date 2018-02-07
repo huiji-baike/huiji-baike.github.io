@@ -754,6 +754,7 @@ function searchTranslate(data) {
 }
 
 function inputVal(data) {
+	console.log(data)
 	if (Array.isArray(data)) {
 		for (var o = 0; o < data.length; o++) {
 			data[o] = data[o].replace(/<head[^>]*>[\s\S]*?<\/head>/gi, "")

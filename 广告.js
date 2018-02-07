@@ -568,7 +568,9 @@ document.getElementById("begin-Notification").addEventListener("click", function
 	}, [[],[]])
 	var 被驳回 = 内容分类[1]
 	if (被驳回.length > 0) {
-		document.getElementById("tracked-Items").insertAdjacentHTML("afterend", "<div style='font-size:small'> \
+		var oldErrorMsg = document.getElementById("input-Error")
+		oldErrorMsg.parentNode.removeChild(oldErrorMsg)
+		document.getElementById("tracked-Items").insertAdjacentHTML("afterend", "<div style='font-size:small' id='input-Error'> \
         输入失败，以下字条违规：" + 被驳回.toString() + "</div>")
 		document.getElementById("tracked-Items").value = 内容分类[0]
 		return 0

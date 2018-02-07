@@ -557,26 +557,20 @@ function displayNotificationDialog() {
 document.getElementById("begin-Notification").addEventListener("click", function (a) {
 	a.preventDefault()
 	追踪项 = document.getElementById("tracked-Items").value.split(/[,，]/).map(x => x.trim()).filter(x => (x != ""))
-	var 被驳回 = 追踪项.reduce((驳回, 项) => {
+	var 内容分类 = 追踪项.reduce((驳回, 项) => {
 		try {
 			new RegExp(项, "i")
+			驳回[0].push(项)
 		} catch (e) {
-			驳回.push(项)
+			驳回[1].push(项)
 		}
 		return 驳回
-	}, [])
+	}, [[],[]])
+	var 被驳回 = 内容分类[1]
 	if (被驳回.length > 0) {
 		document.getElementById("tracked-Items").insertAdjacentHTML("afterend", "<div style='font-size:small'> \
         输入失败，以下字条违规：" + 被驳回.toString() + "</div>")
-		document.getElementById("tracked-Items").value = 追踪项.filter(项 => {
-			var 合格 = true
-			try {
-				new RegExp(项, "i")
-			} catch (e) {
-				合格 = false
-			}
-			return 合格
-		}).toString()
+		document.getElementById("tracked-Items").value = 内容分类[0]
 		return 0
 	}
 	静音时间 = document.getElementById("silent-Interval").value

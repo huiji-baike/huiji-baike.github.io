@@ -263,7 +263,7 @@ function setupWebSocket() {
 		clearTimeout(reconnectTimer)
 		reconnectDelayMs = baseReconnectDelayMs
 		connectionIndicator.classList.add("connected")
-
+/*
 		var tAddress = window.location.href
 		console.log(tAddress)
 
@@ -279,6 +279,7 @@ function setupWebSocket() {
 				offset: 0
 			})
 		}
+		*/
 	}
 
 	socket.onmessage = function (a) {

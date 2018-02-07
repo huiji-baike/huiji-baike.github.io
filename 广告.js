@@ -636,7 +636,12 @@ function navigateUrl(a) {
 	"?latest" == a && (a = "?")
 	var b = parseRequestFromUrl(a),
 		c = parseRequestFromUrl(trimPathName(document.location.pathname))
-	matchesRequest(c, b) || history.pushState({}, "", (a == "?") ? "/广告" : "/广告" + a) //previously: a
+		console.log(matchesRequest(c, b))
+	if (!matchesRequest(c, b)) {
+		console.log("changing address")
+		history.pushState({}, "", (a == "?") ? "/广告" : "/广告" + a) //previously: a
+	}
+	console.log("address change completed")
 	retrieveResults(b)
 }
 

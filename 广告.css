@@ -75,8 +75,7 @@ button:active {
 }
 
 #nav {
-    height: 47px;
-    color:#ffffff;
+    height: 47px;    
     position: fixed;
     z-index: 1;
     left: 0;
@@ -88,7 +87,7 @@ button:active {
     border-radius: 0 0 5px 5px;
     border: 1px solid #ccc;
     border-top: 0;
-    /*box-shadow: 0 0 10px 2px rgba(0,0,0,0.2)*/
+    box-shadow: 0 0 10px 2px rgba(0,0,0,0.2)
 }
 
 #home-link {
@@ -112,12 +111,13 @@ button:active {
 
 #home-text {
     font: 18px/34px "Arial Rounded MT Bold","Helvetica Rounded",Arial,sans-serif;
+    color:#ffffff;
     font-weight: bold;
     margin-right: 9px;
     margin-left: 2px;
     vertical-align: middle;
     white-space: nowrap;
-    text-shadow: 0 0 2px #eee
+    /*text-shadow: 0 0 2px #eee*/
 }
 
 #home-link:hover {
@@ -526,7 +526,7 @@ button:active {
         border-left: 0;
         border-right: 0;
         margin-bottom: -1px;
-        /*box-shadow: 0 0 5px 1px rgba(0,0,0,0.2)*/
+        box-shadow: 0 0 5px 1px rgba(0,0,0,0.2)
     }
 
     #listings {

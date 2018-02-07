@@ -244,7 +244,7 @@ function trimPathName(path) {
 function setupWebSocket() {
 	connectionIndicator.classList.remove("connected")
 	socket && (socket.onclose = socket.onopen = socket.onmessage = null, socket.close())
-	var a = trimPathName(document.location.href) //document.location.pathname || New: Need to generalize this argument
+	var a = trimPathName(document.location.href);
 	(a.charAt(0) == "?") ? a = "/" + a.slice(1): a
 	pendingRequest || (a = "/notify" + a)
 	socket = new WebSocket("wss://" + "kamadan.decltype.org" + "/ws" + a) //window.location.hostname
@@ -295,7 +295,7 @@ function setupWebSocket() {
 								tag: "卡玛丹/" + b.query
 							},
 							e = "激战广告"
-						b.query && (e = e + " - '" + b.query + "' 的搜索结果")						
+						b.query && (e = e + " - '" + b.query + "' 的搜索结果")
 						new Notification(e, d)
 						playNotificationSound()
 					}

@@ -719,7 +719,7 @@ document.addEventListener("click", function (a) {
 	else if (b.classList.contains("page-link") && b.hasAttribute("href"))
 		navigateUrl(b.getAttribute("href")),
 		a.preventDefault()
-	else if (b.classList.contains("fa-angle-double-down")) { //delete
+	else if (b.classList.contains("fa-angle-double-down") || b.classList.contains("delete")) { 
 		a = b.parentNode.parentNode
 		for (var c, b = 0; b < results.length; ++b)
 			results[b].domNode === a && (c = results[b])

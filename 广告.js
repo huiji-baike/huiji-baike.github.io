@@ -307,7 +307,7 @@ function setupWebSocket() {
 						var b = parseRequestFromUrl(trimPathName(document.location.pathname)),
 							d = {
 								body: "角色名: " + a.name + "\n" + parseTranslate(a.message, false), //所在地: 卡玛丹，艾斯坦之钻\n美洲1区
-								icon: "ZjA5Y2E4NT.png", //notification related:  /v/ZjA5Y2E4NT.png
+								icon: "帆船.png", //notification related:  /v/ZjA5Y2E4NT.png
 								tag: "卡玛丹/" + b.query
 							},
 							e = "激战广告"
@@ -717,8 +717,8 @@ document.addEventListener("click", function (a) {
 		else if (b.classList.contains("page-link") && b.hasAttribute("href"))
 			navigateUrl(b.getAttribute("href")),
 			a.preventDefault()
-		else if (b.classList.contains("delete")) {
-			a = b.parentNode
+		else if (b.classList.contains("fa-angle-double-down")) {//delete
+			a = b.parentNode.parentNode
 			for (var c, b = 0; b < results.length; ++b)
 				results[b].domNode === a && (c = results[b])
 			c && displayDeleteDialog(c)

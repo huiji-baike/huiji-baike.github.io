@@ -116,8 +116,7 @@ function formatResult(a) {
 	var b = htmlEscape(a.name),
 		c = humanReadableAge(1E3 * a.timestamp)
 	a = htmlEscape(a.message)
-	a = parseTranslate(a) //New: Need to make sure translation do not break syntax
-	b = inputVal(b) 
+	a = parseTranslate(a) //New: Need to make sure translation do not break syntax	
 	return "<tr class=\"row\"><td class=\"info\"><div class=\"name\">" + b + "</div><div class=\"age\">" + c + "</div></td><td class=\"message\">" + a + "</td><td class=\"delete\"><i class=\"fas fa-angle-double-down\"></i></td></tr>"
 }
 
@@ -286,6 +285,10 @@ function setupWebSocket() {
 		a = JSON.parse(a.data)
 		console.log("some result is received")
 		console.log(a)
+		for (var prop in a) {
+			console.log("message field: "+prop)
+			a[prop] = inputVal(a[prop])
+		}
 		if ("undefined" !== typeof a.query) {
 			console.log("a query is made and a result is returned")
 			displayResults(a)
@@ -764,21 +767,7 @@ function inputVal(data){
 	return data	
 }
 function parseTranslate(data, 样式 = true) {
-	data = data.replace(/<head[^>]*>[\s\S]*?<\/head>/gi, "")
-		.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
-		.replace(/<script[^>]+?\/>|<script(.|\s)*?\/script>/gi, "")
-		.replace(/<\/html>/gi, "")
-		.replace(/<html>/gi, "")
-		.replace(/<\/body>/gi, "")
-		.replace(/<body>/gi, "")
-		.replace(/<head\/>/gi,"")
-		.replace(/<head>/gi,"")
-		.replace(/<\/head>/gi,"")
-		.replace(/<\/.*?>/gi,"")
-		.replace(/<.*?>/gi,"")
-		.replace(/!\[CDATA\[.*?\]\]/gi,"")
-		.replace(/&lt;.*?&gt;/gi,"")
-		.replace(/^\s*?\r*?\n*?$/gi,"")	
+	data = data.replace(/^\s*?\r*?\n*?$/gi,"")	
 	//1. 起始项 (避免常见短句被拆散)
 	data = data.replace(/(^|[^A-Za-z])(COLORS?)(?=[^A-Za-z]|$)/gi, "$1颜色") //不可下放
 	data = data.replace(/(^|[^A-Za-z])(wE)(?=[^A-Za-z]|$)/g, "$1(加持下)") //wE

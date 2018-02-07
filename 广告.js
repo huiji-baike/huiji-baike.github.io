@@ -213,7 +213,7 @@ function findDuplicates(a, b) {
 function addIncomingResult(a) {
 	incomingResults.push(a)
 	trimIncomingResultsAmortized()
-	++incomingResultCount
+		++incomingResultCount
 }
 
 function clearIncomingResults() {
@@ -286,7 +286,7 @@ function setupWebSocket() {
 		console.log("some result is received")
 		console.log(a)
 		for (var prop in a) {
-			console.log("message field: "+prop)
+			console.log("message field: " + prop)
 			a[prop] = inputVal(a[prop])
 		}
 		if ("undefined" !== typeof a.query) {
@@ -569,7 +569,10 @@ document.getElementById("begin-Notification").addEventListener("click", function
 			驳回[1].push(项)
 		}
 		return 驳回
-	}, [[],[]])
+	}, [
+		[],
+		[]
+	])
 	var 被驳回 = 内容分类[1]
 	if (被驳回.length > 0) {
 		var oldErrorMsg = document.getElementById("input-Error")
@@ -594,15 +597,15 @@ document.getElementById("begin-Notification").addEventListener("click", function
 			console.log("意向已明朗")
 			if ("granted" === a) {
 				console.log("被同意")
-				document.getElementById("notification-button").innerHTML="<i class=\"fas fa-cog fa-spin\"></i>"
-				notificationButton.classList.add("enabled")                
+				document.getElementById("notification-button").innerHTML = "<i class=\"fas fa-cog fa-spin\"></i>"
+				notificationButton.classList.add("enabled")
 			} else {
 				console.log("不同意")
 			}
 		})
 	} else {
 		//add enabled
-		document.getElementById("notification-button").innerHTML="<i class=\"fas fa-cog fa-spin\"></i>"
+		document.getElementById("notification-button").innerHTML = "<i class=\"fas fa-cog fa-spin\"></i>"
 		notificationButton.classList.toggle("enabled")
 	}
 
@@ -617,12 +620,12 @@ document.getElementById("cancel-Notification").addEventListener("click", functio
 
 document.getElementById("wiki-button").addEventListener("click", function (a) {
 	a.preventDefault()
-	location.href="https://guildwars.huijiwiki.com/wiki/首页"
+	location.href = "https://guildwars.huijiwiki.com/wiki/首页"
 })
 
 document.getElementById("dictionary-button").addEventListener("click", function (a) {
 	a.preventDefault()
-	location.href="https://guildwars.huijiwiki.com/wiki/词典"  
+	location.href = "https://guildwars.huijiwiki.com/wiki/词典"
 })
 
 function matchesRequest(a, b) {
@@ -668,12 +671,12 @@ notificationButton.addEventListener("click", function () {
 	console.log("点了按钮")
 	if ("undefined" === typeof Notification) {
 		alert("浏览器无提示窗功能")
-		document.getElementById("notification-button").innerHTML="<i class=\"fas fa-cog\"></i>"
+		document.getElementById("notification-button").innerHTML = "<i class=\"fas fa-cog\"></i>"
 		notificationButton.classList.remove("enabled")
 	} else {
 		if (notificationButton.classList.contains("enabled")) {
 			console.log("提示正在进行，现予以关闭")
-			document.getElementById("notification-button").innerHTML="<i class=\"fas fa-cog\"></i>"
+			document.getElementById("notification-button").innerHTML = "<i class=\"fas fa-cog\"></i>"
 			notificationButton.classList.remove("enabled")
 		} else {
 			console.log("有提示窗功能，打开询问窗口")
@@ -704,7 +707,7 @@ window.addEventListener("resize", reflowDocument)
 document.addEventListener("click", function (a) {
 	var b = a.target
 	if (1 == a.which)
-		if (b.classList.contains("name") && !isSelecting(b)){
+		if (b.classList.contains("name") && !isSelecting(b)) {
 			c = getSelection()
 			c.removeAllRanges()
 			var d = document.createRange()
@@ -714,32 +717,32 @@ document.addEventListener("click", function (a) {
 				document.execCommand("copy")
 			} catch (e) {}
 			navigate("author:\"" + b.innerText + "\""),
-			a.preventDefault()
+				a.preventDefault()
 		}
-		else if (b.classList.contains("page-link") && b.hasAttribute("href"))
-			navigateUrl(b.getAttribute("href")),
-			a.preventDefault()
-		else if (b.classList.contains("fa-angle-double-down")) {//delete
-			a = b.parentNode.parentNode
-			for (var c, b = 0; b < results.length; ++b)
-				results[b].domNode === a && (c = results[b])
-			c && displayDeleteDialog(c)
-		} else if ("modal" === b.id)
-			document.body.removeChild(b)
-		else if ("dismiss" === b.id)
-			a = document.getElementById("modal"),
-			document.body.removeChild(a)
-		else if ("command" === b.id) {
-			c = getSelection()
-			c.removeAllRanges()
-			var d = document.createRange()
-			d.selectNode(b)
-			c.addRange(d)
-			try {
-				document.execCommand("copy")
-			} catch (e) {}
-			a.preventDefault()
-		}
+	else if (b.classList.contains("page-link") && b.hasAttribute("href"))
+		navigateUrl(b.getAttribute("href")),
+		a.preventDefault()
+	else if (b.classList.contains("fa-angle-double-down")) { //delete
+		a = b.parentNode.parentNode
+		for (var c, b = 0; b < results.length; ++b)
+			results[b].domNode === a && (c = results[b])
+		c && displayDeleteDialog(c)
+	} else if ("modal" === b.id)
+		document.body.removeChild(b)
+	else if ("dismiss" === b.id)
+		a = document.getElementById("modal"),
+		document.body.removeChild(a)
+	else if ("command" === b.id) {
+		c = getSelection()
+		c.removeAllRanges()
+		var d = document.createRange()
+		d.selectNode(b)
+		c.addRange(d)
+		try {
+			document.execCommand("copy")
+		} catch (e) {}
+		a.preventDefault()
+	}
 })
 
 window.setInterval(updateTimestamps, 1E3)
@@ -749,25 +752,46 @@ setupWebSocket()
 function searchTranslate(data) {
 	return data
 }
-function inputVal(data){
-	data = data.replace(/<head[^>]*>[\s\S]*?<\/head>/gi, "")
-		.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
-		.replace(/<script[^>]+?\/>|<script(.|\s)*?\/script>/gi, "")
-		.replace(/<\/html>/gi, "")
-		.replace(/<html>/gi, "")
-		.replace(/<\/body>/gi, "")
-		.replace(/<body>/gi, "")
-		.replace(/<head\/>/gi,"")
-		.replace(/<head>/gi,"")
-		.replace(/<\/head>/gi,"")
-		.replace(/<\/.*?>/gi,"")
-		.replace(/<.*?>/gi,"")
-		.replace(/!\[CDATA\[.*?\]\]/gi,"")
-		.replace(/&lt;.*?&gt;/gi,"")		
-	return data	
+
+function inputVal(data) {
+	if (Array.isArray(data)) {
+		for (var o = 0; o < data.length; o++) {
+			data[o] = data[o].replace(/<head[^>]*>[\s\S]*?<\/head>/gi, "")
+				.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
+				.replace(/<script[^>]+?\/>|<script(.|\s)*?\/script>/gi, "")
+				.replace(/<\/html>/gi, "")
+				.replace(/<html>/gi, "")
+				.replace(/<\/body>/gi, "")
+				.replace(/<body>/gi, "")
+				.replace(/<head\/>/gi, "")
+				.replace(/<head>/gi, "")
+				.replace(/<\/head>/gi, "")
+				.replace(/<\/.*?>/gi, "")
+				.replace(/<.*?>/gi, "")
+				.replace(/!\[CDATA\[.*?\]\]/gi, "")
+				.replace(/&lt;.*?&gt;/gi, "")
+		}
+	} else {
+		data = data.replace(/<head[^>]*>[\s\S]*?<\/head>/gi, "")
+			.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
+			.replace(/<script[^>]+?\/>|<script(.|\s)*?\/script>/gi, "")
+			.replace(/<\/html>/gi, "")
+			.replace(/<html>/gi, "")
+			.replace(/<\/body>/gi, "")
+			.replace(/<body>/gi, "")
+			.replace(/<head\/>/gi, "")
+			.replace(/<head>/gi, "")
+			.replace(/<\/head>/gi, "")
+			.replace(/<\/.*?>/gi, "")
+			.replace(/<.*?>/gi, "")
+			.replace(/!\[CDATA\[.*?\]\]/gi, "")
+			.replace(/&lt;.*?&gt;/gi, "")
+	}
+	return data
 }
+
 function parseTranslate(data, 样式 = true) {
-	data = data.replace(/^\s*?\r*?\n*?$/gi,"")	
+	data = data.replace(/^\s*?\r*?\n*?$/gi, "")
 	//1. 起始项 (避免常见短句被拆散)
 	data = data.replace(/(^|[^A-Za-z])(COLORS?)(?=[^A-Za-z]|$)/gi, "$1颜色") //不可下放
 	data = data.replace(/(^|[^A-Za-z])(wE)(?=[^A-Za-z]|$)/g, "$1(加持下)") //wE
@@ -818,7 +842,7 @@ function parseTranslate(data, 样式 = true) {
 	data = data.replace(/(^|[^A-Za-z])(STONE\s*?RAINS*?)(?=[^A-Za-z]|$)/gi, "$1石之雨")
 	data = data.replace(/(^|[^A-Za-z])(POLYMOC*K*S*?(?: PIECES*)?)(?=[^A-Za-z]|$)/gi, "$1战斗仿棋")
 	data = data.replace(/(^|[^A-Za-z])(MASTER OF WH*?I*?SPE*?R*?S*?)(?=[^A-Za-z]|$)/gi, "$1唤言大师")
-	if (样式){
+	if (样式) {
 		data = data.replace(/^WTBUY|^WTB/gi, "<span style=\"color:#0000FF;font-weight:900\">买</span>")
 		data = data.replace(/^WTSELL|^WTS/gi, "<span style=\"color:#BB00BB;font-weight:900\">卖</span>")
 	} else {
@@ -1084,7 +1108,7 @@ function parseTranslate(data, 样式 = true) {
 	data = data.replace(/(^|[^A-Za-z])(VS*?\.*?\s?PI*?EI*?RC*?S*I*N*G*(?: DA*?MA*?GE*?S*?)?)(?=[^A-Za-z]|$)/gi, "$1(对穿刺)")
 
 	data = data.replace(/(^|[^A-Za-z])((?:OS|OLDS*?CHOO*?L|OLD SCHOO*?L|OLD SKOO*?L|OLDSKOO*?L)\s*?(?:RS|RUNESCAPES*?))(?=[^A-Za-z]|$)/gi, "$1原版 江湖")
-	if (样式){
+	if (样式) {
 		data = data.replace(/(^|[^A-Za-z])(WANT TO SELL)(?=[^A-Za-z]|$)/gi, "$1<span style=\"color:#BB00BB;font-weight:900\">卖</span>")
 		data = data.replace(/(^|[^A-Za-z])(WANT TO BUY)(?=[^A-Za-z]|$)/gi, "$1<span style=\"color:#0000FF;font-weight:900\">买</span>")
 	} else {
@@ -1155,7 +1179,7 @@ function parseTranslate(data, 样式 = true) {
 	data = data.replace(/(^|[^A-Za-z])(SHOW ME THE MONEY)(?=[^A-Za-z]|$)/gi, "$1\"给我钱\"")
 
 	//2. 卖买
-	if (样式){
+	if (样式) {
 		data = data.replace(/(^|[^A-Za-z])(SELL*?I*?ING*?|WW*?TSS*?|WT\$|SELL|VENDR*?E*?|VVTS|W[^A-Za-z]*?T[^A-Za-z]*?S)(?=[^A-Za-z]|$)/gi, "$1<span style=\"color:#BB00BB;font-weight:900\">卖</span>")
 		data = data.replace(/(^|[^A-Za-z])(BUYING|BUYIN|WYB|WW*?TBB*?|VVTB|ACHETE*?R*?S*?|BUY|W[^A-Za-z]*?T[^A-Za-z]*?B|WTV)(?=[^A-Za-z]|$)/gi, "$1<span style=\"color:#0000FF;font-weight:900\">买</span>")
 	} else {
@@ -3084,7 +3108,7 @@ function parseTranslate(data, 样式 = true) {
 	data = data.replace(/(^|[^A-Za-z])((EVER*?\s*?LAS*?TING*?|EVERLA*?S*?T*?I*?N*?G*?\.*?|EL)+?\s*?(TONICS*?|TONCIS)+?)(?=[^A-Za-z]|$)/gi, "$1永久变身")
 	data = data.replace(/(^|[^A-Za-z])(EVER*?\s*?LAS*?TING*?|EL)(?=[^A-Za-z]|$)/gi, "$1永久") //EL 修改
 	data = data.replace(/(^|[^A-Za-z])(TONICS*?|TONCIS)(?=[^A-Za-z]|$)/gi, "$1变身")
-	if (样式){
+	if (样式) {
 		data = data.replace(/(^|[^A-Za-z])(永久 CHAMPI*?O*?N*?S*?(?: OF )?(BAL*?THA*?Z*?R*?A*?R*?D*?'?s*?Z*?)?)(?=[^A-Za-z]|$)/gi, "$1永久变身 <a href=\"http://wiki.guildwars.com/wiki/Everlasting_Balthazar%27s_Champion_Tonic\" style=\"font-weight:900;\" title=\"Everlasting_Balthazar_Champion_Tonic\">巴萨泽拥护者</a> [<a href=\"http://wiki.guildwars.com/wiki/Champion_of_Balthazar\" style=\"font-weight:900;text-decoration:underline;\">图</a>]")
 
 		data = data.replace(/(^|[^A-Za-z])(CHAMPI*?O*?N*?S*? (?:OF )?BAL*?THA*?Z*?R*?A*?R*?D*?'?s*?Z*?|BAL*?THA*?Z*?R*?A*?R*?D*?'?s*?Z*? CHAMPIONS*?)(?=[^A-Za-z]|$)/gi, "$1<a href=\"http://wiki.guildwars.com/wiki/Everlasting_Balthazar%27s_Champion_Tonic\" style=\"font-weight:900;\" title=\"Everlasting_Balthazar_Champion_Tonic\">巴萨泽拥护者</a> [<a href=\"http://wiki.guildwars.com/wiki/Champion_of_Balthazar\" style=\"font-weight:900;text-decoration:underline;\">图</a>]")

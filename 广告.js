@@ -235,7 +235,7 @@ function forceReconnectWebSocket() {
 	setupWebSocket()
 }
 
-function trimPathName(path) {
+function trimPathName(path) {	
 	var tPath = path
 	path = path.replace(/^.+?(\?(?:(?:search)|(?:latest)).*?)$/gi, "$1")
 	console.log("performing trimPath, original: " + tPath + " | processed: " + path + " :: if identical, sends empty string")
@@ -245,7 +245,7 @@ function trimPathName(path) {
 function setupWebSocket() {
 	connectionIndicator.classList.remove("connected")
 	socket && (socket.onclose = socket.onopen = socket.onmessage = null, socket.close())
-	var a = trimPathName(document.location.pathname) //document.location.pathname || New: Need to generalize this argument
+	var a = trimPathName(document.location.href) //document.location.pathname || New: Need to generalize this argument
 	console.log("pretrim pathname: " + document.location.pathname)
 	console.log("websocket setup suffix is: " + a);
 	(a.charAt(0) == "?") ? a = "/" + a.slice(1): a
@@ -308,7 +308,7 @@ function setupWebSocket() {
 					})
 					console.log("找到: " + 找到)
 					if ((找到.length > 0) && 未曾见过(a)) {
-						var b = parseRequestFromUrl(trimPathName(document.location.pathname)),
+						var b = parseRequestFromUrl(trimPathName(document.location.href)),
 							d = {
 								body: "角色名: " + a.name + "\n" + parseTranslate(a.message, false), //所在地: 卡玛丹，艾斯坦之钻\n美洲1区
 								icon: "帆船.png", //notification related:  /v/ZjA5Y2E4NT.png
@@ -461,10 +461,6 @@ function parseRequestFromUrl(a) {
 		query: b,
 		offset: c
 	}
-}
-
-function retrieveResultsForUrl(a) {
-	retrieveResults(parseRequestFromUrl(a))
 }
 
 function displayRequest(a) {
@@ -635,9 +631,8 @@ function matchesRequest(a, b) {
 function navigateUrl(a) {
 	"?latest" == a && (a = "?")
 	var b = parseRequestFromUrl(a),
-		c = parseRequestFromUrl(trimPathName(document.location.pathname))
-	//matchesRequest(c, b))
-	history.pushState({}, "", (a == "?") ? "/广告" : "/广告" + a) //previously: a	
+		c = parseRequestFromUrl(trimPathName(document.location.href))
+	matchesRequest(c, b) || history.pushState({}, "", (a == "?") ? "/广告" : "/广告" + a) //previously: a	
 	retrieveResults(b)
 }
 
@@ -692,7 +687,7 @@ scrollIndicator.addEventListener("click", function () {
 })
 
 window.addEventListener("popstate", function (a) {
-	retrieveResultsForUrl(trimPathName(document.location.pathname))
+	retrieveResults(parseRequestFromUrl(trimPathName(document.location.href)))
 })
 
 window.addEventListener("beforeunload", function () {

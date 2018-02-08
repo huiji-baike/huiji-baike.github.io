@@ -293,7 +293,7 @@ function setupWebSocket() {
 						return (a.message.match(new RegExp(项, "i")) || parseTranslate(a.message, false).match(new RegExp(项, "i")))
 					})
 					var 近期广告表 = 近期广告.reduce((总结, 项) => {
-						总结 += 项.toString
+						总结 += 项.name + "\n"+项.message+"\n"
 						return 总结
 					}, "")
 					console.log("原文: "+a.message+"\n正在追踪: "+追踪项.toString()+"\n找到: "+找到.toString()+"\n已见过的广告: "+近期广告表)					

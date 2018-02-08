@@ -73,10 +73,46 @@ function humanReadableDuration(a, b) {
 		1 < c ? c + " " + e.unit + "" : e.article + " " + e.unit) : "几 秒 "
 }
 
+function humanReadableDurationEn(a, b) {
+	for (var c = Math.abs(b - a), d = [{
+			unit: "minute",
+			article: "a",
+			ms: 6E4
+		}, {
+			unit: "hour",
+			article: "an",
+			ms: 36E5
+		}, {
+			unit: "day",
+			article: "a",
+			ms: 864E5
+		}, {
+			unit: "week",
+			article: "a",
+			ms: 6048E5
+		}, {
+			unit: "month",
+			article: "a",
+			ms: 2629746E3
+		}, {
+			unit: "year",
+			article: "a",
+			ms: 31556952E3
+		}], e = null, f = 0; f < d.length && !(c < d[f].ms); ++f)
+		e = d[f];
+	return e ? (c = Math.floor(c / e.ms),
+		1 < c ? c + " " + e.unit + "s" : e.article + " " + e.unit) : "a few seconds"
+}
+
 function humanReadableAge(a, b) {
 	"undefined" === typeof b && (b = (new Date).valueOf())
-	return humanReadableDuration(a > b ? b : a, b) + "前"
+	if (translateButton.classList.contains("字母版")) {
+		return humanReadableDurationEn(a > b ? b : a, b) + " ago"
+	} else {
+		return humanReadableDuration(a > b ? b : a, b) + "前"
+	}
 }
+
 
 function clearResults() {
 	results = []
@@ -293,10 +329,10 @@ function setupWebSocket() {
 						return (a.message.match(new RegExp(项, "i")) || parseTranslate(a.message, false).match(new RegExp(项, "i")))
 					})
 					var 近期广告表 = 近期广告.reduce((总结, 项) => {
-						总结 += 项.name + "\n"+项.message+"\n"
+						总结 += 项.name + "\n" + 项.message + "\n"
 						return 总结
 					}, "")
-					console.log("原文: "+a.message+"\n正在追踪: "+追踪项.toString()+"\n找到: "+找到.toString()+"\n已见过的广告: "+近期广告表)					
+					console.log("原文: " + a.message + "\n正在追踪: " + 追踪项.toString() + "\n找到: " + 找到.toString() + "\n已见过的广告: " + 近期广告表)
 					if ((找到.length > 0) && 未曾见过(a)) {
 						var b = parseRequestFromUrl(trimPathName(document.location.href)),
 							d = {
@@ -664,7 +700,7 @@ document.getElementById("translate-button").addEventListener("click", function (
 	}
 	if (window.location.href.match(网址)) {
 		navigateUrl(window.location.href.match(网址)[1])
-	}	
+	}
 })
 
 function matchesRequest(a, b) {
@@ -698,11 +734,11 @@ enableInstantSearch && searchInput.addEventListener("input", function (a) {
 
 searchForm.addEventListener("submit", function (a) {
 	a.preventDefault()
-	if (searchInput.value.match(/^名\s*?=\s*?[^\s]+/)){
+	if (searchInput.value.match(/^名\s*?=\s*?[^\s]+/)) {
 		searchInput.value = searchInput.value.replace(/^名\s*?=\s*?(.+?)$/gi, "author:\"$1\"")
 	} else {
 		searchInput.value = searchTranslate(searchInput.value)
-	}		
+	}
 	navigate(searchInput.value)
 })
 

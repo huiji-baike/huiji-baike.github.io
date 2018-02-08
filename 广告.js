@@ -733,7 +733,7 @@ document.addEventListener("click", function (a) {
 
 window.setInterval(updateTimestamps, 1E3)
 reflowDocument()
-setupWebSocket()
+setupWebSocket();
 
 (function (h, o, t, j, a, r) {
 	h.hj = h.hj || function () {

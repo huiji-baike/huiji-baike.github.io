@@ -566,16 +566,12 @@ document.getElementById("begin-Notification").addEventListener("click", function
 	fetchNotificationSound()
 	if ("granted" !== Notification.permission) {
 		Notification.requestPermission(function (a) {
-			if ("granted" === a) {
-				//update, make spin
-				//document.getElementById("notification-button").innerHTML = "<i class=\"fas fa-cog fa-spin\"></i>"
+			if ("granted" === a) {				
 				notificationButton.classList.add("enabled")
 			} else {}
 		})
 	} else {
-		//add enabled
-		//update, make spin
-		//document.getElementById("notification-button").innerHTML = "<i class=\"fas fa-cog fa-spin\"></i>"
+		//add enabled		
 		notificationButton.classList.toggle("enabled")
 	}
 
@@ -657,13 +653,9 @@ homeLink.addEventListener("click", function (a) {
 notificationButton.addEventListener("click", function () {
 	if ("undefined" === typeof Notification) {
 		alert("浏览器无提示窗功能")
-		//update, stop spin
-		//document.getElementById("notification-button").innerHTML = "<i class=\"fas fa-cog\"></i>"
 		notificationButton.classList.remove("enabled")
 	} else {
-		if (notificationButton.classList.contains("enabled")) {
-			//update, stop spin
-			//document.getElementById("notification-button").innerHTML = "<i class=\"fas fa-cog\"></i>"
+		if (notificationButton.classList.contains("enabled")) {			
 			notificationButton.classList.remove("enabled")
 		} else {
 			displayNotificationDialog()

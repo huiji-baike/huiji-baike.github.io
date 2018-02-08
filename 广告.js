@@ -282,6 +282,7 @@ function setupWebSocket() {
 	connectionIndicator.classList.remove("connected")
 	searchInput.classList.add("no-connection")
 	document.getElementById("nav").style.background = "firebrick"
+	document.getElementById("results-header").style.background = "firebrick"
 	searchInput.setAttribute("placeholder", "正在联系服务器，暂无回应")
 	socket && (socket.onclose = socket.onopen = socket.onmessage = null, socket.close())
 	var a = trimPathName(document.location.href);
@@ -300,6 +301,7 @@ function setupWebSocket() {
 		connectionIndicator.classList.add("connected")
 		searchInput.classList.remove("no-connection")
 		document.getElementById("nav").style.background = "#333"
+		document.getElementById("results-header").style.background = "#333"
 		searchInput.setAttribute("placeholder", "搜索词需用字母名 | 按以下格式寻人: 名=填名；亦可点击表内人名 (浏览器会自动复制该名) | [旗标]以示原文 | [齿轮]启动自动提示")
 
 		if (window.location.href.match(网址)) {

@@ -286,6 +286,9 @@ button:active {
     padding: 10px 15px
 }
 
+#results-header .offline{
+    background: firebrick;
+}
 #connection-indicator {
     margin-left: 5px;
     margin-top: auto;

@@ -689,7 +689,7 @@ document.addEventListener("click", function (a) {
 		navigateUrl(b.getAttribute("href")),
 		a.preventDefault()
 	else if (b.classList.contains("delete")) { 
-		a = b.parentNode.parentNode
+		a = b.parentNode
 		for (var c, b = 0; b < results.length; ++b)
 			results[b].domNode === a && (c = results[b])
 		c && displayDeleteDialog(c)

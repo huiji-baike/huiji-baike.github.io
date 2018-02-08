@@ -292,7 +292,11 @@ function setupWebSocket() {
 					找到 = 追踪项.filter(项 => {
 						return (a.message.match(new RegExp(项, "i")) || parseTranslate(a.message, false).match(new RegExp(项, "i")))
 					})
-					console.log("原文: "+a.message+"\n正在追踪: "+追踪项.toString()+"\n找到: "+找到.toString()+"\n已见过的广告: "+近期广告.toString())					
+					var 近期广告表 = 近期广告.reduce((总结, 项) => {
+						总结 += 项.toString
+						return 总结
+					}, "")
+					console.log("原文: "+a.message+"\n正在追踪: "+追踪项.toString()+"\n找到: "+找到.toString()+"\n已见过的广告: "+近期广告表)					
 					if ((找到.length > 0) && 未曾见过(a)) {
 						var b = parseRequestFromUrl(trimPathName(document.location.href)),
 							d = {

@@ -280,8 +280,8 @@ function trimPathName(path) {
 
 function setupWebSocket() {
 	connectionIndicator.classList.remove("connected")
-	searchInput.classList.add("no-connection")
-	document.getElementById("nav").style.background = "firebrick"
+	searchInput.classList.add("offline")
+	document.getElementById("nav").classList.add("offline")
 	document.getElementById("results-header").classList.add("offline")
 	searchInput.setAttribute("placeholder", "正在联系服务器，暂无回应")
 	socket && (socket.onclose = socket.onopen = socket.onmessage = null, socket.close())
@@ -299,8 +299,8 @@ function setupWebSocket() {
 		clearTimeout(reconnectTimer)
 		reconnectDelayMs = baseReconnectDelayMs
 		connectionIndicator.classList.add("connected")
-		searchInput.classList.remove("no-connection")
-		document.getElementById("nav").style.background = "#333"
+		searchInput.classList.remove("offline")
+		document.getElementById("nav").classList.remove("offline")
 		document.getElementById("results-header").classList.remove("offline")
 		searchInput.setAttribute("placeholder", "搜索词需用字母名 | 按以下格式寻人: 名=填名；亦可点击表内人名 (浏览器会自动复制该名) | [旗标]以示原文 | [齿轮]启动自动提示")
 

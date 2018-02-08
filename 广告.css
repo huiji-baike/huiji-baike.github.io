@@ -94,6 +94,10 @@ button:active {
     box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.2)
 }
 
+#nav.offline{
+    background: firebrick;
+}
+
 #home-link {
     display: inline-flex;
     height: 34px;
@@ -185,7 +189,7 @@ button:active {
     font-size: 0.85em
 }
 
-.no-connection::placeholder {
+.offline::placeholder {
     color: firebrick;
     font-weight: bold;
 }
@@ -289,6 +293,7 @@ button:active {
 #results-header.offline{
     background: firebrick;
 }
+
 #connection-indicator {
     margin-left: 5px;
     margin-top: auto;

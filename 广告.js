@@ -15,6 +15,7 @@ var resultsPerPage = 25,
 	homeLink = document.getElementById("home-link"),
 	connectionIndicator = document.getElementById("connection-indicator"),
 	notificationButton = document.getElementById("notification-button"),
+	translateButton = document.getElementById("translate-button"),
 	audioContext,
 	notificationSoundBuffer,
 	socket,
@@ -30,7 +31,8 @@ var resultsPerPage = 25,
 	incomingResultCount = 0,
 	追踪项 = [],
 	近期广告 = [],
-	静音时间 = 5
+	静音时间 = 5,
+	regX = new RegExp("^https\:\/\/huiji\-baike\.github\.io\/" + encodeURIComponent("广告") + "(\\?.+)$", "i")
 
 var animationEnd = 0,
 	animationLengthMs = 500,
@@ -263,17 +265,17 @@ function setupWebSocket() {
 		document.getElementById("search-input").classList.remove("no-connection")
 		document.getElementById("search-input").setAttribute("placeholder", "搜索词需用其外语名 | 按以下格式寻人: 名=填名；亦可点击表内人名 (浏览器会自动复制该名) | [旗标]以示原文 | [齿轮]启动自动提示")
 		
-		var regX = new RegExp("^https\:\/\/huiji\-baike\.github\.io\/" + encodeURIComponent("广告") + "(\\?.+)$", "i")
-
 		if (window.location.href.match(regX)) {
 			navigateUrl(window.location.href.match(regX)[1])
-		} else {
+		} 
+		/* 
+		  else {
 			retrieveResults({
 				query: "",
 				offset: 0
 			})
 		}
-
+		*/
 	}
 
 	socket.onmessage = function (a) {
@@ -596,6 +598,21 @@ document.getElementById("dictionary-button").addEventListener("click", function 
 	location.href = "https://guildwars.huijiwiki.com/wiki/词典"
 })
 
+document.getElementById("translate-button").addEventListener("click", function(a){
+	a.preventDefault()
+	var language = !translateButton.classList.contains("字母版")	
+	if (language){ //currently not in foreign text
+		translateButton.classList.add("字母版")
+		translateButton.setAttribute("title", "Switch to Chinese")
+	} else {//currently foreign, so switch to Chinese mode
+		translateButton.classList.remove("字母版")
+		translateButton.setAttribute("title", "字母版")
+	}
+	if (window.location.href.match(regX)) {
+		navigateUrl(window.location.href.match(regX)[1])
+	}	
+})
+
 function matchesRequest(a, b) {
 	return a.query === b.query && a.offset == b.offset
 }
@@ -755,6 +772,25 @@ function inputValHelper(data) {
 
 function parseTranslate(data, 样式 = true) {
 	data = data.replace(/^\s*?\r*?\n*?$/gi, "")
+
+	if (translateButton.classList.contains("字母版")){
+		if (样式){
+			data = data.replace(/^WTBUY|^WTB/gi, "<span style=\"color:#0000FF;font-weight:900\">WTB</span>")
+			data = data.replace(/^WTSELL|^WTS/gi, "<span style=\"color:#BB00BB;font-weight:900\">WTS</span>")
+			data = data.replace(/(^|[^A-Za-z])(WANT TO SELL)(?=[^A-Za-z]|$)/gi, "$1<span style=\"color:#BB00BB;font-weight:900\">WTS</span>")
+			data = data.replace(/(^|[^A-Za-z])(WANT TO BUY)(?=[^A-Za-z]|$)/gi, "$1<span style=\"color:#0000FF;font-weight:900\">WTB</span>")
+			data = data.replace(/(^|[^A-Za-z])(SELL*?I*?ING*?|WW*?TSS*?|WT\$|SELL|VENDR*?E*?|VVTS|W[^A-Za-z]*?T[^A-Za-z]*?S)(?=[^A-Za-z]|$)/gi, "$1<span style=\"color:#BB00BB;font-weight:900\">WTS</span>")
+			data = data.replace(/(^|[^A-Za-z])(BUYING|BUYIN|WYB|WW*?TBB*?|VVTB|ACHETE*?R*?S*?|BUY|W[^A-Za-z]*?T[^A-Za-z]*?B|WTV)(?=[^A-Za-z]|$)/gi, "$1<span style=\"color:#0000FF;font-weight:900\">WTB</span>")
+		} else {
+			data = data.replace(/^WTBUY|^WTB/gi, "WTB")
+			data = data.replace(/^WTSELL|^WTS/gi, "WTS")			
+			data = data.replace(/(^|[^A-Za-z])(WANT TO SELL)(?=[^A-Za-z]|$)/gi, "$1WTS")
+			data = data.replace(/(^|[^A-Za-z])(WANT TO BUY)(?=[^A-Za-z]|$)/gi, "$1WTB")
+			data = data.replace(/(^|[^A-Za-z])(SELL*?I*?ING*?|WW*?TSS*?|WT\$|SELL|VENDR*?E*?|VVTS|W[^A-Za-z]*?T[^A-Za-z]*?S)(?=[^A-Za-z]|$)/gi, "$1WTS")
+			data = data.replace(/(^|[^A-Za-z])(BUYING|BUYIN|WYB|WW*?TBB*?|VVTB|ACHETE*?R*?S*?|BUY|W[^A-Za-z]*?T[^A-Za-z]*?B|WTV)(?=[^A-Za-z]|$)/gi, "$1WTB")
+		}				
+		return data
+	}
 	//1. 起始项 (避免常见短句被拆散)
 	data = data.replace(/(^|[^A-Za-z])(COLORS?)(?=[^A-Za-z]|$)/gi, "$1颜色") //不可下放
 	data = data.replace(/(^|[^A-Za-z])(wE)(?=[^A-Za-z]|$)/g, "$1(加持下)") //wE

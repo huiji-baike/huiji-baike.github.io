@@ -172,7 +172,7 @@ button:active {
 ::placeholder{
     font-size:0.85em
 }
-.noconnection::placeholder{
+.no-connection::placeholder{
     color:firebrick;
     font-weight:bold;
 }

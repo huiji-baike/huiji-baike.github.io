@@ -654,9 +654,11 @@ notificationButton.addEventListener("click", function () {
 	if ("undefined" === typeof Notification) {
 		alert("浏览器无提示窗功能")
 		notificationButton.classList.remove("enabled")
+		近期广告 = []
 	} else {
 		if (notificationButton.classList.contains("enabled")) {			
 			notificationButton.classList.remove("enabled")
+			近期广告 = []
 		} else {
 			displayNotificationDialog()
 		}

@@ -261,7 +261,7 @@ function setupWebSocket() {
 		reconnectDelayMs = baseReconnectDelayMs
 		connectionIndicator.classList.add("connected")
 		document.getElementById("search-input").style.color = "#333"
-		document.getElementById("search-input").setAttribute("placeholder", "搜索词需用其外语名 | 寻人用以下格式: 名=填名；亦可点击表内人名 (浏览器会自动复制该名) | [旗标]以示原文 | [齿轮]启动自动提示")
+		document.getElementById("search-input").setAttribute("placeholder", "搜索词需用其外语名 | 按以下格式寻人: 名=填名；亦可点击表内人名 (浏览器会自动复制该名) | [旗标]以示原文 | [齿轮]启动自动提示")
 		
 		var regX = new RegExp("^https\:\/\/huiji\-baike\.github\.io\/" + encodeURIComponent("广告") + "(\\?.+)$", "i")
 

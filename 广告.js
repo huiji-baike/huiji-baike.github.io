@@ -589,7 +589,8 @@ function displayNotificationDialog() {
 	document.getElementById("tracked-Items").value = 追踪项.toString()
 	document.getElementById("silent-Interval").value = 静音时间
 }
-document.getElementById("begin-Notification").addEventListener("click", function (a) {
+
+function 开报(a) {
 	a.preventDefault()
 	追踪项 = document.getElementById("tracked-Items").value.split(/[,，]/).map(x => x.trim()).filter(x => (x != ""))
 	var 内容分类 = 追踪项.reduce((驳回, 项) => {
@@ -635,14 +636,13 @@ document.getElementById("begin-Notification").addEventListener("click", function
 		notificationButton.classList.toggle("enabled")
 	}
 
-	document.getElementById("tracking-Form").style.display = "none"
-})
+	document.body.removeChild(document.getElementById("tracking-Form"))
+}
 
-document.getElementById("cancel-Notification").addEventListener("click", function (a) {
+function 取消按钮(a) {
 	a.preventDefault()
-
-	document.getElementById("tracking-Form").style.display = "none"
-})
+	document.body.removeChild(document.getElementById("tracking-Form"))
+}
 
 document.getElementById("wiki-button").addEventListener("click", function (a) {
 	a.preventDefault()
@@ -773,10 +773,11 @@ document.addEventListener("click", function (a) {
 	else if ("dismiss" === b.id)
 		a = document.getElementById("modal"),
 		document.body.removeChild(a)
-	else if (("cancel-Notification" === b.id) || ("begin-Notification" === b.id)) {
-		a = document.getElementById("tracking-Form"),
-			document.body.removeChild(a)
-	} else if ("command" === b.id) {
+	else if ("cancel-Notification" === b.id)
+		取消按钮(a)
+	else if ("begin-Notification" === b.id)
+		开报(a)
+	else if ("command" === b.id) {
 		c = getSelection()
 		c.removeAllRanges()
 		var d = document.createRange()

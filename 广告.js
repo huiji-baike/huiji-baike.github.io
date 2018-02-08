@@ -42,37 +42,6 @@ var animationEnd = 0,
 var scrollAnimationEnd = 0,
 	scrollAnimationLengthMs, scrollStartY, scrollEndY
 
-function humanReadableDuration(a, b) {
-	for (var c = Math.abs(b - a), d = [{
-			unit: "分 钟 ",
-			article: "1 ",
-			ms: 6E4
-		}, {
-			unit: "小 时 ",
-			article: "1 ",
-			ms: 36E5
-		}, {
-			unit: "天 ",
-			article: "1 ",
-			ms: 864E5
-		}, {
-			unit: "周 ",
-			article: "1 ",
-			ms: 6048E5
-		}, {
-			unit: "个 月 ",
-			article: "1 ",
-			ms: 2629746E3
-		}, {
-			unit: "年 ",
-			article: "1 ",
-			ms: 31556952E3
-		}], e = null, f = 0; f < d.length && !(c < d[f].ms); ++f)
-		e = d[f]
-	return e ? (c = Math.floor(c / e.ms),
-		1 < c ? c + " " + e.unit + "" : e.article + " " + e.unit) : "几 秒 "
-}
-
 function humanReadableDurationEn(a, b) {
 	for (var c = Math.abs(b - a), d = [{
 			unit: "minute",
@@ -104,6 +73,37 @@ function humanReadableDurationEn(a, b) {
 		1 < c ? c + " " + e.unit + "s" : e.article + " " + e.unit) : "a few seconds"
 }
 
+function humanReadableDuration(a, b) {
+	for (var c = Math.abs(b - a), d = [{
+			unit: "分 钟 ",
+			article: "1 ",
+			ms: 6E4
+		}, {
+			unit: "小 时 ",
+			article: "1 ",
+			ms: 36E5
+		}, {
+			unit: "天 ",
+			article: "1 ",
+			ms: 864E5
+		}, {
+			unit: "周 ",
+			article: "1 ",
+			ms: 6048E5
+		}, {
+			unit: "个 月 ",
+			article: "1 ",
+			ms: 2629746E3
+		}, {
+			unit: "年 ",
+			article: "1 ",
+			ms: 31556952E3
+		}], e = null, f = 0; f < d.length && !(c < d[f].ms); ++f)
+		e = d[f]
+	return e ? (c = Math.floor(c / e.ms),
+		1 < c ? c + " " + e.unit + "" : e.article + " " + e.unit) : "几 秒 "
+}
+
 function humanReadableAge(a, b) {
 	"undefined" === typeof b && (b = (new Date).valueOf())
 	if (translateButton.classList.contains("字母版")) {
@@ -112,7 +112,6 @@ function humanReadableAge(a, b) {
 		return humanReadableDuration(a > b ? b : a, b) + "前"
 	}
 }
-
 
 function clearResults() {
 	results = []

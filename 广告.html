@@ -73,40 +73,20 @@
     </div>
   </div>
   <script>
-    window.addEventListener('load', function () {
-      var s = document.createElement('script');
-      s.src = '广告.js';
-      document.body.appendChild(s);
-    });
-  </script>
-  <div class="wsite-footerState">
-    <script>
       var sc_project = 10449297;
       var sc_invisible = 1;
       var sc_security = "bf72af9f";
-      var scJsHost = "";
-      document.write("<sc" + "ript type='text/javascript' src='" +
-        scJsHost +
-        "https://huiji-baike.github.io/pre/footerState.js'></" + "script>");
-    </script>
+      window.addEventListener('load', function () {
+        var s = document.createElement('script');
+        s.src = '广告.js';
+        document.body.appendChild(s);
 
-    <script>
-      (function (h, o, t, j, a, r) {
-        h.hj = h.hj || function () {
-          (h.hj.q = h.hj.q || []).push(arguments)
-        };
-        h._hjSettings = {
-          hjid: 402228,
-          hjsv: 5
-        };
-        a = o.getElementsByTagName('head')[0];
-        r = o.createElement('script');
-        r.async = 1;
-        r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
-        a.appendChild(r);
-      })(window, document, '//static.hotjar.com/c/hotjar-', '.js?sv=');
-    </script>
-  </div>
+        var s2 = document.createElement('script');
+        s2.src = 'footerState.js'
+        document.body.appendChile(s2)
+      });          
+  </script>
+
 </body>
 
 </html>

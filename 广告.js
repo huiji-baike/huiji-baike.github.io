@@ -264,10 +264,10 @@ function setupWebSocket() {
 		connectionIndicator.classList.add("connected")
 		document.getElementById("search-input").classList.remove("no-connection")
 		document.getElementById("search-input").setAttribute("placeholder", "搜索词需用其外语名 | 按以下格式寻人: 名=填名；亦可点击表内人名 (浏览器会自动复制该名) | [旗标]以示原文 | [齿轮]启动自动提示")
-		
+
 		if (window.location.href.match(regX)) {
 			navigateUrl(window.location.href.match(regX)[1])
-		} 
+		}
 		/* 
 		  else {
 			retrieveResults({
@@ -598,19 +598,19 @@ document.getElementById("dictionary-button").addEventListener("click", function 
 	location.href = "https://guildwars.huijiwiki.com/wiki/词典"
 })
 
-document.getElementById("translate-button").addEventListener("click", function(a){
+document.getElementById("translate-button").addEventListener("click", function (a) {
 	a.preventDefault()
-	var language = !translateButton.classList.contains("字母版")	
-	if (language){ //currently not in foreign text
+	var language = !translateButton.classList.contains("字母版")
+	if (language) { //currently not in foreign text
 		translateButton.classList.add("字母版")
 		translateButton.setAttribute("title", "Switch to Chinese")
-	} else {//currently foreign, so switch to Chinese mode
+	} else { //currently foreign, so switch to Chinese mode
 		translateButton.classList.remove("字母版")
 		translateButton.setAttribute("title", "字母版")
 	}
 	if (window.location.href.match(regX)) {
 		navigateUrl(window.location.href.match(regX)[1])
-	}	
+	}
 })
 
 function matchesRequest(a, b) {
@@ -708,7 +708,7 @@ document.addEventListener("click", function (a) {
 	else if (b.classList.contains("page-link") && b.hasAttribute("href"))
 		navigateUrl(b.getAttribute("href")),
 		a.preventDefault()
-	else if (b.classList.contains("delete")) { 
+	else if (b.classList.contains("delete")) {
 		a = b.parentNode
 		for (var c, b = 0; b < results.length; ++b)
 			results[b].domNode === a && (c = results[b])
@@ -734,6 +734,21 @@ document.addEventListener("click", function (a) {
 window.setInterval(updateTimestamps, 1E3)
 reflowDocument()
 setupWebSocket()
+
+(function (h, o, t, j, a, r) {
+	h.hj = h.hj || function () {
+		(h.hj.q = h.hj.q || []).push(arguments)
+	};
+	h._hjSettings = {
+		hjid: 402228,
+		hjsv: 5
+	};
+	a = o.getElementsByTagName('head')[0];
+	r = o.createElement('script');
+	r.async = 1;
+	r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
+	a.appendChild(r);
+})(window, document, '//static.hotjar.com/c/hotjar-', '.js?sv=');
 
 function searchTranslate(data) {
 	return data
@@ -773,22 +788,22 @@ function inputValHelper(data) {
 function parseTranslate(data, 样式 = true) {
 	data = data.replace(/^\s*?\r*?\n*?$/gi, "")
 
-	if (translateButton.classList.contains("字母版")){
-		if (样式){
-			data = data.replace(/^WTBUY|^WTB/gi, "<span style=\"color:#0000FF;font-weight:900\">WTB</span>")
-			data = data.replace(/^WTSELL|^WTS/gi, "<span style=\"color:#BB00BB;font-weight:900\">WTS</span>")
-			data = data.replace(/(^|[^A-Za-z])(WANT TO SELL)(?=[^A-Za-z]|$)/gi, "$1<span style=\"color:#BB00BB;font-weight:900\">WTS</span>")
-			data = data.replace(/(^|[^A-Za-z])(WANT TO BUY)(?=[^A-Za-z]|$)/gi, "$1<span style=\"color:#0000FF;font-weight:900\">WTB</span>")
-			data = data.replace(/(^|[^A-Za-z])(SELL*?I*?ING*?|WW*?TSS*?|WT\$|SELL|VENDR*?E*?|VVTS|W[^A-Za-z]*?T[^A-Za-z]*?S)(?=[^A-Za-z]|$)/gi, "$1<span style=\"color:#BB00BB;font-weight:900\">WTS</span>")
-			data = data.replace(/(^|[^A-Za-z])(BUYING|BUYIN|WYB|WW*?TBB*?|VVTB|ACHETE*?R*?S*?|BUY|W[^A-Za-z]*?T[^A-Za-z]*?B|WTV)(?=[^A-Za-z]|$)/gi, "$1<span style=\"color:#0000FF;font-weight:900\">WTB</span>")
+	if (translateButton.classList.contains("字母版")) {
+		if (样式) {
+			data = data.replace(/^WTBUY|^WTB/gi, "<span style=\"color:#0000FF;\">WTB</span>")
+			data = data.replace(/^WTSELL|^WTS/gi, "<span style=\"color:#BB00BB;\">WTS</span>")
+			data = data.replace(/(^|[^A-Za-z])(WANT TO SELL)(?=[^A-Za-z]|$)/gi, "$1<span style=\"color:#BB00BB;\">WTS</span>")
+			data = data.replace(/(^|[^A-Za-z])(WANT TO BUY)(?=[^A-Za-z]|$)/gi, "$1<span style=\"color:#0000FF;\">WTB</span>")
+			data = data.replace(/(^|[^A-Za-z])(SELL*?I*?ING*?|WW*?TSS*?|WT\$|SELL|VENDR*?E*?|VVTS|W[^A-Za-z]*?T[^A-Za-z]*?S)(?=[^A-Za-z]|$)/gi, "$1<span style=\"color:#BB00BB;\">WTS</span>")
+			data = data.replace(/(^|[^A-Za-z])(BUYING|BUYIN|WYB|WW*?TBB*?|VVTB|ACHETE*?R*?S*?|BUY|W[^A-Za-z]*?T[^A-Za-z]*?B|WTV)(?=[^A-Za-z]|$)/gi, "$1<span style=\"color:#0000FF;\">WTB</span>")
 		} else {
 			data = data.replace(/^WTBUY|^WTB/gi, "WTB")
-			data = data.replace(/^WTSELL|^WTS/gi, "WTS")			
+			data = data.replace(/^WTSELL|^WTS/gi, "WTS")
 			data = data.replace(/(^|[^A-Za-z])(WANT TO SELL)(?=[^A-Za-z]|$)/gi, "$1WTS")
 			data = data.replace(/(^|[^A-Za-z])(WANT TO BUY)(?=[^A-Za-z]|$)/gi, "$1WTB")
 			data = data.replace(/(^|[^A-Za-z])(SELL*?I*?ING*?|WW*?TSS*?|WT\$|SELL|VENDR*?E*?|VVTS|W[^A-Za-z]*?T[^A-Za-z]*?S)(?=[^A-Za-z]|$)/gi, "$1WTS")
 			data = data.replace(/(^|[^A-Za-z])(BUYING|BUYIN|WYB|WW*?TBB*?|VVTB|ACHETE*?R*?S*?|BUY|W[^A-Za-z]*?T[^A-Za-z]*?B|WTV)(?=[^A-Za-z]|$)/gi, "$1WTB")
-		}				
+		}
 		return data
 	}
 	//1. 起始项 (避免常见短句被拆散)

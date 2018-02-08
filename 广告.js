@@ -292,7 +292,10 @@ function setupWebSocket() {
 					找到 = 追踪项.filter(项 => {
 						return (a.message.match(new RegExp(项, "i")) || parseTranslate(a.message, false).match(new RegExp(项, "i")))
 					})
+					console.log(a.message)
+					console.log(追踪项)
 					console.log(找到)
+					console.log(近期广告)
 					if ((找到.length > 0) && 未曾见过(a)) {
 						var b = parseRequestFromUrl(trimPathName(document.location.href)),
 							d = {
@@ -301,9 +304,8 @@ function setupWebSocket() {
 								tag: "卡玛丹/" + b.query
 							},
 							e = "激战广告"
-						b.query && (e = e + " - '" + b.query + "' 的搜索结果")
-						console.log("找到")
-						console.log("正在试图发报")
+						b.query && (e = e + " - '" + b.query + "' 的搜索结果")						
+						console.log("找到, 正在试图发报")
 						new Notification(e, d)
 						playNotificationSound()
 					}

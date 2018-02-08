@@ -308,7 +308,7 @@ function setupWebSocket() {
 								tag: "卡玛丹/" + b.query
 							},
 							e = "激战广告"
-						b.query && (e = e + " - '" + b.query + "' 的搜索结果")						
+						b.query && (e = e + " - '" + b.query + "' 的搜索结果")
 						console.log("找到, 正在试图发报")
 						new Notification(e, d)
 						playNotificationSound()
@@ -531,7 +531,11 @@ function isSelecting(a) {
 }
 
 function displayDeleteDialog(a) {
-	a = "<div id=\"modal\"><div id=\"dialog\"><div><h1>原文 及 删除办法</h1>原文: <div id=\"command\">" + htmlEscape(a.message) + "</div>删除办法: 以 <strong>" + htmlEscape(a.name) + "</strong> 角色登入激战，再用 对话栏 发以下字条:</div><div id=\"command\">/whisper Chat Log, DELETE " + a.id + "</div><div id=\"dialog-footer\"><button id=\"dismiss\">返回</button></div></div></div>"
+	if (translateButton.classList.contains("字母版")) {
+		a = "<div id=\"modal\"><div id=\"dialog\"><div><h1>Request message deletion</h1>To delete this message, log in with <strong>" + htmlEscape(a.name) + "</strong> and enter the following command:</div><div id=\"command\">/whisper Chat Log, DELETE " + a.id + "</div><div id=\"dialog-footer\"><button id=\"dismiss\">Got it!</button></div></div></div>"
+	} else {
+		a = "<div id=\"modal\"><div id=\"dialog\"><div><h1>原文 及 删除办法</h1>原文: <div id=\"command\">" + htmlEscape(a.message) + "</div>删除办法: 以 <strong>" + htmlEscape(a.name) + "</strong> 角色登入激战，再用 对话栏 发以下字条:</div><div id=\"command\">/whisper Chat Log, DELETE " + a.id + "</div><div id=\"dialog-footer\"><button id=\"dismiss\">返回</button></div></div></div>"
+	}
 	document.body.insertAdjacentHTML("beforeend", a)
 }
 
@@ -575,7 +579,7 @@ document.getElementById("begin-Notification").addEventListener("click", function
 	fetchNotificationSound()
 	if ("granted" !== Notification.permission) {
 		Notification.requestPermission(function (a) {
-			if ("granted" === a) {				
+			if ("granted" === a) {
 				notificationButton.classList.add("enabled")
 				console.log("用户同意发报")
 			} else {}
@@ -667,7 +671,7 @@ notificationButton.addEventListener("click", function () {
 		notificationButton.classList.remove("enabled")
 		近期广告 = []
 	} else {
-		if (notificationButton.classList.contains("enabled")) {	
+		if (notificationButton.classList.contains("enabled")) {
 			console.log("停止发报")
 			notificationButton.classList.remove("enabled")
 			近期广告 = []

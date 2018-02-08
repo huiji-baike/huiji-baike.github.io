@@ -292,9 +292,13 @@ function setupWebSocket() {
 					找到 = 追踪项.filter(项 => {
 						return (a.message.match(new RegExp(项, "i")) || parseTranslate(a.message, false).match(new RegExp(项, "i")))
 					})
+					console.log("原文:")
 					console.log(a.message)
+					console.log("正在追踪:")
 					console.log(追踪项)
+					console.log("找到:")
 					console.log(找到)
+					console.log("或已见过")
 					console.log(近期广告)
 					if ((找到.length > 0) && 未曾见过(a)) {
 						var b = parseRequestFromUrl(trimPathName(document.location.href)),

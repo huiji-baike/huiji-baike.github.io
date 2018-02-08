@@ -693,8 +693,11 @@ enableInstantSearch && searchInput.addEventListener("input", function (a) {
 
 searchForm.addEventListener("submit", function (a) {
 	a.preventDefault()
-	searchInput.value = searchInput.value.replace(/^名\s*?=\s*?(.+?)$/gi, "author:\"$1\"")
-	searchInput.value = searchTranslate(searchInput.value)
+	if (searchInput.value.match(/^名\s*?=\s*?[^\s]+/)){
+		searchInput.value = searchInput.value.replace(/^名\s*?=\s*?(.+?)$/gi, "author:\"$1\"")
+	} else {
+		searchInput.value = searchTranslate(searchInput.value)
+	}		
 	navigate(searchInput.value)
 })
 

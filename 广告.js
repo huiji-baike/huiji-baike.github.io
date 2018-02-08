@@ -534,7 +534,7 @@ function displayDeleteDialog(a) {
 	if (translateButton.classList.contains("字母版")) {
 		a = "<div id=\"modal\"><div id=\"dialog\"><div><h1>Request message deletion</h1>To delete this message, log in with <strong>" + htmlEscape(a.name) + "</strong> and enter the following command:</div><div id=\"command\">/whisper Chat Log, DELETE " + a.id + "</div><div id=\"dialog-footer\"><button id=\"dismiss\">Got it!</button></div></div></div>"
 	} else {
-		a = "<div id=\"modal\"><div id=\"dialog\"><div><h1>原文 及 删除办法</h1>原文: <div id=\"command\">" + htmlEscape(a.message) + "</div>删除办法: 以 <strong>" + htmlEscape(a.name) + "</strong> 角色登入激战，再用 对话栏 发以下字条:</div><div id=\"command\">/whisper Chat Log, DELETE " + a.id + "</div><div id=\"dialog-footer\"><button id=\"dismiss\">返回</button></div></div></div>"
+		a = "<div id=\"modal\"><div id=\"dialog\"><div><h1>原文 及 删除办法</h1>原文: <div id=\"command\">" + htmlEscape(a.message) + "</div>删除办法: 以 <strong>" + htmlEscape(a.name) + "</strong> 角色登入激战，再用其 对话栏 发以下字条:</div><div id=\"command\">/whisper Chat Log, DELETE " + a.id + "</div><div id=\"dialog-footer\"><button id=\"dismiss\">返回</button></div></div></div>"
 	}
 	document.body.insertAdjacentHTML("beforeend", a)
 }

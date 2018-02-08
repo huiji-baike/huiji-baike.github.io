@@ -243,6 +243,8 @@ function trimPathName(path) {
 
 function setupWebSocket() {
 	connectionIndicator.classList.remove("connected")
+	document.getElementById("search-input").style.color = "firebrick"
+	document.getElementById("search-input").setAttribute("placeholder", "正在联系服务器，暂无回应")
 	socket && (socket.onclose = socket.onopen = socket.onmessage = null, socket.close())
 	var a = trimPathName(document.location.href);
 	(a.charAt(0) == "?") ? a = "/" + a.slice(1): a
@@ -258,8 +260,9 @@ function setupWebSocket() {
 		clearTimeout(reconnectTimer)
 		reconnectDelayMs = baseReconnectDelayMs
 		connectionIndicator.classList.add("connected")
-
-		var tAddress = window.location.href
+		document.getElementById("search-input").style.color = "#333"
+		document.getElementById("search-input").setAttribute("placeholder", "搜索词需用其外语名 | 寻人用以下格式: 名=填名；亦可点击表内人名 (浏览器会自动复制该名) | [旗标]以示原文 | [齿轮]启动自动提示")
+		
 		var regX = new RegExp("^https\:\/\/huiji\-baike\.github\.io\/" + encodeURIComponent("广告") + "(\\?.+)$", "i")
 
 		if (window.location.href.match(regX)) {

@@ -32,7 +32,6 @@ var resultsPerPage = 25,
 	追踪项 = [],
 	近期广告 = [],
 	静音时间 = 5,
-	regX = new RegExp("^https\:\/\/huiji\-baike\.github\.io\/" + encodeURIComponent("广告") + "(\\?{0,1}.*?)$", "i")
 
 var animationEnd = 0,
 	animationLengthMs = 500,
@@ -265,8 +264,6 @@ function setupWebSocket() {
 		document.getElementById("search-input").classList.remove("no-connection")
 		document.getElementById("search-input").setAttribute("placeholder", "搜索词需用字母名 | 按以下格式寻人: 名=填名；亦可点击表内人名 (浏览器会自动复制该名) | [旗标]以示原文 | [齿轮]启动自动提示")
 
-		if (window.location.href.match(regX)) {
-			navigateUrl(window.location.href.match(regX)[1])
 		}
 		/* 
 		  else {
@@ -662,8 +659,6 @@ document.getElementById("translate-button").addEventListener("click", function (
 		translateButton.classList.remove("字母版")
 		translateButton.setAttribute("title", "字母版")
 	}
-	if (window.location.href.match(regX)) {
-		navigateUrl(window.location.href.match(regX)[1])
 	}
 })
 

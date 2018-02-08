@@ -272,7 +272,7 @@ button:active {
     border-radius: 50%;
     background-color: #ff4136;
     border: 1px solid #333;
-    display: none
+    /*display: none*/
 }
 
 #connection-indicator.connected {

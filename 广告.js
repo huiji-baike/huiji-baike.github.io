@@ -32,7 +32,7 @@ var resultsPerPage = 25,
 	追踪项 = [],
 	近期广告 = [],
 	静音时间 = 5,
-	regX = new RegExp("^https\:\/\/huiji\-baike\.github\.io\/" + encodeURIComponent("广告") + "(\\?.+)$", "i")
+	regX = new RegExp("^https\:\/\/huiji\-baike\.github\.io\/" + encodeURIComponent("广告") + "(\\?{0,1}.*?)$", "i")
 
 var animationEnd = 0,
 	animationLengthMs = 500,

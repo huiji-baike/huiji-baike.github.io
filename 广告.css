@@ -286,7 +286,7 @@ button:active {
     padding: 10px 15px
 }
 
-#results-header .offline{
+#results-header.offline{
     background: firebrick;
 }
 #connection-indicator {

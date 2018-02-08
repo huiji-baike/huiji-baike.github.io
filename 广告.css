@@ -288,6 +288,9 @@ button:active {
     display: block;
     overflow: hidden;
     /* display: none */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 66%;
 }
 
 #wiki-button{

@@ -577,7 +577,8 @@ button:active {
         border-radius: 0;
         background: #ffe;
         font-size: 12px;
-        padding: 4px 8px
+        padding: 4px 8px;
+        color: black;
     }
     #connection-indicator {
         width: 10px;

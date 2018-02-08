@@ -559,7 +559,7 @@ button:active {
 
     #results-header {
         border-radius: 0;
-        background: #333;/*#ffe;*/
+        background: #ffe;
         font-size: 12px;
         padding: 4px 8px
     }

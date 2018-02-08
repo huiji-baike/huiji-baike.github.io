@@ -117,7 +117,7 @@ function formatResult(a) {
 		c = humanReadableAge(1E3 * a.timestamp)
 	a = htmlEscape(a.message)
 	a = parseTranslate(a) //New: Need to make sure translation do not break syntax	
-	return "<tr class=\"row\"><td class=\"info\"><div class=\"name\">" + b + "</div><div class=\"age\">" + c + "</div></td><td class=\"message\">" + a + "</td><td class=\"delete\"><i class=\"fas fa-angle-double-down\"></i></td></tr>"
+	return "<tr class=\"row\"><td class=\"info\"><div class=\"name\">" + b + "</div><div class=\"age\">" + c + "</div></td><td class=\"message\">" + a + "</td><td class=\"delete\"></td></tr>"
 }
 
 function shouldAnimate() {
@@ -562,13 +562,15 @@ document.getElementById("begin-Notification").addEventListener("click", function
 	if ("granted" !== Notification.permission) {
 		Notification.requestPermission(function (a) {
 			if ("granted" === a) {
-				document.getElementById("notification-button").innerHTML = "<i class=\"fas fa-cog fa-spin\"></i>"
+				//update, make spin
+				//document.getElementById("notification-button").innerHTML = "<i class=\"fas fa-cog fa-spin\"></i>"
 				notificationButton.classList.add("enabled")
 			} else {}
 		})
 	} else {
 		//add enabled
-		document.getElementById("notification-button").innerHTML = "<i class=\"fas fa-cog fa-spin\"></i>"
+		//update, make spin
+		//document.getElementById("notification-button").innerHTML = "<i class=\"fas fa-cog fa-spin\"></i>"
 		notificationButton.classList.toggle("enabled")
 	}
 
@@ -635,11 +637,13 @@ homeLink.addEventListener("click", function (a) {
 notificationButton.addEventListener("click", function () {
 	if ("undefined" === typeof Notification) {
 		alert("浏览器无提示窗功能")
-		document.getElementById("notification-button").innerHTML = "<i class=\"fas fa-cog\"></i>"
+		//update, stop spin
+		//document.getElementById("notification-button").innerHTML = "<i class=\"fas fa-cog\"></i>"
 		notificationButton.classList.remove("enabled")
 	} else {
 		if (notificationButton.classList.contains("enabled")) {
-			document.getElementById("notification-button").innerHTML = "<i class=\"fas fa-cog\"></i>"
+			//update, stop spin
+			//document.getElementById("notification-button").innerHTML = "<i class=\"fas fa-cog\"></i>"
 			notificationButton.classList.remove("enabled")
 		} else {
 			displayNotificationDialog()
@@ -684,7 +688,7 @@ document.addEventListener("click", function (a) {
 	else if (b.classList.contains("page-link") && b.hasAttribute("href"))
 		navigateUrl(b.getAttribute("href")),
 		a.preventDefault()
-	else if (b.classList.contains("fa-angle-double-down")) { //|| b.classList.contains("delete")
+	else if (b.classList.contains("delete")) { 
 		a = b.parentNode.parentNode
 		for (var c, b = 0; b < results.length; ++b)
 			results[b].domNode === a && (c = results[b])

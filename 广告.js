@@ -222,7 +222,7 @@ function animateResults() {
 	for (var a = (new Date).getTime(), a = a > animationEnd ? 1 : 1 - (animationEnd - a) / animationLengthMs, b = 1, c = results.length - 1; 0 <= c; --c) {
 		var d = results[c],
 			e = d.domNode
-		d.y = Math.round(a * d.targetY + (1 - a) * d.oldY)
+		d.y = Math.ceil(a * d.targetY + (1 - a) * d.oldY)
 		e.style.transform = "translate3d(0, " + d.y + "px, 0)"
 		d.deleted ? (b = 1 - (b - d.y) / d.height,
 			e.style.opacity = b,

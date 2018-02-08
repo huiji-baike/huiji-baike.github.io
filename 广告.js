@@ -263,7 +263,7 @@ function setupWebSocket() {
 		reconnectDelayMs = baseReconnectDelayMs
 		connectionIndicator.classList.add("connected")
 		document.getElementById("search-input").classList.remove("no-connection")
-		document.getElementById("search-input").setAttribute("placeholder", "搜索词需用其外语名 | 按以下格式寻人: 名=填名；亦可点击表内人名 (浏览器会自动复制该名) | [旗标]以示原文 | [齿轮]启动自动提示")
+		document.getElementById("search-input").setAttribute("placeholder", "搜索词需用字母名 | 按以下格式寻人: 名=填名；亦可点击表内人名 (浏览器会自动复制该名) | [旗标]以示原文 | [齿轮]启动自动提示")
 
 		if (window.location.href.match(regX)) {
 			navigateUrl(window.location.href.match(regX)[1])
@@ -540,7 +540,52 @@ function displayDeleteDialog(a) {
 }
 
 function displayNotificationDialog() {
-	document.getElementById("tracking-Form").style.display = "flex"
+	var sForm
+	if (!translateButton.classList.contains("字母版")) {
+		sForm = "<div id=\"tracking-Form\" style=\"display:flex\"> \
+				<div id=\"dialog\"> \
+				<div> \
+					<h1>自动提示 - 设置</h1> \
+					<div>填入 物品名称，或各种别名，以逗号为分隔符，中外文通用</div> \
+					<div id=\"command\"> \
+					<div style=\"font-size:small\">(特殊符号需以\"\\\"号开头，例：\+)</div> \
+					<textarea id=\"tracked-Items\" rows=\"5\" cols=\"50\"></textarea> \
+					</div> \
+					<div id=\"command\"> \
+					<input type=\"number\" id=\"silent-Interval\" value=\"5\" min=\"0\" max=\"99\" required pattern=\"[0-9]{1,2}\"> \
+					<span style=\"font-size:small\">分钟内不报重复的广告</span> \
+					</div> \
+				</div> \
+				<div id=\"dialog-footer\"> \
+					<button id=\"cancel-Notification\">取消</button> \
+					<button id=\"begin-Notification\">启动</button> \
+				</div> \
+				</div> \
+			</div>"
+	} else {
+		sForm = "<div id=\"tracking-Form\" style=\"display:flex\"> \
+				<div id=\"dialog\"> \
+				<div> \
+					<h1>Notification Settings</h1> \
+					<div>Enter Item Names | Use Comma Between Entries</div> \
+					<div id=\"command\"> \
+					<div style=\"font-size:small\">(Escape RegExp Symbols | E.g. \\+)</div> \
+					<textarea id=\"tracked-Items\" rows=\"5\" cols=\"50\"></textarea> \
+					</div> \
+					<div id=\"command\"> \
+					Ignore Duplicates from the last <input type=\"number\" id=\"silent-Interval\" value=\"5\" min=\"0\" max=\"99\" required pattern=\"[0-9]{1,2}\"> \
+					<span style=\"font-size:small\"> Minutes</span> \
+					</div> \
+				</div> \
+				<div id=\"dialog-footer\"> \
+					<button id=\"cancel-Notification\">Cancel</button> \
+					<button id=\"begin-Notification\">Apply</button> \
+				</div> \
+				</div> \
+			</div>"
+	}
+	document.body.insertAdjacentHTML("beforeend", sForm)
+	//document.getElementById("tracking-Form").style.display = "flex"
 	document.getElementById("tracked-Items").value = 追踪项.toString()
 	document.getElementById("silent-Interval").value = 静音时间
 }
@@ -728,7 +773,10 @@ document.addEventListener("click", function (a) {
 	else if ("dismiss" === b.id)
 		a = document.getElementById("modal"),
 		document.body.removeChild(a)
-	else if ("command" === b.id) {
+	else if (("cancel-Notification" === b.id) || ("begin-Notification" === b.id)) {
+		a = document.getElementById("tracking-Form"),
+			document.body.removeChild(a)
+	} else if ("command" === b.id) {
 		c = getSelection()
 		c.removeAllRanges()
 		var d = document.createRange()

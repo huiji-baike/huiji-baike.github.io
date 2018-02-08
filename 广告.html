@@ -54,7 +54,7 @@
     <div id="pagination"></div>
   </div>
   <!--
-  <div id="tracking-Form" style="display:none">
+  <div id="tracking-Form" style="display:flex">
     <div id="dialog">
       <div>
         <h1>自动提示 - 设置</h1>
@@ -71,6 +71,26 @@
       <div id="dialog-footer">
         <button id="cancel-Notification">取消</button>
         <button id="begin-Notification">启动</button>
+      </div>
+    </div>
+  </div>
+  <div id="tracking-Form" style="display:flex">
+    <div id="dialog">
+      <div>
+        <h1>Notification Settings</h1>
+        <div>Enter Item Names | Use Comma Between Entries</div>
+        <div id="command">
+          <div style="font-size:small">(Escape RegExp Symbols | E.g. \+)</div>
+          <textarea id="tracked-Items" rows="5" cols="50"></textarea>
+        </div>
+        <div id="command">
+          Ignore Duplicates from the last <input type="number" id="silent-Interval" value="5" min="0" max="99" required pattern="[0-9]{1,2}">
+          <span style="font-size:small"> Minutes</span>
+        </div>
+      </div>
+      <div id="dialog-footer">
+        <button id="cancel-Notification">Cancel</button>
+        <button id="begin-Notification">Apply</button>
       </div>
     </div>
   </div>

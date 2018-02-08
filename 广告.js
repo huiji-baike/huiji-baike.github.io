@@ -292,6 +292,7 @@ function setupWebSocket() {
 					找到 = 追踪项.filter(项 => {
 						return (a.message.match(new RegExp(项, "i")) || parseTranslate(a.message, false).match(new RegExp(项, "i")))
 					})
+					console.log(找到)
 					if ((找到.length > 0) && 未曾见过(a)) {
 						var b = parseRequestFromUrl(trimPathName(document.location.href)),
 							d = {
@@ -301,6 +302,8 @@ function setupWebSocket() {
 							},
 							e = "激战广告"
 						b.query && (e = e + " - '" + b.query + "' 的搜索结果")
+						console.log("找到")
+						console.log("正在试图发报")
 						new Notification(e, d)
 						playNotificationSound()
 					}
@@ -568,10 +571,12 @@ document.getElementById("begin-Notification").addEventListener("click", function
 		Notification.requestPermission(function (a) {
 			if ("granted" === a) {				
 				notificationButton.classList.add("enabled")
+				console.log("用户同意发报")
 			} else {}
 		})
 	} else {
 		//add enabled		
+		console.log("开始发报")
 		notificationButton.classList.toggle("enabled")
 	}
 
@@ -656,7 +661,8 @@ notificationButton.addEventListener("click", function () {
 		notificationButton.classList.remove("enabled")
 		近期广告 = []
 	} else {
-		if (notificationButton.classList.contains("enabled")) {			
+		if (notificationButton.classList.contains("enabled")) {	
+			console.log("停止发报")
 			notificationButton.classList.remove("enabled")
 			近期广告 = []
 		} else {

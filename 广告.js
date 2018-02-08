@@ -570,7 +570,8 @@ function displayNotificationDialog() {
 					<textarea id=\"tracked-Items\" rows=\"5\" cols=\"50\"></textarea> \
 					</div> \
 					<div id=\"command\"> \
-					Ignore Duplicates from the last <input type=\"number\" id=\"silent-Interval\" value=\"5\" min=\"0\" max=\"99\" required pattern=\"[0-9]{1,2}\"> \
+					<span style=\"font-size:small\">Ignore Duplicates from the last </span> \
+					<input type=\"number\" id=\"silent-Interval\" value=\"5\" min=\"0\" max=\"99\" required pattern=\"[0-9]{1,2}\"> \
 					<span style=\"font-size:small\"> Minutes</span> \
 					</div> \
 				</div> \

@@ -397,7 +397,7 @@ button:active {
 .js .row {
     position: absolute;
     width: 100%;
-    /* will-change: transform, opacity */
+    will-change: transform, opacity 
 }
 
 .name {

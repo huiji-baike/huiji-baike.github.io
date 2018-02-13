@@ -699,7 +699,7 @@ document.getElementById("translate-button").addEventListener("click", function (
 	var language = !translateButton.classList.contains("字母版")
 	if (language) { //currently not in foreign text
 		translateButton.classList.add("字母版")
-		translateButton.setAttribute("title", "Chinese Translation")
+		translateButton.setAttribute("title", "Chinese")
 	} else { //currently foreign, so switch to Chinese mode
 		translateButton.classList.remove("字母版")
 		translateButton.setAttribute("title", "字母版")

@@ -223,10 +223,10 @@ function animateResults() {
 		var d = results[c],
 			e = d.domNode
 		d.y = a * d.targetY + (1 - a) * d.oldY
-		//e.style.transform = "translate3d(0, " + d.y + "px, 0)"
-		e.style.position = "absolute"
-		e.style.left = 0 + "px"
-		e.style.top = d.y +"px"
+		e.style.transform = "translate3d(0, " + d.y + "px, 0)"
+		//e.style.position = "absolute"
+		//e.style.left = 0 + "px"
+		//e.style.top = d.y +"px"
 		d.deleted ? (b = 1 - (b - d.y) / d.height,
 			e.style.opacity = b,
 			0 == b && (current.removeChild(e),

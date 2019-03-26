@@ -30,6 +30,7 @@ var resultsPerPage = 25,
 	incomingResults = [],
 	incomingResultCount = 0,
 	追踪项 = [],
+	禁言项 = ["GAMERSMARKÉT", "GVGMALL", "GAMERSMARKET"],
 	近期广告 = [],
 	静音时间 = 5,
 	网址 = new RegExp("^https\:\/\/huiji\-baike\.github\.io\/" + encodeURIComponent("广告") + "(\\?{0,1}.*?)$", "i")
@@ -328,48 +329,56 @@ function setupWebSocket() {
 		if ("undefined" !== typeof a.query) {
 			displayResults(a)
 		} else {
-			if (notificationButton.classList.contains("enabled")) {
-				var 找到 = []
-				if (追踪项.length > 0) {
-					找到 = 追踪项.filter(项 => {
-						return (a.message.match(new RegExp(项, "i")) || parseTranslate(a.message, false).match(new RegExp(项, "i")))
-					})
-					var 近期广告表 = 近期广告.reduce((总结, 项) => {
-						总结 += 项.name + "\n" + 项.message + "\n"
-						return 总结
-					}, "")
-					console.log("原文: \n" + a.name + "\n" + a.message + "\n正在追踪: " + 追踪项.toString() + "\n找到: " + 找到.toString() + "\n已见过的广告: \n" + 近期广告表)
-					if ((找到.length > 0) && 未曾见过(a)) {
-						var b = parseRequestFromUrl(trimPathName(document.location.href)),
-							d = {
-								body: "角色名: " + a.name + "\n" + parseTranslate(a.message, false), //所在地: 卡玛丹，艾斯坦之钻\n美洲1区
-								icon: "帆船.png", //notification related:  /v/ZjA5Y2E4NT.png
-								tag: "卡玛丹/" + b.query
-							},
-							e = "激战广告"
-						b.query && (e = e + " - '" + b.query + "' 的搜索结果")
-						console.log("找到, 正在试图发报")
-						new Notification(e, d)
-						playNotificationSound()
+			var 违禁 = []
+			违禁 = 禁言项.filter(项 => {
+				return a.message.match(new RegExp(项, "i")) 
+			})
+			if (违禁.length==0) {
+
+				
+				if (notificationButton.classList.contains("enabled")) {
+					var 找到 = []
+					if (追踪项.length > 0) {
+						找到 = 追踪项.filter(项 => {
+							return (a.message.match(new RegExp(项, "i")) || parseTranslate(a.message, false).match(new RegExp(项, "i")))
+						})
+						var 近期广告表 = 近期广告.reduce((总结, 项) => {
+							总结 += 项.name + "\n" + 项.message + "\n"
+							return 总结
+						}, "")
+						console.log("原文: \n" + a.name + "\n" + a.message + "\n正在追踪: " + 追踪项.toString() + "\n找到: " + 找到.toString() + "\n已见过的广告: \n" + 近期广告表)
+						if ((找到.length > 0) && 未曾见过(a)) {
+							var b = parseRequestFromUrl(trimPathName(document.location.href)),
+								d = {
+									body: "角色名: " + a.name + "\n" + parseTranslate(a.message, false), //所在地: 卡玛丹，艾斯坦之钻\n美洲1区
+									icon: "帆船.png", //notification related:  /v/ZjA5Y2E4NT.png
+									tag: "卡玛丹/" + b.query
+								},
+								e = "激战广告"
+							b.query && (e = e + " - '" + b.query + "' 的搜索结果")
+							console.log("找到, 正在试图发报")
+							new Notification(e, d)
+							playNotificationSound()
+						}
 					}
 				}
+				d = scrolledDown && !scrolling
+				b = findDuplicates(a, results)
+				if (d) {
+					d = findDuplicates(a, incomingResults)
+					b = b.concat(d)
+					for (d = 0; d < b.length; ++d)
+						b[d].deletedByIncoming = !0
+					addIncomingResult(a)
+					toggleScrollIndicator(!0)
+				} else
+					addResult(a),
+					b.forEach(function (a) {
+						a.deleted = !0
+					}),
+					placeNewResults(),
+					reflowResults(shouldAnimate())
 			}
-			d = scrolledDown && !scrolling
-			b = findDuplicates(a, results)
-			if (d) {
-				d = findDuplicates(a, incomingResults)
-				b = b.concat(d)
-				for (d = 0; d < b.length; ++d)
-					b[d].deletedByIncoming = !0
-				addIncomingResult(a)
-				toggleScrollIndicator(!0)
-			} else
-				addResult(a),
-				b.forEach(function (a) {
-					a.deleted = !0
-				}),
-				placeNewResults(),
-				reflowResults(shouldAnimate())
 		}
 	}
 }

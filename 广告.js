@@ -476,9 +476,10 @@ function displayResults(a) {
 	var c = parseInt(a.num_results, 10)
 	clearResults()
 	for (var d = a.results.length - 1; 0 <= d; --d){
-		if (!(违禁(a.results[d]))) {
-			addResult(a.results[d])
+		if (违禁(a.results[d])) {
+			a.results[d].message = "违禁广告，内容已删"			
 		}
+		addResult(a.results[d])
 	}		
 	displaySearchInfo(a)
 	displayPagination(b, a.offset, c)

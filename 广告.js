@@ -377,7 +377,7 @@ function setupWebSocket() {
 }
 
 function 违禁(a){
-	var 禁言项 = ["GAMERSMARKÉT", "GVGMALL", "GAMERSMARKET", "\.COM"]
+	var 禁言项 = ["GAMERSMARKÉT", "GVGMALL", "GAMERSMARKET", "\\\.COM"]
 	var 有违禁 = []	
 	有违禁 = 禁言项.filter(项 => {
 		return a.message.match(new RegExp(项, "i")) 

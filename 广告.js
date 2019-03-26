@@ -30,7 +30,6 @@ var resultsPerPage = 25,
 	incomingResults = [],
 	incomingResultCount = 0,
 	追踪项 = [],
-	禁言项 = ["GAMERSMARKÉT", "GVGMALL", "GAMERSMARKET"],
 	近期广告 = [],
 	静音时间 = 5,
 	网址 = new RegExp("^https\:\/\/huiji\-baike\.github\.io\/" + encodeURIComponent("广告") + "(\\?{0,1}.*?)$", "i")
@@ -328,14 +327,8 @@ function setupWebSocket() {
 		}
 		if ("undefined" !== typeof a.query) {
 			displayResults(a)
-		} else {
-			var 违禁 = []
-			违禁 = 禁言项.filter(项 => {
-				return a.message.match(new RegExp(项, "i")) 
-			})
-			if (违禁.length==0) {
-
-				
+		} else {			
+			if (!(违禁(a))) {				
 				if (notificationButton.classList.contains("enabled")) {
 					var 找到 = []
 					if (追踪项.length > 0) {
@@ -381,6 +374,15 @@ function setupWebSocket() {
 			}
 		}
 	}
+}
+
+function 违禁(a){
+	var 禁言项 = ["GAMERSMARKÉT", "GVGMALL", "GAMERSMARKET", "\.COM"]
+	var 有违禁 = []	
+	有违禁 = 禁言项.filter(项 => {
+		return a.message.match(new RegExp(项, "i")) 
+	})
+	return ((有违禁.length==0) ? false : true)
 }
 
 function 未曾见过(新数据) {
@@ -473,8 +475,11 @@ function displayResults(a) {
 	buildUrlFor(a.query, a.offset)
 	var c = parseInt(a.num_results, 10)
 	clearResults()
-	for (var d = a.results.length - 1; 0 <= d; --d)
-		addResult(a.results[d])
+	for (var d = a.results.length - 1; 0 <= d; --d){
+		if (!(违禁(a.results[d]))) {
+			addResult(a.results[d])
+		}
+	}		
 	displaySearchInfo(a)
 	displayPagination(b, a.offset, c)
 	placeNewResults()
